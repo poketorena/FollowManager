@@ -22,8 +22,6 @@ namespace FollowManager
         {
             var moduleCatalog = (ModuleCatalog)ModuleCatalog;
             //moduleCatalog.AddModule(typeof(YOUR_MODULE));
-
-            Build Fail Test.
         }
     }
 }
