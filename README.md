@@ -18,6 +18,7 @@ Windowsで動作する、Twitterのフォロー整理を楽にするアプリで
 * Windows Presentation Foundation
 * [Prism](https://github.com/PrismLibrary/Prism)
 * [Unity](https://github.com/unitycontainer/unity)
+* [Reactive Extensions](https://github.com/dotnet/reactive)
 * [ReactiveProperty](https://github.com/runceel/ReactiveProperty)
 * [Material Design In XAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
 
