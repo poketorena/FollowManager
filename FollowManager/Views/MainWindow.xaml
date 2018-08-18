@@ -7,7 +7,42 @@
     Width="1200"
     Height="750"
     prism:ViewModelLocator.AutoWireViewModel="True">
+
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="23" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ContentControl
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="60"
+            prism:RegionManager.RegionName="TopRegion" />
+
+        <ContentControl
+            Grid.Row="1"
+            Grid.Column="0"
+            Width="300"
+            prism:RegionManager.RegionName="SideRegion" />
+
+        <ContentControl
+            Grid.Row="1"
+            Grid.Column="1"
+            prism:RegionManager.RegionName="ContentRegion" />
+
+        <ContentControl
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="23"
+            prism:RegionManager.RegionName="BottomRegion" />
     </Grid>
 </Window>
