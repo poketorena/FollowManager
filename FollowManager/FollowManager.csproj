@@ -56,6 +56,38 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
+      <DependentUpon>BottomPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BottomPanel\BottomPanelViewModel.cs" />
+    <Compile Include="CardPanel\CardPanelView.xaml.cs">
+      <DependentUpon>CardPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CardPanel\CardPanelViewModel.cs" />
+    <Compile Include="Loading\LoadingView.xaml.cs">
+      <DependentUpon>LoadingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="SidePanel\SidePanelView.xaml.cs">
+      <DependentUpon>SidePanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SidePanel\SidePanelViewModel.cs" />
+    <Compile Include="TopPanel\TopPanelView.xaml.cs">
+      <DependentUpon>TopPanelView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="TopPanel\TopPanelViewModel.cs" />
+    <Page Include="BottomPanel\BottomPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CardPanel\CardPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Loading\LoadingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -70,6 +102,14 @@
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SidePanel\SidePanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TopPanel\TopPanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -100,5 +140,6 @@
       <Version>6.3.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
