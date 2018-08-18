@@ -4,8 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:prism="http://prismlibrary.com/"
     Title="{Binding Title}"
-    Width="525"
-    Height="350"
+    Width="1200"
+    Height="750"
     prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
