@@ -7,7 +7,10 @@
     Background="Orange">
     <Grid>
         <StatusBar Height="23">
-            <StatusBarItem Content="おはようございます。" />
+            <StatusBarItem
+                Background="#607d8b"
+                Content="おはようございます。"
+                Foreground="White" />
         </StatusBar>
     </Grid>
 </UserControl>
