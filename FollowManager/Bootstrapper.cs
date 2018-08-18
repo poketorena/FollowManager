@@ -6,7 +6,7 @@ using Prism.Unity;
 
 namespace FollowManager
 {
-    class Bootstrapper : UnityBootstrapper
+    public class Bootstrapper : UnityBootstrapper
     {
         protected override DependencyObject CreateShell()
         {
