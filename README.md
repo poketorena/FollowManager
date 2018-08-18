@@ -21,6 +21,8 @@ Windowsで動作する、Twitterのフォロー整理を楽にするアプリで
 * [Reactive Extensions](https://github.com/dotnet/reactive)
 * [ReactiveProperty](https://github.com/runceel/ReactiveProperty)
 * [Material Design In XAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
+* [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
+* [CoreTweet](https://github.com/CoreTweet/CoreTweet)
 
 ## Author
 
