@@ -9,7 +9,7 @@
         <StatusBar Height="23">
             <StatusBarItem
                 Background="#607d8b"
-                Content="おはようございます。"
+                Content="{Binding Log.Value}"
                 Foreground="White" />
         </StatusBar>
     </Grid>

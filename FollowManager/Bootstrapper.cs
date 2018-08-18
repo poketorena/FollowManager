@@ -3,6 +3,7 @@ using System.Windows;
 using Prism.Modularity;
 using Microsoft.Practices.Unity;
 using Prism.Unity;
+using FollowManager.Service;
 
 namespace FollowManager
 {
@@ -22,6 +23,14 @@ namespace FollowManager
         {
             var moduleCatalog = (ModuleCatalog)ModuleCatalog;
             //moduleCatalog.AddModule(typeof(YOUR_MODULE));
+        }
+
+        protected override void ConfigureContainer()
+        {
+            base.ConfigureContainer();
+
+            // シングルトンでコンテナに登録
+            Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
         }
     }
 }
