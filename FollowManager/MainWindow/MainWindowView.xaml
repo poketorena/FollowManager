@@ -6,7 +6,8 @@
     Title="{Binding Title}"
     Width="1200"
     Height="750"
-    prism:ViewModelLocator.AutoWireViewModel="True">
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    ResizeMode="CanResizeWithGrip">
 
     <Grid>
         <Grid.RowDefinitions>
