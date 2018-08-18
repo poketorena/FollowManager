@@ -1,4 +1,4 @@
-﻿using FollowManager.Views;
+﻿using FollowManager.MainWindow;
 using System.Windows;
 using Prism.Modularity;
 using Microsoft.Practices.Unity;
@@ -10,7 +10,7 @@ namespace FollowManager
     {
         protected override DependencyObject CreateShell()
         {
-            return Container.Resolve<MainWindow>();
+            return Container.Resolve<MainWindowView>();
         }
 
         protected override void InitializeShell()

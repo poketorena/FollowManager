@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace FollowManager.ViewModels
+namespace FollowManager.MainWindow
 {
     public class MainWindowViewModel : BindableBase
     {
