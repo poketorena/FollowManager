@@ -73,10 +73,6 @@
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
-    <Compile Include="TopPanel\TopPanelView.xaml.cs">
-      <DependentUpon>TopPanelView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TopPanel\TopPanelViewModel.cs" />
     <Page Include="BottomPanel\BottomPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,10 +100,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SidePanel\SidePanelView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TopPanel\TopPanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

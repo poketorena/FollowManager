@@ -2,7 +2,6 @@
 using FollowManager.BottomPanel;
 using FollowManager.CardPanel;
 using FollowManager.SidePanel;
-using FollowManager.TopPanel;
 using MahApps.Metro.Controls;
 using Prism.Regions;
 
@@ -16,7 +15,6 @@ namespace FollowManager.MainWindow
         public MainWindowView(IRegionManager regionManager)
         {
             InitializeComponent();
-            regionManager.RegisterViewWithRegion("TopRegion", typeof(TopPanelView));
             regionManager.RegisterViewWithRegion("SideRegion", typeof(SidePanelView));
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(CardPanelView));
             regionManager.RegisterViewWithRegion("BottomRegion", typeof(BottomPanelView));
