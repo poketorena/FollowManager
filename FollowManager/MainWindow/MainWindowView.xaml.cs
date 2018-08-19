@@ -3,6 +3,7 @@ using FollowManager.BottomPanel;
 using FollowManager.CardPanel;
 using FollowManager.SidePanel;
 using FollowManager.TopPanel;
+using MahApps.Metro.Controls;
 using Prism.Regions;
 
 namespace FollowManager.MainWindow
@@ -10,7 +11,7 @@ namespace FollowManager.MainWindow
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindowView : Window
+    public partial class MainWindowView : MetroWindow
     {
         public MainWindowView(IRegionManager regionManager)
         {

@@ -7,10 +7,7 @@
     Background="Orange">
     <Grid>
         <StatusBar Height="23">
-            <StatusBarItem
-                Background="#607d8b"
-                Content="おはようございます。"
-                Foreground="White" />
+            <StatusBarItem Content="{Binding Log.Value}" />
         </StatusBar>
     </Grid>
 </UserControl>

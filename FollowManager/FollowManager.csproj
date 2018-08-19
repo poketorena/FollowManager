@@ -68,6 +68,7 @@
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="Service\LoggingService.cs" />
     <Compile Include="SidePanel\SidePanelView.xaml.cs">
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
@@ -137,6 +138,9 @@
   <ItemGroup>
     <PackageReference Include="CoreTweet">
       <Version>0.9.0.415</Version>
+    </PackageReference>
+    <PackageReference Include="MahApps.Metro">
+      <Version>1.6.5</Version>
     </PackageReference>
     <PackageReference Include="MaterialDesignThemes">
       <Version>2.4.1.1101</Version>
