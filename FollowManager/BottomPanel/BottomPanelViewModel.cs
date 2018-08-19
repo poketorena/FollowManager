@@ -16,13 +16,16 @@ namespace FollowManager.BottomPanel
         // コンストラクタ
         public BottomPanelViewModel(LoggingService loggingService)
         {
+            // DI
             _loggingService = loggingService;
 
+            // プロパティの設定
             Log = _loggingService
                 .Logs
                 .ObserveAddChanged()
                 .ToReactiveProperty();
 
+            // 変更通知のテスト
             _loggingService.Logs.Add("おはようございます");
             _loggingService.Logs.Add("こんにちは");
             _loggingService.Logs.Add("こんばんは");
