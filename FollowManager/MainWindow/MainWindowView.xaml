@@ -20,6 +20,7 @@
 
     <Controls:MetroWindow.RightWindowCommands>
         <Controls:WindowCommands>
+            <Button Content="データの再取得" />
             <Button Content="アカウント" />
             <Button Content="設定" />
             <Button Content="Follow Managerについて" />
