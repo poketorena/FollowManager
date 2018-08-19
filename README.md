@@ -20,6 +20,7 @@ Windowsで動作する、Twitterのフォロー整理を楽にするアプリで
 * [Unity](https://github.com/unitycontainer/unity)
 * [Reactive Extensions](https://github.com/dotnet/reactive)
 * [ReactiveProperty](https://github.com/runceel/ReactiveProperty)
+* [MahApps.Metro](https://github.com/MahApps/MahApps.Metro)
 * [Material Design In XAML Toolkit](https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit)
 * [Json.NET](https://github.com/JamesNK/Newtonsoft.Json)
 * [CoreTweet](https://github.com/CoreTweet/CoreTweet)
