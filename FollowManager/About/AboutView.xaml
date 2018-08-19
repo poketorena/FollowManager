@@ -11,7 +11,11 @@
     Background="{DynamicResource MaterialDesignPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}">
+    ShowMaxRestoreButton="False"
+    ShowMinButton="False"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TitleCaps="False"
+    WindowStartupLocation="CenterScreen">
     <StackPanel>
 
         <TextBlock Margin="10" FontSize="20">

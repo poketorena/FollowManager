@@ -8,7 +8,7 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:setting="clr-namespace:FollowManager.Setting"
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-    Title="Follow Manager"
+    Title="FollowManager"
     Width="1200"
     Height="750"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -17,6 +17,8 @@
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ResizeMode="CanResizeWithGrip"
     TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TitleCaps="False"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
     <Controls:MetroWindow.RightWindowCommands>
@@ -24,7 +26,7 @@
             <Button Content="データの再取得" />
             <Button Content="アカウント" />
             <Button Command="{Binding SettingOpenCommand}" Content="設定" />
-            <Button Command="{Binding AboutOpenCommand}" Content="Follow Managerについて" />
+            <Button Command="{Binding AboutOpenCommand}" Content="FollowManagerについて" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 

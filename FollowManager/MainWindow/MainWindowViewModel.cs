@@ -45,12 +45,7 @@ namespace FollowManager.MainWindow
         // プライベート関数
         private void ExecuteSettingOpenCommand()
         {
-            var window = new SettingView()
-            {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowMinButton = false,
-                ShowMaxRestoreButton = false
-            };
+            var window = new SettingView();
             window.Closed += (o, args) => _loggingService.Logs.Add("設定が更新されました。");
             window.Closed += (o, args) => window = null;
             window.ShowDialog();
@@ -58,12 +53,7 @@ namespace FollowManager.MainWindow
 
         private void ExecuteAboutOpenCommand()
         {
-            var window = new AboutView()
-            {
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                ShowMinButton = false,
-                ShowMaxRestoreButton = false
-            };
+            var window = new AboutView();
             window.Closed += (o, args) => _loggingService.Logs.Add("About画面を閉じました。");
             window.Closed += (o, args) => window = null;
             window.ShowDialog();
