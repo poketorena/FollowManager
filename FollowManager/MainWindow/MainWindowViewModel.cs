@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using FollowManager.About;
 using FollowManager.Service;
 using FollowManager.Setting;
 using MahApps.Metro.Controls;
@@ -21,6 +22,10 @@ namespace FollowManager.MainWindow
         private DelegateCommand _settingOpenCommand;
         public DelegateCommand SettingOpenCommand =>
             _settingOpenCommand ?? (_settingOpenCommand = new DelegateCommand(ExecuteSettingOpenCommand));
+
+        private DelegateCommand _aboutOpenCommand;
+        public DelegateCommand AboutOpenCommand =>
+            _aboutOpenCommand ?? (_aboutOpenCommand = new DelegateCommand(ExecuteAboutOpenCommand));
 
         // プライベート変数
 
@@ -47,6 +52,19 @@ namespace FollowManager.MainWindow
                 ShowMaxRestoreButton = false
             };
             window.Closed += (o, args) => _loggingService.Logs.Add("設定が更新されました。");
+            window.Closed += (o, args) => window = null;
+            window.ShowDialog();
+        }
+
+        private void ExecuteAboutOpenCommand()
+        {
+            var window = new AboutView()
+            {
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowMinButton = false,
+                ShowMaxRestoreButton = false
+            };
+            window.Closed += (o, args) => _loggingService.Logs.Add("About画面を閉じました。");
             window.Closed += (o, args) => window = null;
             window.ShowDialog();
         }

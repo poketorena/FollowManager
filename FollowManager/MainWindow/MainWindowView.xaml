@@ -24,7 +24,7 @@
             <Button Content="データの再取得" />
             <Button Content="アカウント" />
             <Button Command="{Binding SettingOpenCommand}" Content="設定" />
-            <Button Content="Follow Managerについて" />
+            <Button Command="{Binding AboutOpenCommand}" Content="Follow Managerについて" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 
