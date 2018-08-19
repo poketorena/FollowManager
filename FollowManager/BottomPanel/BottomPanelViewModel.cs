@@ -7,11 +7,11 @@ namespace FollowManager.BottomPanel
 {
     public class BottomPanelViewModel : BindableBase
     {
-        // DI注入される変数
-        private readonly LoggingService _loggingService;
-
         // プロパティ
         public ReactiveProperty<string> Log { get; } = new ReactiveProperty<string>();
+
+        // DI注入される変数
+        private readonly LoggingService _loggingService;
 
         // コンストラクタ
         public BottomPanelViewModel(LoggingService loggingService)

@@ -6,8 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:setting="clr-namespace:FollowManager.Setting"
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
-    Title="{Binding Title}"
+    Title="Follow Manager"
     Width="1200"
     Height="750"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -22,7 +23,7 @@
         <Controls:WindowCommands>
             <Button Content="データの再取得" />
             <Button Content="アカウント" />
-            <Button Content="設定" />
+            <Button Command="{Binding SettingOpenCommand}" Content="設定" />
             <Button Content="Follow Managerについて" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>

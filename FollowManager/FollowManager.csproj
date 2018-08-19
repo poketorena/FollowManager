@@ -69,6 +69,11 @@
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
     <Compile Include="Service\LoggingService.cs" />
+    <Compile Include="Setting\SettingModel.cs" />
+    <Compile Include="Setting\SettingView.xaml.cs">
+      <DependentUpon>SettingView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Setting\SettingViewModel.cs" />
     <Compile Include="SidePanel\SidePanelView.xaml.cs">
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
@@ -99,6 +104,10 @@
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Setting\SettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SidePanel\SidePanelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
