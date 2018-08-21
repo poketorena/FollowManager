@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using FollowManager.About;
+using FollowManager.Account;
 using FollowManager.Service;
 using FollowManager.Setting;
 using MahApps.Metro.Controls;
@@ -32,12 +33,14 @@ namespace FollowManager.MainWindow
         // DI注入される変数
         LoggingService _loggingService;
         IRegionManager _reagionManager;
+        AccountManager _accountManager;
 
         // コンストラクタ
-        public MainWindowViewModel(LoggingService loggingService, IRegionManager regionManager)
+        public MainWindowViewModel(LoggingService loggingService, IRegionManager regionManager, AccountManager accountManager)
         {
             _loggingService = loggingService;
             _reagionManager = regionManager;
+            _accountManager = accountManager;
         }
 
         // デストラクタ

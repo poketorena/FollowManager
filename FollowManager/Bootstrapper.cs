@@ -4,6 +4,7 @@ using Prism.Modularity;
 using Microsoft.Practices.Unity;
 using Prism.Unity;
 using FollowManager.Service;
+using FollowManager.Account;
 
 namespace FollowManager
 {
@@ -31,6 +32,7 @@ namespace FollowManager
 
             // シングルトンでコンテナに登録
             Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());
         }
     }
 }
