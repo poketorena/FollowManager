@@ -71,6 +71,7 @@
       <DependentUpon>CardPanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="CardPanel\CardPanelViewModel.cs" />
+    <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
