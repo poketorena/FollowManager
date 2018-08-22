@@ -118,7 +118,7 @@
                                 Padding="2,0,2,0"
                                 materialDesign:RippleAssist.IsCentered="True"
                                 Style="{StaticResource MaterialDesignToolButton}">
-                                <materialDesign:PackIcon Kind="ShareVariant" />
+                                <materialDesign:PackIcon Kind="BlockHelper" />
                             </Button>
                             <Button
                                 Width="30"
@@ -127,12 +127,6 @@
                                 Style="{StaticResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon Kind="Heart" />
                             </Button>
-                            <materialDesign:PopupBox Padding="2,0,2,0" Style="{StaticResource MaterialDesignToolPopupBox}">
-                                <StackPanel>
-                                    <Button Content="More" />
-                                    <Button Content="Options" />
-                                </StackPanel>
-                            </materialDesign:PopupBox>
                         </StackPanel>
                     </Grid>
                 </materialDesign:Card>
