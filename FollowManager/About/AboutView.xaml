@@ -13,7 +13,6 @@
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ShowMaxRestoreButton="False"
     ShowMinButton="False"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TitleCaps="False"
     WindowStartupLocation="CenterScreen">
     <StackPanel>

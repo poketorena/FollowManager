@@ -16,7 +16,6 @@
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ResizeMode="CanResizeWithGrip"
-    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
     TitleCaps="False"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
