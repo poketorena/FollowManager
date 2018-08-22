@@ -63,6 +63,8 @@
     <Compile Include="About\AboutViewModel.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountManager.cs" />
+    <Compile Include="Account\FollowType.cs" />
+    <Compile Include="Account\UserData.cs" />
     <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
       <DependentUpon>BottomPanelView.xaml</DependentUpon>
     </Compile>

@@ -54,12 +54,12 @@
                             Margin="0,0,0,0"
                             Panel.ZIndex="5"
                             Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.ClickCommand}"
-                            CommandParameter="{Binding ScreenName}"
+                            CommandParameter="{Binding User.ScreenName}"
                             Opacity="0" />
                         <Image
                             Width="200"
                             Height="66"
-                            Source="{Binding ProfileBannerUrl}"
+                            Source="{Binding User.ProfileBannerUrl}"
                             Stretch="Fill" />
                         <Image
                             Grid.Row="0"
@@ -68,7 +68,7 @@
                             Margin="8,0,0,-25"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Bottom"
-                            Source="{Binding ProfileImageUrlHttps}"
+                            Source="{Binding User.ProfileImageUrlHttps}"
                             Stretch="UniformToFill" />
 
                         <Rectangle
@@ -91,18 +91,18 @@
                             Text="ファン"
                             TextAlignment="Center" />
                         <StackPanel Grid.Row="1" Margin="8,29,8,0">
-                            <TextBlock FontWeight="Bold" Text="{Binding Name}" />
+                            <TextBlock FontWeight="Bold" Text="{Binding User.Name}" />
                             <TextBlock
                                 Margin="0,2,0,0"
                                 VerticalAlignment="Center"
                                 Opacity="0.8"
-                                Text="{Binding ScreenName, StringFormat=@{0}}"
+                                Text="{Binding User.ScreenName, StringFormat=@{0}}"
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Height="55"
                                 Margin="0,2,0,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding Description}"
+                                Text="{Binding User.Description}"
                                 TextWrapping="Wrap" />
                         </StackPanel>
                         <StackPanel

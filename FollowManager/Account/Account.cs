@@ -11,9 +11,9 @@ namespace FollowManager.Account
     public class Account
     {
         // プロパティ
-        public ObservableCollection<User> Follows { get; set; } = new ObservableCollection<User>();
+        public ObservableCollection<UserData> Follows { get; set; } = new ObservableCollection<UserData>();
 
-        public ObservableCollection<User> Followers { get; set; } = new ObservableCollection<User>();
+        public ObservableCollection<UserData> Followers { get; set; } = new ObservableCollection<UserData>();
 
         //public Tokens Tokens { get; set; } = new Tokens();
     }

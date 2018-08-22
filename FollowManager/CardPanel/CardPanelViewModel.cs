@@ -14,7 +14,7 @@ namespace FollowManager.CardPanel
     public class CardPanelViewModel : BindableBase
     {
         // プロパティ
-        public ReactiveCollection<User> Follows { get; set; }
+        public ReactiveCollection<UserData> Follows { get; set; }
 
         // DI注入される変数
         AccountManager _accountManager;
@@ -43,13 +43,13 @@ namespace FollowManager.CardPanel
                 .CollectionChangedAsObservable()
                 .Subscribe(x =>
                 {
-                    Follows = new ReactiveCollection<User>(_accountManager.Current.Follows.ToObservable());
+                    Follows = new ReactiveCollection<UserData>(_accountManager.Current.Follows.ToObservable());
                 }
                 );
 
-            Follows = new ReactiveCollection<User>(_accountManager.Current.Follows.ToObservable());
+            Follows = new ReactiveCollection<UserData>(_accountManager.Current.Follows.ToObservable());
         }
-
+        
         ~CardPanelViewModel()
         {
             _disposable.Dispose();
