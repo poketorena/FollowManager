@@ -63,6 +63,7 @@
     <Compile Include="About\AboutViewModel.cs" />
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountManager.cs" />
+    <Compile Include="Account\Authentication.cs" />
     <Compile Include="Account\FollowType.cs" />
     <Compile Include="Account\UserData.cs" />
     <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
@@ -75,6 +76,7 @@
     </Compile>
     <Compile Include="CardPanel\CardPanelViewModel.cs" />
     <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
+    <Compile Include="Converters\Bool2ColorConverter.cs" />
     <Compile Include="Converters\FollowType2ColorConverter.cs" />
     <Compile Include="Converters\FollowType2StringConverter.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">

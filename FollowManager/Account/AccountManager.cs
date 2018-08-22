@@ -28,6 +28,15 @@ namespace FollowManager.Account
                 }
                 Current = JsonConvert.DeserializeObject<Account>(jsonData);
             }
+
+            Current.Tokens = CoreTweet.Tokens.Create(
+                Current.Authentication.ConsumerKey,
+                Current.Authentication.ConsumerSecret,
+                Current.Authentication.AccessToken,
+                Current.Authentication.AccessTokenSecret,
+                Current.Authentication.UserId,
+                Current.Authentication.ScreenName
+                );
         }
     }
 }

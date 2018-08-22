@@ -32,6 +32,7 @@
             </ResourceDictionary.MergedDictionaries>
             <c:FollowType2ColorConverter x:Key="FollowType2ColorConverter" />
             <c:FollowType2StringConverter x:Key="FollowType2StringConverter" />
+            <c:Bool2ColorConverter x:Key="Bool2ColorConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <ListBox
@@ -117,6 +118,8 @@
                                 Width="30"
                                 Padding="2,0,2,0"
                                 materialDesign:RippleAssist.IsCentered="True"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.BlockAndBlockReleaseCommand}"
+                                CommandParameter="{Binding}"
                                 Style="{StaticResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon Kind="BlockHelper" />
                             </Button>
@@ -124,6 +127,9 @@
                                 Width="30"
                                 Padding="2,0,2,0"
                                 materialDesign:RippleAssist.IsCentered="True"
+                                Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.FavoriteCommnad}"
+                                CommandParameter="{Binding}"
+                                Foreground="{Binding Favorite, Converter={StaticResource Bool2ColorConverter}}"
                                 Style="{StaticResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon Kind="Heart" />
                             </Button>

@@ -32,7 +32,8 @@ namespace FollowManager.CardPanel
                     ScreenName = "science507",
                     Name = "ポケトレーナー"
                 },
-                FollowType = FollowType.Follow
+                FollowType = FollowType.Follow,
+                Favorite = true
             });
 
             Follows = new ReactiveCollection<UserData>(users);

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CoreTweet;
+using Newtonsoft.Json;
 
 namespace FollowManager.Account
 {
@@ -15,6 +16,10 @@ namespace FollowManager.Account
 
         public ObservableCollection<UserData> Followers { get; set; } = new ObservableCollection<UserData>();
 
-        //public Tokens Tokens { get; set; } = new Tokens();
+        [JsonIgnore]
+        public Tokens Tokens { get; set; } = new Tokens();
+
+        // 認証用データ
+        public Authentication Authentication { get; set; } = new Authentication();
     }
 }

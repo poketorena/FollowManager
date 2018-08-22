@@ -19,13 +19,29 @@ namespace FollowManager.CardPanel
         // パブリック関数
 
         // DI注入される変数
-        readonly AccountManager _accountManager;
-        readonly CardPanelModel _cardPanelModel;
+        private readonly AccountManager _accountManager;
+        private readonly CardPanelModel _cardPanelModel;
 
         // デリゲートコマンド
         private DelegateCommand<string> _openProfileCommand;
         public DelegateCommand<string> OpenProfileCommand =>
             _openProfileCommand ?? (_openProfileCommand = new DelegateCommand<string>(_cardPanelModel.OpenProfile));
+
+        private DelegateCommand<UserData> _favoriteCommand;
+        public DelegateCommand<UserData> FavoriteCommnad =>
+            _favoriteCommand ?? (_favoriteCommand = new DelegateCommand<UserData>(x =>
+            {
+                // Favoriteを反転させる
+                Follows.ElementAt(Follows.IndexOf(x)).Favorite = !Follows.ElementAt(Follows.IndexOf(x)).Favorite;
+            }));
+
+        private DelegateCommand<UserData> _blockAndBlockReleaseCommnad;
+        public DelegateCommand<UserData> BlockAndBlockReleaseCommand =>
+            _blockAndBlockReleaseCommnad ?? (_blockAndBlockReleaseCommnad = new DelegateCommand<UserData>(async x =>
+            {
+                Follows.ElementAt(Follows.IndexOf(x)).FollowType = FollowType.BlockAndBlockRelease;
+                await _cardPanelModel.ScheduleBlockAndBlockRelease(x.User);
+            }));
 
         // インタラクションリクエスト
 
