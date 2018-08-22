@@ -16,15 +16,23 @@ namespace FollowManager.CardPanel
         // プロパティ
         public ReactiveCollection<UserData> Follows { get; set; }
 
-        // DI注入される変数
-        AccountManager _accountManager;
-        CardPanelModel _cardPanelModel;
+        // パブリック関数
 
+        // DI注入される変数
+        readonly AccountManager _accountManager;
+        readonly CardPanelModel _cardPanelModel;
+
+        // デリゲートコマンド
         private DelegateCommand<string> _openProfileCommand;
         public DelegateCommand<string> OpenProfileCommand =>
             _openProfileCommand ?? (_openProfileCommand = new DelegateCommand<string>(_cardPanelModel.OpenProfile));
 
+        // インタラクションリクエスト
+
+        // プライベート変数
         private IDisposable _disposable;
+
+        // DI注入される変数
 
         // コンストラクタ
         public CardPanelViewModel(AccountManager accountManager, CardPanelModel cardPanelModel)
@@ -44,10 +52,13 @@ namespace FollowManager.CardPanel
 
             Follows = new ReactiveCollection<UserData>(_accountManager.Current.Follows.ToObservable());
         }
-        
+
+        // デストラクタ
         ~CardPanelViewModel()
         {
             _disposable.Dispose();
         }
+
+        // プライベート関数
     }
 }
