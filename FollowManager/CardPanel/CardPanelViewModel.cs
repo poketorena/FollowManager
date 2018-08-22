@@ -41,7 +41,7 @@ namespace FollowManager.CardPanel
                 .Current
                 .Follows
                 .CollectionChangedAsObservable()
-                .Subscribe(x =>
+                .Subscribe(_ =>
                 {
                     Follows = new ReactiveCollection<UserData>(_accountManager.Current.Follows.ToObservable());
                 }
