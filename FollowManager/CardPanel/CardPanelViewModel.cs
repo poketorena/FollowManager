@@ -18,24 +18,19 @@ namespace FollowManager.CardPanel
 
         // DI注入される変数
         AccountManager _accountManager;
+        CardPanelModel _cardPanelModel;
 
-        private DelegateCommand<string> _clickCommand;
-        public DelegateCommand<string> ClickCommand =>
-            _clickCommand ?? (_clickCommand = new DelegateCommand<string>(ExecuteClickCommand));
+        private DelegateCommand<string> _openProfileCommand;
+        public DelegateCommand<string> OpenProfileCommand =>
+            _openProfileCommand ?? (_openProfileCommand = new DelegateCommand<string>(_cardPanelModel.OpenProfile));
 
         private IDisposable _disposable;
 
-        private void ExecuteClickCommand(string screenName)
-        {
-            // プロフィールページをブラウザで開く
-            var url = "https://twitter.com/" + screenName;
-            System.Diagnostics.Process.Start(url);
-        }
-
         // コンストラクタ
-        public CardPanelViewModel(AccountManager accountManager)
+        public CardPanelViewModel(AccountManager accountManager, CardPanelModel cardPanelModel)
         {
             _accountManager = accountManager;
+            _cardPanelModel = cardPanelModel;
 
             _disposable = _accountManager
                 .Current

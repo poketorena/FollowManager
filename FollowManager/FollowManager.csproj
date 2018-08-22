@@ -69,6 +69,7 @@
       <DependentUpon>BottomPanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="BottomPanel\BottomPanelViewModel.cs" />
+    <Compile Include="CardPanel\CardPanelModel.cs" />
     <Compile Include="CardPanel\CardPanelView.xaml.cs">
       <DependentUpon>CardPanelView.xaml</DependentUpon>
     </Compile>

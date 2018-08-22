@@ -5,6 +5,7 @@ using Microsoft.Practices.Unity;
 using Prism.Unity;
 using FollowManager.Service;
 using FollowManager.Account;
+using FollowManager.CardPanel;
 
 namespace FollowManager
 {
@@ -29,6 +30,8 @@ namespace FollowManager
         protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
+
+            Container.RegisterType<CardPanelModel>();
 
             // シングルトンでコンテナに登録
             Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
