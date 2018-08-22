@@ -2,6 +2,7 @@
     x:Class="FollowManager.CardPanel.CardPanelView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:FollowManager.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:FollowManager.CardPanel"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
@@ -29,6 +30,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <c:FollowType2ColorConverter x:Key="FollowType2ColorConverter" />
+            <c:FollowType2StringConverter x:Key="FollowType2StringConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <ListBox
@@ -78,7 +81,7 @@
                             Margin="0,5,8,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Fill="#FF4081"
+                            Fill="{Binding FollowType, Converter={StaticResource FollowType2ColorConverter}}"
                             Opacity="1" />
                         <TextBlock
                             Grid.Row="1"
@@ -88,7 +91,7 @@
                             VerticalAlignment="Top"
                             FontSize="12"
                             Foreground="White"
-                            Text="ファン"
+                            Text="{Binding FollowType, Converter={StaticResource FollowType2StringConverter}}"
                             TextAlignment="Center" />
                         <StackPanel Grid.Row="1" Margin="8,29,8,0">
                             <TextBlock FontWeight="Bold" Text="{Binding User.Name}" />

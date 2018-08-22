@@ -75,6 +75,8 @@
     </Compile>
     <Compile Include="CardPanel\CardPanelViewModel.cs" />
     <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
+    <Compile Include="Converters\FollowType2ColorConverter.cs" />
+    <Compile Include="Converters\FollowType2StringConverter.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
