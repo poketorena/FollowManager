@@ -10,6 +10,7 @@ namespace FollowManager.Account
     {
         Follow,
         Follower,
-        Mutual
+        Mutual,
+        BlockAndBlockRelease
     }
 }

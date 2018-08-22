@@ -26,6 +26,9 @@ namespace FollowManager.Converters
                 case FollowType.Mutual:
                     // オレンジ
                     return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#FF5722"));
+                case FollowType.BlockAndBlockRelease:
+                    // 紫
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#E040FB"));
                 default:
                     throw new ArgumentException();
             }

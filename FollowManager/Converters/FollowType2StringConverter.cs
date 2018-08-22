@@ -22,6 +22,8 @@ namespace FollowManager.Converters
                     return "ファン";
                 case FollowType.Mutual:
                     return "相互フォロー";
+                case FollowType.BlockAndBlockRelease:
+                    return "B&BR済み";
                 default:
                     throw new ArgumentException();
             }

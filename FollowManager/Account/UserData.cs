@@ -23,5 +23,12 @@ namespace FollowManager.Account
             get { return _followType; }
             set { SetProperty(ref _followType, value); }
         }
+
+        private bool _favorite;
+        public bool Favorite
+        {
+            get { return _favorite; }
+            set { SetProperty(ref _favorite, value); }
+        }
     }
 }
