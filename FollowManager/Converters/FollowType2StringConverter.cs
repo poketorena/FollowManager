@@ -16,14 +16,16 @@ namespace FollowManager.Converters
 
             switch ((FollowType)value)
             {
-                case FollowType.Follow:
+                case FollowType.OneWay:
                     return "片思い";
-                case FollowType.Follower:
+                case FollowType.Fan:
                     return "ファン";
                 case FollowType.Mutual:
                     return "相互フォロー";
                 case FollowType.BlockAndBlockRelease:
                     return "B&BR済み";
+                case FollowType.NotSet:
+                    return "未設定";
                 default:
                     throw new ArgumentException();
             }

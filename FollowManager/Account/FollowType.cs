@@ -8,9 +8,10 @@ namespace FollowManager.Account
 {
     public enum FollowType
     {
-        Follow,
-        Follower,
+        OneWay,
+        Fan,
         Mutual,
-        BlockAndBlockRelease
+        BlockAndBlockRelease,
+        NotSet
     }
 }

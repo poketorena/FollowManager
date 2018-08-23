@@ -15,7 +15,7 @@ namespace FollowManager.CardPanel
     public class TestCardPanelViewModel
     {
         // プロパティ
-        public ReactiveCollection<UserData> Follows { get; } = new ReactiveCollection<UserData>();
+        public ReactiveCollection<UserData> UserDatas { get; } = new ReactiveCollection<UserData>();
 
         // コンストラクタ
         public TestCardPanelViewModel()
@@ -32,11 +32,11 @@ namespace FollowManager.CardPanel
                     ScreenName = "science507",
                     Name = "ポケトレーナー"
                 },
-                FollowType = FollowType.Follow,
+                FollowType = FollowType.OneWay,
                 Favorite = true
             });
 
-            Follows = new ReactiveCollection<UserData>(users);
+            UserDatas = new ReactiveCollection<UserData>(users);
         }
     }
 }

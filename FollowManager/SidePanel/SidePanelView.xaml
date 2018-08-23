@@ -2,8 +2,34 @@
     x:Class="FollowManager.SidePanel.SidePanelView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:f="clr-namespace:FollowManager.FilterAndSort"
     xmlns:prism="http://prismlibrary.com/"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="LightGreen">
-    <Grid />
+    <StackPanel>
+        <Button
+            Command="{Binding ChangeFilterCommand}"
+            CommandParameter="Fan"
+            Content="ファン" />
+        <Button
+            Command="{Binding ChangeFilterCommand}"
+            CommandParameter="OneWay"
+            Content="片思い" />
+        <Button
+            Command="{Binding ChangeFilterCommand}"
+            CommandParameter="Mutual"
+            Content="相互フォロー" />
+        <Button
+            Command="{Binding ChangeFilterCommand}"
+            CommandParameter="Inactive"
+            Content="非アクティブ" />
+
+        <!--  未実装  -->
+        <Button Command="{Binding ChangeSortKeyCommand}" Content="最終ツイート日" />
+        <Button Command="{Binding ChangeSortKeyCommand}" Content="フォーローした日" />
+        <Button Command="{Binding ChangeSortKeyCommand}" Content="1日あたりのツイート数" />
+
+        <Button Command="{Binding ChangeSortKeyCommand}" Content="昇順" />
+        <Button Command="{Binding ChangeSortKeyCommand}" Content="降順" />
+    </StackPanel>
 </UserControl>

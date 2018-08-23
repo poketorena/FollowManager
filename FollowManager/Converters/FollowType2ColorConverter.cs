@@ -17,10 +17,10 @@ namespace FollowManager.Converters
 
             switch ((FollowType)value)
             {
-                case FollowType.Follow:
+                case FollowType.OneWay:
                     // 水色
                     return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#03A9F4"));
-                case FollowType.Follower:
+                case FollowType.Fan:
                     // ピンク
                     return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#FF4081"));
                 case FollowType.Mutual:
@@ -29,6 +29,9 @@ namespace FollowManager.Converters
                 case FollowType.BlockAndBlockRelease:
                     // 紫
                     return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#E040FB"));
+                case FollowType.NotSet:
+                    // ブルーグレー
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#607D8B"));
                 default:
                     throw new ArgumentException();
             }
