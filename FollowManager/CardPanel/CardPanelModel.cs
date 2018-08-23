@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,15 @@ namespace FollowManager.CardPanel
     public class CardPanelModel
     {
         // プロパティ
+
+        // フィルターのためのキャッシュ
+        public ObservableCollection<UserData> OneWay { get; set; } = new ObservableCollection<UserData>();
+
+        public ObservableCollection<UserData> Fan { get; set; } = new ObservableCollection<UserData>();
+
+        public ObservableCollection<UserData> Mutual { get; set; } = new ObservableCollection<UserData>();
+
+        public ObservableCollection<UserData> Inactive { get; set; } = new ObservableCollection<UserData>();
 
         // パブリック関数
         public void OpenProfile(string screenName)
