@@ -125,7 +125,7 @@ namespace FollowManager.CardPanel
                 .Current
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
-                .Subscribe(Load);
+                .Subscribe(x => Task.Run(() => Load(x)));
         }
 
         private void Load(System.ComponentModel.PropertyChangedEventArgs propertyChangedEventArgs)

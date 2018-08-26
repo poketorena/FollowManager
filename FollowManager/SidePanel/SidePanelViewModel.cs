@@ -18,7 +18,7 @@ namespace FollowManager.SidePanel
         // デリゲートコマンド
         private DelegateCommand<string> _changeFilterCommand;
         public DelegateCommand<string> ChangeFilterCommand =>
-            _changeFilterCommand ?? (_changeFilterCommand = new DelegateCommand<string>(_sidePanelModel.ExecuteChangeFilterCommand));
+            _changeFilterCommand ?? (_changeFilterCommand = new DelegateCommand<string>(x =>Task.Run(() =>_sidePanelModel.ExecuteChangeFilterCommand(x))));
 
         // インタラクションリクエスト
 
