@@ -5,6 +5,7 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FollowManager.SidePanel
 {
@@ -17,7 +18,7 @@ namespace FollowManager.SidePanel
         // デリゲートコマンド
         private DelegateCommand<string> _changeFilterCommand;
         public DelegateCommand<string> ChangeFilterCommand =>
-            _changeFilterCommand ?? (_changeFilterCommand = new DelegateCommand<string>(ExecuteChangeFilterCommand));
+            _changeFilterCommand ?? (_changeFilterCommand = new DelegateCommand<string>(_sidePanelModel.ExecuteChangeFilterCommand));
 
         // インタラクションリクエスト
 
@@ -25,44 +26,17 @@ namespace FollowManager.SidePanel
 
         // DI注入される変数
         private readonly AccountManager _accountManager;
+        private readonly SidePanelModel _sidePanelModel;
 
         // コンストラクタ
-        public SidePanelViewModel(AccountManager accountManager)
+        public SidePanelViewModel(AccountManager accountManager, SidePanelModel sidePanelModel)
         {
             _accountManager = accountManager;
+            _sidePanelModel = sidePanelModel;
         }
 
         // デストラクタ
 
         // プライベート関数
-        private void ExecuteChangeFilterCommand(string filterParamer)
-        {
-            switch (filterParamer)
-            {
-                case nameof(FilterType.OneWay):
-                    {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.OneWay;
-                        break;
-                    }
-                case nameof(FilterType.Fan):
-                    {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Fan;
-                        break;
-                    }
-                case nameof(FilterType.Mutual):
-                    {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Mutual;
-                        break;
-                    }
-                case nameof(FilterType.Inactive):
-                    {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Inactive;
-                        break;
-                    }
-                default:
-                    break;
-            }
-
-        }
     }
 }

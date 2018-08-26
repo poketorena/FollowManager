@@ -10,6 +10,8 @@ using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
 using FollowManager.FilterAndSort;
 using FollowManager.Service;
+using Prism.Regions;
+using System.Diagnostics;
 
 namespace FollowManager.CardPanel
 {
@@ -43,13 +45,14 @@ namespace FollowManager.CardPanel
             _blockAndBlockReleaseCommnad ?? (_blockAndBlockReleaseCommnad = new DelegateCommand<UserData>(async x =>
             {
                 UserDatas.ElementAt(UserDatas.IndexOf(x)).FollowType = FollowType.BlockAndBlockRelease;
-                await _cardPanelModel.ScheduleBlockAndBlockRelease(x.User);
+                await _cardPanelModel.BlockAndBlockReleaseAsync(x.User);
             }));
+
 
         // インタラクションリクエスト
 
         // プライベート変数
-        private IDisposable _filterAndSort;
+        private IDisposable _filter;
 
         // DI注入される変数
         private readonly AccountManager _accountManager;
@@ -63,368 +66,24 @@ namespace FollowManager.CardPanel
             _cardPanelModel = cardPanelModel;
             _loggingService = loggingService;
 
-            _filterAndSort = _accountManager
-                .Current
-                .Follows
-                .PropertyChangedAsObservable()
-                .Subscribe(_ =>
+            //UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
+
+            _filter = Observable.FromEvent<List<UserData>>(
+                handler => _cardPanelModel.LoadCompleted += handler,
+                handler => _cardPanelModel.LoadCompleted -= handler
+                )
+                .Subscribe(userData =>
                 {
-                    UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
-                }
-                );
-
-            UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
-
-            _accountManager
-                .Current
-                .FilterAndSortOption
-                .PropertyChangedAsObservable()
-                .Subscribe(x =>
-                {
-                    if (x.PropertyName == nameof(FilterType))
-                    {
-                        // 購読を解除
-                        _filterAndSort.Dispose();
-
-                        var filterType = _accountManager.Current.FilterAndSortOption.FilterType;
-
-                        switch (filterType)
-                        {
-                            case FilterType.OneWay:
-                                {
-                                    var followsObservable = _accountManager
-                                    .Current
-                                    .Follows
-                                    .PropertyChangedAsObservable();
-
-                                    var followersObservable = _accountManager
-                                    .Current
-                                    .Followers
-                                    .PropertyChangedAsObservable();
-
-                                    _filterAndSort = followsObservable
-                                    .Zip(followersObservable, (_1, _2) => "unused")
-                                    .Subscribe(_ =>
-                                    {
-                                        UserDatas = new ReactiveCollection<UserData>(
-                                            _accountManager
-                                            .Current
-                                            .Follows
-                                            .Except(
-                                                _accountManager
-                                                .Current
-                                                .Follows
-                                                .Intersect(
-                                                    _accountManager
-                                                    .Current
-                                                    .Followers,
-                                                    new UserDataEqualityComparer()
-                                                    ),
-                                                new UserDataEqualityComparer()
-                                                )
-                                                .Select(userData =>
-                                                {
-                                                    return new UserData
-                                                    {
-                                                        User = userData.User,
-                                                        FollowType = FollowType.OneWay,
-                                                        Favorite = userData.Favorite
-                                                    };
-                                                })
-                                                .ToObservable()
-                                            );
-                                    });
-
-                                    UserDatas = new ReactiveCollection<UserData>(
-                                        _accountManager
-                                        .Current
-                                        .Follows
-                                        .Except(
-                                            _accountManager
-                                            .Current
-                                            .Follows
-                                            .Intersect(
-                                                _accountManager
-                                                .Current
-                                                .Followers,
-                                                new UserDataEqualityComparer()
-                                                ),
-                                            new UserDataEqualityComparer()
-                                            )
-                                            .Select(userData =>
-                                            {
-                                                return new UserData
-                                                {
-                                                    User = userData.User,
-                                                    FollowType = FollowType.OneWay,
-                                                    Favorite = userData.Favorite
-                                                };
-                                            })
-                                            .ToObservable()
-                                        );
-                                    break;
-                                }
-                            case FilterType.Fan:
-                                {
-                                    var followsObservable = _accountManager
-                                    .Current
-                                    .Follows
-                                    .PropertyChangedAsObservable();
-
-                                    var followersObservable = _accountManager
-                                    .Current
-                                    .Followers
-                                    .PropertyChangedAsObservable();
-
-                                    _filterAndSort = followsObservable
-                                    .Zip(followersObservable, (_1, _2) => "unused")
-                                    .Subscribe(_ =>
-                                    {
-                                        UserDatas = new ReactiveCollection<UserData>(
-                                            _accountManager
-                                            .Current
-                                            .Followers
-                                            .Except(
-                                                _accountManager
-                                                .Current
-                                                .Follows
-                                                .Intersect(
-                                                    _accountManager
-                                                    .Current
-                                                    .Followers,
-                                                    new UserDataEqualityComparer()
-                                                    ),
-                                                new UserDataEqualityComparer()
-                                                )
-                                                .Select(userData =>
-                                                {
-                                                    return new UserData
-                                                    {
-                                                        User = userData.User,
-                                                        FollowType = FollowType.Fan,
-                                                        Favorite = userData.Favorite
-                                                    };
-                                                })
-                                                .ToObservable()
-                                            );
-                                    });
-
-                                    UserDatas = new ReactiveCollection<UserData>(
-                                        _accountManager
-                                        .Current
-                                        .Followers
-                                        .Except(
-                                            _accountManager
-                                            .Current
-                                            .Follows
-                                            .Intersect(
-                                                _accountManager
-                                                .Current
-                                                .Followers,
-                                                new UserDataEqualityComparer()
-                                                ),
-                                            new UserDataEqualityComparer()
-                                            )
-                                            .Select(userData =>
-                                            {
-                                                return new UserData
-                                                {
-                                                    User = userData.User,
-                                                    FollowType = FollowType.Fan,
-                                                    Favorite = userData.Favorite
-                                                };
-                                            })
-                                            .ToObservable()
-                                        );
-                                    break;
-                                }
-                            case FilterType.Mutual:
-                                {
-                                    var followsObservable = _accountManager
-                                    .Current
-                                    .Follows
-                                    .PropertyChangedAsObservable();
-
-                                    var followersObservable = _accountManager
-                                    .Current
-                                    .Followers
-                                    .PropertyChangedAsObservable();
-
-                                    _filterAndSort = followsObservable
-                                    .Zip(followersObservable, (_1, _2) => "unused")
-                                    .Subscribe(_ =>
-                                    {
-                                        UserDatas = new ReactiveCollection<UserData>(
-                                            _accountManager
-                                            .Current
-                                            .Follows
-                                            .Intersect(
-                                                _accountManager
-                                                .Current
-                                                .Followers,
-                                                new UserDataEqualityComparer()
-                                                )
-                                                .Select(userData =>
-                                                {
-                                                    return new UserData
-                                                    {
-                                                        User = userData.User,
-                                                        FollowType = FollowType.Mutual,
-                                                        Favorite = userData.Favorite
-                                                    };
-                                                })
-                                                .ToObservable()
-                                            );
-                                    });
-
-                                    UserDatas = new ReactiveCollection<UserData>(
-                                        _accountManager
-                                        .Current
-                                        .Follows
-                                        .Intersect(
-                                            _accountManager
-                                            .Current
-                                            .Followers,
-                                            new UserDataEqualityComparer()
-                                            )
-                                            .Select(userData =>
-                                            {
-                                                return new UserData
-                                                {
-                                                    User = userData.User,
-                                                    FollowType = FollowType.Mutual,
-                                                    Favorite = userData.Favorite
-                                                };
-                                            })
-                                            .ToObservable()
-                                        );
-                                    break;
-                                }
-                            case FilterType.Inactive:
-                                {
-                                    var followsObservable = _accountManager
-                                    .Current
-                                    .Follows
-                                    .PropertyChangedAsObservable();
-
-                                    var followersObservable = _accountManager
-                                    .Current
-                                    .Followers
-                                    .PropertyChangedAsObservable();
-
-                                    _filterAndSort = followsObservable
-                                    .Zip(followersObservable, (_1, _2) => "unused")
-                                    .Subscribe(_ =>
-                                    {
-                                        UserDatas = new ReactiveCollection<UserData>(
-                                            _accountManager
-                                            .Current
-                                            .Follows
-                                            .Where(
-                                                userData =>
-                                                {
-                                                    IEnumerable<Status> statuses;
-                                                    try
-                                                    {
-                                                        statuses = _accountManager
-                                                        .Current
-                                                        .Tokens
-                                                        .Statuses
-                                                        .UserTimeline(
-                                                            user_id => userData.User.Id,
-                                                            count => 2
-                                                            );
-
-                                                    }
-                                                    catch (Exception e)
-                                                    {
-                                                        _loggingService.Logs.Add(userData.User.ScreenName + " : " + e.Message);
-                                                        return false;
-                                                    }
-
-                                                    var status = statuses.ElementAtOrDefault(1);
-
-                                                    if (status != null)
-                                                    {
-                                                        return DateTimeOffset.Now.Subtract(statuses.ElementAt(1).CreatedAt).Days >= 30;
-                                                    }
-                                                    else
-                                                    {
-                                                        return true;
-                                                    }
-                                                })
-                                                .Select(userData =>
-                                                {
-                                                    return new UserData
-                                                    {
-                                                        User = userData.User,
-                                                        FollowType = FollowType.NotSet,
-                                                        Favorite = userData.Favorite
-                                                    };
-                                                })
-                                                .ToObservable()
-                                            );
-                                    });
-
-                                    UserDatas = new ReactiveCollection<UserData>(
-                                        _accountManager
-                                        .Current
-                                        .Follows
-                                        .Where(
-                                            userData =>
-                                            {
-                                                IEnumerable<Status> statuses;
-                                                try
-                                                {
-                                                    statuses = _accountManager
-                                                    .Current
-                                                    .Tokens
-                                                    .Statuses
-                                                    .UserTimeline(
-                                                        user_id => userData.User.Id,
-                                                        count => 2
-                                                        );
-
-                                                }
-                                                catch (Exception e)
-                                                {
-                                                    _loggingService.Logs.Add(userData.User.ScreenName + " : " + e.Message);
-                                                    return true;
-                                                }
-
-                                                var status = statuses.ElementAtOrDefault(1);
-
-                                                if (status != null)
-                                                {
-                                                    return DateTimeOffset.Now.Subtract(statuses.ElementAt(1).CreatedAt).Days >= 30;
-                                                }
-                                                else
-                                                {
-                                                    return true;
-                                                }
-                                            })
-                                            .Select(userData =>
-                                            {
-                                                return new UserData
-                                                {
-                                                    User = userData.User,
-                                                    FollowType = FollowType.NotSet,
-                                                    Favorite = userData.Favorite
-                                                };
-                                            })
-                                            .ToObservable()
-                                        );
-                                    break;
-                                }
-                        }
-                    }
+                    UserDatas = (userData ?? new List<UserData>())
+                    .ToObservable()
+                    .ToReactiveCollection();
                 });
         }
 
         // デストラクタ
         ~CardPanelViewModel()
         {
-            _filterAndSort.Dispose();
+            _filter.Dispose();
         }
 
         // プライベート関数

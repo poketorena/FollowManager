@@ -22,9 +22,9 @@ namespace FollowManager.CardPanel
         {
             var users = Observable
             .Range(0, 20)
-            .Select(x => new UserData
-            {
-                User = new User
+            .Select(_ => new UserData
+            (
+                new User
                 {
                     ProfileImageUrlHttps = "https://pbs.twimg.com/profile_images/815189933124042756/xVkaYdkM_normal.jpg",
                     ProfileBannerUrl = "https://pbs.twimg.com/profile_banners/1302791522/1364285191/1500x500",
@@ -32,9 +32,9 @@ namespace FollowManager.CardPanel
                     ScreenName = "science507",
                     Name = "ポケトレーナー"
                 },
-                FollowType = FollowType.OneWay,
-                Favorite = true
-            });
+                FollowType.OneWay,
+                true
+            ));
 
             UserDatas = new ReactiveCollection<UserData>(users);
         }
