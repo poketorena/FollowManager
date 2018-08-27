@@ -16,9 +16,18 @@ namespace FollowManager.SidePanel
         // パブリック関数
 
         // デリゲートコマンド
-        private DelegateCommand<string> _changeFilterCommand;
-        public DelegateCommand<string> ChangeFilterCommand =>
-            _changeFilterCommand ?? (_changeFilterCommand = new DelegateCommand<string>(filterType => Task.Run(() => _sidePanelModel.ChangeFilter(filterType))));
+        private DelegateCommand<string> _changeFilterTypeCommand;
+        public DelegateCommand<string> ChangeFilterTypeCommand =>
+                                                                                                              // HACK: 非同期処理は要調整
+            _changeFilterTypeCommand ?? (_changeFilterTypeCommand = new DelegateCommand<string>(filterType => Task.Run(() => _sidePanelModel.ChangeFilterType(filterType))));
+
+        private DelegateCommand<string> _changeSortKeyTypeCommand;
+        public DelegateCommand<string> ChangeSortKeyTypeCommand =>
+            _changeSortKeyTypeCommand ?? (_changeSortKeyTypeCommand = new DelegateCommand<string>(_sidePanelModel.ChangeSortKeyType));
+
+        private DelegateCommand<string> _changeSortOrderTypeCommand;
+        public DelegateCommand<string> ChangeSortOrderTypeCommand =>
+            _changeSortOrderTypeCommand ?? (_changeSortOrderTypeCommand = new DelegateCommand<string>(_sidePanelModel.ChangeSortOrderType));
 
         // インタラクションリクエスト
 

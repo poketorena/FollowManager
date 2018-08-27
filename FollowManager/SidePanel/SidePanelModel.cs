@@ -14,7 +14,7 @@ namespace FollowManager.SidePanel
         public FilterAndSortOption FilterAndSortOption { get; } = new FilterAndSortOption();
 
         // パブリック関数
-        public void ChangeFilter(string filterType)
+        public void ChangeFilterType(string filterType)
         {
             switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
             {
@@ -41,11 +41,50 @@ namespace FollowManager.SidePanel
             }
         }
 
+        public void ChangeSortKeyType(string sortKeyType)
+        {
+            switch ((SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType))
+            {
+                case SortKeyType.LastTweetDay:
+                    {
+                        FilterAndSortOption.SortKeyType = SortKeyType.LastTweetDay;
+                        break;
+                    }
+                case SortKeyType.FollowDay:
+                    {
+                        FilterAndSortOption.SortKeyType = SortKeyType.FollowDay;
+                        break;
+                    }
+                case SortKeyType.TweetsPerDay:
+                    {
+                        FilterAndSortOption.SortKeyType = SortKeyType.TweetsPerDay;
+                        break;
+                    }
+            }
+        }
+
+        public void ChangeSortOrderType(string sortOrderType)
+        {
+            switch ((SortOrderType)Enum.Parse(typeof(SortOrderType), sortOrderType))
+            {
+                case SortOrderType.Ascending:
+                    {
+                        FilterAndSortOption.SortOrderType = SortOrderType.Ascending;
+                        break;
+                    }
+                case SortOrderType.Descending:
+                    {
+                        FilterAndSortOption.SortOrderType = SortOrderType.Descending;
+                        break;
+                    }
+            }
+        }
+
         // プライベート変数
 
         // DI注入される変数
         private readonly AccountManager _accountManager;
-        
+
         // コンストラクタ
         public SidePanelModel(AccountManager accountManager)
         {

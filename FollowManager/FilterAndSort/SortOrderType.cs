@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FollowManager.FilterAndSort
 {
-    public enum SortOption
+    public enum SortOrderType
     {
         Ascending,
         Descending

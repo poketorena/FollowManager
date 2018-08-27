@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,25 +17,25 @@ namespace FollowManager.FilterAndSort
             set { SetProperty(ref _filterType, value); }
         }
 
-        private SortKeyType _sortType;
+        private SortKeyType _sortKeyType;
         public SortKeyType SortKeyType
         {
-            get { return _sortType; }
-            set { SetProperty(ref _sortType, value); }
+            get { return _sortKeyType; }
+            set { SetProperty(ref _sortKeyType, value); }
         }
 
-        private SortOption _sortOption;
-        public SortOption SortOption
+        private SortOrderType _sortOrderType;
+        public SortOrderType SortOrderType
         {
-            get { return _sortOption; }
-            set { SetProperty(ref _sortOption, value); }
+            get { return _sortOrderType; }
+            set { SetProperty(ref _sortOrderType, value); }
         }
 
         public FilterAndSortOption()
         {
             FilterType = FilterType.Fan;
             SortKeyType = SortKeyType.LastTweetDay;
-            SortOption = SortOption.Descending;
+            SortOrderType = SortOrderType.Descending;
         }
     }
 }

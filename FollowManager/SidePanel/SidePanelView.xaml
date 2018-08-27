@@ -8,28 +8,43 @@
     Background="LightGreen">
     <StackPanel>
         <Button
-            Command="{Binding ChangeFilterCommand}"
+            Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Fan"
             Content="ファン" />
         <Button
-            Command="{Binding ChangeFilterCommand}"
+            Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="OneWay"
             Content="片思い" />
         <Button
-            Command="{Binding ChangeFilterCommand}"
+            Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Mutual"
             Content="相互フォロー" />
         <Button
-            Command="{Binding ChangeFilterCommand}"
+            Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Inactive"
             Content="非アクティブ" />
 
         <!--  未実装  -->
-        <Button Command="{Binding ChangeSortKeyCommand}" Content="最終ツイート日" />
-        <Button Command="{Binding ChangeSortKeyCommand}" Content="フォーローした日" />
-        <Button Command="{Binding ChangeSortKeyCommand}" Content="1日あたりのツイート数" />
+        <Button
+            Command="{Binding ChangeSortKeyTypeCommand}"
+            CommandParameter="LastTweetDay"
+            Content="最終ツイート日" />
+        <Button
+            Command="{Binding ChangeSortKeyTypeCommand}"
+            CommandParameter="FollowDay"
+            Content="フォーローした日" />
+        <Button
+            Command="{Binding ChangeSortKeyTypeCommand}"
+            CommandParameter="TweetsPerDay"
+            Content="1日あたりのツイート数" />
 
-        <Button Command="{Binding ChangeSortKeyCommand}" Content="昇順" />
-        <Button Command="{Binding ChangeSortKeyCommand}" Content="降順" />
+        <Button
+            Command="{Binding ChangeSortOrderTypeCommand}"
+            CommandParameter="Ascending"
+            Content="昇順" />
+        <Button
+            Command="{Binding ChangeSortOrderTypeCommand}"
+            CommandParameter="Descending"
+            Content="降順" />
     </StackPanel>
 </UserControl>

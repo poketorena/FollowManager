@@ -82,6 +82,8 @@
     <Compile Include="Converters\Bool2ColorConverter.cs" />
     <Compile Include="Converters\FollowType2ColorConverter.cs" />
     <Compile Include="Converters\FollowType2StringConverter.cs" />
+    <Compile Include="FilterAndSort\SortKeyType.cs" />
+    <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
@@ -99,8 +101,6 @@
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
-    <Compile Include="FilterAndSort\SortOption.cs" />
-    <Compile Include="FilterAndSort\SortType.cs" />
     <Page Include="About\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

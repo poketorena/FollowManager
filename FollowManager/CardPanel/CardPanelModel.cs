@@ -128,38 +128,37 @@ namespace FollowManager.CardPanel
             _filterAndSort = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
-                .Subscribe(propertyChangedEventArgs => Task.Run(() => Load(propertyChangedEventArgs)));
+                .Where(args => args.PropertyName == nameof(FilterType))
+                // HACK: 非同期処理は要調整
+                .Subscribe(_ => Task.Run(() => Load()));
         }
 
-        private void Load(PropertyChangedEventArgs propertyChangedEventArgs)
+        private void Load()
         {
-            if (propertyChangedEventArgs.PropertyName == nameof(FilterType))
-            {
-                var filterType = _sidePanelModel.FilterAndSortOption.FilterType;
+            var filterType = _sidePanelModel.FilterAndSortOption.FilterType;
 
-                switch (filterType)
-                {
-                    case FilterType.OneWay:
-                        {
-                            LoadCompleted?.Invoke(OneWay);
-                            break;
-                        }
-                    case FilterType.Fan:
-                        {
-                            LoadCompleted?.Invoke(Fan);
-                            break;
-                        }
-                    case FilterType.Mutual:
-                        {
-                            LoadCompleted?.Invoke(Mutual);
-                            break;
-                        }
-                    case FilterType.Inactive:
-                        {
-                            LoadCompleted?.Invoke(Inactive);
-                            break;
-                        }
-                }
+            switch (filterType)
+            {
+                case FilterType.OneWay:
+                    {
+                        LoadCompleted?.Invoke(OneWay);
+                        break;
+                    }
+                case FilterType.Fan:
+                    {
+                        LoadCompleted?.Invoke(Fan);
+                        break;
+                    }
+                case FilterType.Mutual:
+                    {
+                        LoadCompleted?.Invoke(Mutual);
+                        break;
+                    }
+                case FilterType.Inactive:
+                    {
+                        LoadCompleted?.Invoke(Inactive);
+                        break;
+                    }
             }
         }
 
