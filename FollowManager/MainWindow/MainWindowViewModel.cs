@@ -1,15 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using FollowManager.About;
+﻿using FollowManager.About;
 using FollowManager.Account;
 using FollowManager.Service;
 using FollowManager.Setting;
-using MahApps.Metro.Controls;
-using Microsoft.Practices.Unity;
 using Prism.Commands;
-using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
-using Prism.Regions;
 
 namespace FollowManager.MainWindow
 {
@@ -31,16 +25,14 @@ namespace FollowManager.MainWindow
         // プライベート変数
 
         // DI注入される変数
-        LoggingService _loggingService;
-        IRegionManager _reagionManager;
-        AccountManager _accountManager;
+        readonly AccountManager _accountManager;
+        readonly LoggingService _loggingService;
 
         // コンストラクタ
-        public MainWindowViewModel(LoggingService loggingService, IRegionManager regionManager, AccountManager accountManager)
+        public MainWindowViewModel(AccountManager accountManager, LoggingService loggingService)
         {
-            _loggingService = loggingService;
-            _reagionManager = regionManager;
             _accountManager = accountManager;
+            _loggingService = loggingService;
         }
 
         // デストラクタ
