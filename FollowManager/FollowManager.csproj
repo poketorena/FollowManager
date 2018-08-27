@@ -80,8 +80,11 @@
     <Compile Include="CardPanel\CardPanelViewModel.cs" />
     <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
     <Compile Include="Converters\BoolToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\FilterTypeToStyleConverter.cs" />
     <Compile Include="Converters\FollowTypeToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\FollowTypeToStringConverter.cs" />
+    <Compile Include="Converters\SortKeyTypeToStyleConverter.cs" />
+    <Compile Include="Converters\SortOrderTypeToStyleConverter.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">

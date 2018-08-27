@@ -2,12 +2,25 @@
     x:Class="FollowManager.SidePanel.SidePanelView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:FollowManager.Converters"
     xmlns:f="clr-namespace:FollowManager.FilterAndSort"
     xmlns:prism="http://prismlibrary.com/"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{DynamicResource LightGrayPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <c:FilterTypeToStyleConverter x:Key="FilterTypeToStyleConverter" />
+            <c:SortKeyTypeToStyleConverter x:Key="SortKeyTypeToStyleConverter" />
+            <c:SortOrderTypeToStyleConverter x:Key="SortOrderTypeToStyleConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
@@ -35,25 +48,61 @@
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Fan"
-            Content="ファン" />
+            Content="ファン">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource FilterTypeToStyleConverter}" ConverterParameter="Fan">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="FilterType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="2"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="OneWay"
-            Content="片思い" />
+            Content="片思い">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource FilterTypeToStyleConverter}" ConverterParameter="OneWay">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="FilterType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="3"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Mutual"
-            Content="相互フォロー" />
+            Content="相互フォロー">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource FilterTypeToStyleConverter}" ConverterParameter="Mutual">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="FilterType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="4"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Inactive"
-            Content="非アクティブ" />
+            Content="非アクティブ">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource FilterTypeToStyleConverter}" ConverterParameter="Inactive">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="FilterType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <TextBlock
             Grid.Row="5"
             FontSize="25"
@@ -64,19 +113,46 @@
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="LastTweetDay"
-            Content="最終ツイート日" />
+            Content="最終ツイート日">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="LastTweetDay">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="SortKeyType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="7"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="FollowDay"
-            Content="フォローした日" />
+            Content="フォローした日">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="FollowDay">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="SortKeyType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="8"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="TweetsPerDay"
-            Content="1日あたりのツイート数" />
+            Content="1日あたりのツイート数">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="TweetsPerDay">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="SortKeyType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <TextBlock
             Grid.Row="9"
             FontSize="25"
@@ -87,12 +163,30 @@
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="Ascending"
-            Content="昇順" />
+            Content="昇順">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource SortOrderTypeToStyleConverter}" ConverterParameter="Ascending">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="SortOrderType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
         <Button
             Grid.Row="11"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="Descending"
-            Content="降順" />
+            Content="降順">
+            <Button.Style>
+                <MultiBinding Converter="{StaticResource SortOrderTypeToStyleConverter}" ConverterParameter="Descending">
+                    <MultiBinding.Bindings>
+                        <Binding RelativeSource="{RelativeSource Self}" />
+                        <Binding Path="SortOrderType.Value" />
+                    </MultiBinding.Bindings>
+                </MultiBinding>
+            </Button.Style>
+        </Button>
     </Grid>
 </UserControl>
