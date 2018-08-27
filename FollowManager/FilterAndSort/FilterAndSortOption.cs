@@ -34,7 +34,7 @@ namespace FollowManager.FilterAndSort
         public FilterAndSortOption()
         {
             FilterType = FilterType.Fan;
-            SortKeyType = SortKeyType.LastTweetDay;
+            SortKeyType = SortKeyType.FollowDay;
             SortOrderType = SortOrderType.Descending;
         }
     }
