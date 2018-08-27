@@ -6,6 +6,7 @@ using Prism.Unity;
 using FollowManager.Service;
 using FollowManager.Account;
 using FollowManager.CardPanel;
+using FollowManager.SidePanel;
 
 namespace FollowManager
 {
@@ -34,8 +35,9 @@ namespace FollowManager
             Container.RegisterType<CardPanelModel>();
 
             // シングルトンでコンテナに登録
-            Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<SidePanelModel>(new ContainerControlledLifetimeManager());
         }
     }
 }

@@ -29,8 +29,6 @@ namespace FollowManager.Account
         public Dictionary<long, List<Status>> UserTweets =>
             _userTweets ?? (_userTweets = GetUserTweets());
 
-        public FilterAndSortOption FilterAndSortOption { get; set; } = new FilterAndSortOption();
-
         public Tokens Tokens { get; set; } = new Tokens();
 
         // 認証用データ

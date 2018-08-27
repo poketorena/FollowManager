@@ -10,8 +10,10 @@ using CoreTweet;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
 using FollowManager.Service;
+using FollowManager.SidePanel;
 using Prism.Mvvm;
 using Reactive.Bindings.Extensions;
+using System.ComponentModel;
 
 namespace FollowManager.CardPanel
 {
@@ -112,27 +114,28 @@ namespace FollowManager.CardPanel
         // DI注入される変数
         private readonly AccountManager _accountManager;
         private readonly LoggingService _loggingService;
+        private readonly SidePanelModel _sidePanelModel;
 
         // コンストラクタ
-        public CardPanelModel(AccountManager accountManager, LoggingService loggingService)
+        public CardPanelModel(AccountManager accountManager, LoggingService loggingService, SidePanelModel sidePanelModel)
         {
             // DI
             _accountManager = accountManager;
             _loggingService = loggingService;
+            _sidePanelModel = sidePanelModel;
 
-            // ここから
-            _filterAndSort = _accountManager
-                .Current
+            // フィルターの変更を監視
+            _filterAndSort = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
-                .Subscribe(x => Task.Run(() => Load(x)));
+                .Subscribe(propertyChangedEventArgs => Task.Run(() => Load(propertyChangedEventArgs)));
         }
 
-        private void Load(System.ComponentModel.PropertyChangedEventArgs propertyChangedEventArgs)
+        private void Load(PropertyChangedEventArgs propertyChangedEventArgs)
         {
             if (propertyChangedEventArgs.PropertyName == nameof(FilterType))
             {
-                var filterType = _accountManager.Current.FilterAndSortOption.FilterType;
+                var filterType = _sidePanelModel.FilterAndSortOption.FilterType;
 
                 switch (filterType)
                 {

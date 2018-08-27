@@ -11,30 +11,31 @@ namespace FollowManager.SidePanel
     public class SidePanelModel
     {
         // プロパティ
+        public FilterAndSortOption FilterAndSortOption { get; } = new FilterAndSortOption();
 
         // パブリック関数
-        public void ExecuteChangeFilterCommand(string filterParamer)
+        public void ChangeFilter(string filterType)
         {
-            switch (filterParamer)
+            switch (filterType)
             {
                 case nameof(FilterType.OneWay):
                     {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.OneWay;
+                        FilterAndSortOption.FilterType = FilterType.OneWay;
                         break;
                     }
                 case nameof(FilterType.Fan):
                     {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Fan;
+                        FilterAndSortOption.FilterType = FilterType.Fan;
                         break;
                     }
                 case nameof(FilterType.Mutual):
                     {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Mutual;
+                        FilterAndSortOption.FilterType = FilterType.Mutual;
                         break;
                     }
                 case nameof(FilterType.Inactive):
                     {
-                        _accountManager.Current.FilterAndSortOption.FilterType = FilterType.Inactive;
+                        FilterAndSortOption.FilterType = FilterType.Inactive;
                         break;
                     }
             }

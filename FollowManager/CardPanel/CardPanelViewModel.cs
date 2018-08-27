@@ -1,5 +1,4 @@
-﻿using CoreTweet;
-using FollowManager.Account;
+﻿using FollowManager.Account;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reactive.Bindings;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Linq;
-using FollowManager.FilterAndSort;
 using FollowManager.Service;
 using Prism.Regions;
 using System.Diagnostics;
