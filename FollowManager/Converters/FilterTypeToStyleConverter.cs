@@ -1,19 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using FollowManager.FilterAndSort;
 
 namespace FollowManager.Converters
 {
+    /// <summary>
+    /// FilterType型からStyle型に変換するコンバーター。現在のフィルタを強調表示するために動的にスタイルを変更します。
+    /// </summary>
     public class FilterTypeToStyleConverter : IMultiValueConverter
     {
-        public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        /// <summary>
+        /// FilterType型からStyle型に変換します。
+        /// </summary>
+        /// <param name="values">values[0]がスタイルを適応するボタン、values[1]がViewModelのFilterTypeプロパティ</param>
+        /// <param name="targetType">未使用</param>
+        /// <param name="parameter">Viewで指定するFilterTypeの文字列</param>
+        /// <param name="culture">未使用</param>
+        /// <returns>変更後のボタンのスタイル</returns>
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var targetElement = values[0] as FrameworkElement;
 
@@ -35,7 +41,7 @@ namespace FollowManager.Converters
             }
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, System.Globalization.CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
