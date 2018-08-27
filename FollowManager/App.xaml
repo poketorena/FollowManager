@@ -38,6 +38,16 @@
                     <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="{StaticResource Primary700}" />
                     <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="{StaticResource Primary700Foreground}" />
 
+                    <!--  My Resources  -->
+                    <SolidColorBrush
+                        x:Key="MaterialDesignPaper"
+                        options:Freeze="True"
+                        Color="#FFfafafa" />
+                    <SolidColorBrush
+                        x:Key="LightGrayPaper"
+                        options:Freeze="True"
+                        Color="#e8e8e8" />
+
                     <!--  MAHAPPS BRUSHES  -->
                     <SolidColorBrush
                         x:Key="HighlightBrush"

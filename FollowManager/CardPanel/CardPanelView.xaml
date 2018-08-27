@@ -13,7 +13,7 @@
     d:DesignHeight="777"
     d:DesignWidth="980"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="Pink"
+    Background="{DynamicResource LightGrayPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     TextElement.FontSize="12"

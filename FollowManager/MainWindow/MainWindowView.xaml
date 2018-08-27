@@ -14,7 +14,6 @@
     MinWidth="832"
     MinHeight="624"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="{DynamicResource MaterialDesignPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ResizeMode="CanResizeWithGrip"

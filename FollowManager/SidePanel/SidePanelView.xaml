@@ -5,46 +5,94 @@
     xmlns:f="clr-namespace:FollowManager.FilterAndSort"
     xmlns:prism="http://prismlibrary.com/"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="LightGreen">
-    <StackPanel>
+    Background="{DynamicResource LightGrayPaper}"
+    BorderBrush="{DynamicResource AccentColorBrush}"
+    FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
+    <Grid Margin="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+
+            <RowDefinition Height="50" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+        <TextBlock
+            Grid.Row="0"
+            FontSize="25"
+            Foreground="{DynamicResource AccentColorBrush}"
+            Text="フィルタ" />
         <Button
+            Grid.Row="1"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Fan"
             Content="ファン" />
         <Button
+            Grid.Row="2"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="OneWay"
             Content="片思い" />
         <Button
+            Grid.Row="3"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Mutual"
             Content="相互フォロー" />
         <Button
+            Grid.Row="4"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="Inactive"
             Content="非アクティブ" />
-
-        <!--  未実装  -->
+        <TextBlock
+            Grid.Row="5"
+            FontSize="25"
+            Foreground="{DynamicResource AccentColorBrush}"
+            Text="ソートキー" />
         <Button
+            Grid.Row="6"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="LastTweetDay"
             Content="最終ツイート日" />
         <Button
+            Grid.Row="7"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="FollowDay"
-            Content="フォーローした日" />
+            Content="フォローした日" />
         <Button
+            Grid.Row="8"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="TweetsPerDay"
             Content="1日あたりのツイート数" />
-
+        <TextBlock
+            Grid.Row="9"
+            FontSize="25"
+            Foreground="{DynamicResource AccentColorBrush}"
+            Text="ソート順" />
         <Button
+            Grid.Row="10"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="Ascending"
             Content="昇順" />
         <Button
+            Grid.Row="11"
+            Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="Descending"
             Content="降順" />
-    </StackPanel>
+    </Grid>
 </UserControl>

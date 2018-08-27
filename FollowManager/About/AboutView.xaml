@@ -8,7 +8,6 @@
     Width="800"
     Height="500"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="{DynamicResource MaterialDesignPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ShowMaxRestoreButton="False"
