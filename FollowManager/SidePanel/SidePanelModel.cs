@@ -16,24 +16,24 @@ namespace FollowManager.SidePanel
         // パブリック関数
         public void ChangeFilter(string filterType)
         {
-            switch (filterType)
+            switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
             {
-                case nameof(FilterType.OneWay):
+                case FilterType.OneWay:
                     {
                         FilterAndSortOption.FilterType = FilterType.OneWay;
                         break;
                     }
-                case nameof(FilterType.Fan):
+                case FilterType.Fan:
                     {
                         FilterAndSortOption.FilterType = FilterType.Fan;
                         break;
                     }
-                case nameof(FilterType.Mutual):
+                case FilterType.Mutual:
                     {
                         FilterAndSortOption.FilterType = FilterType.Mutual;
                         break;
                     }
-                case nameof(FilterType.Inactive):
+                case FilterType.Inactive:
                     {
                         FilterAndSortOption.FilterType = FilterType.Inactive;
                         break;
