@@ -81,6 +81,7 @@ namespace FollowManager.CardPanel
                     UserDatas = (userData ?? new List<UserData>())
                     .ToObservable()
                     .ToReactiveCollection();
+                    Sort();
                 });
 
             _sort = _sidePanelModel
