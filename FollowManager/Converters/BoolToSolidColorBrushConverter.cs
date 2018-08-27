@@ -9,7 +9,7 @@ using System.Windows.Media;
 
 namespace FollowManager.Converters
 {
-    public class Bool2ColorConverter : IValueConverter
+    public class BoolToSolidColorBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

@@ -30,9 +30,9 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <c:FollowType2ColorConverter x:Key="FollowType2ColorConverter" />
-            <c:FollowType2StringConverter x:Key="FollowType2StringConverter" />
-            <c:Bool2ColorConverter x:Key="Bool2ColorConverter" />
+            <c:FollowTypeToSolidColorBrushConverter x:Key="FollowTypeToSolidColorBrushConverter" />
+            <c:FollowTypeToStringConverter x:Key="FollowTypeToStringConverter" />
+            <c:BoolToSolidColorBrushConverter x:Key="BoolToSolidColorBrushConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <ListBox
@@ -82,7 +82,7 @@
                             Margin="0,5,8,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Fill="{Binding FollowType, Converter={StaticResource FollowType2ColorConverter}}"
+                            Fill="{Binding FollowType, Converter={StaticResource FollowTypeToSolidColorBrushConverter}}"
                             Opacity="1" />
                         <TextBlock
                             Grid.Row="1"
@@ -92,7 +92,7 @@
                             VerticalAlignment="Top"
                             FontSize="12"
                             Foreground="White"
-                            Text="{Binding FollowType, Converter={StaticResource FollowType2StringConverter}}"
+                            Text="{Binding FollowType, Converter={StaticResource FollowTypeToStringConverter}}"
                             TextAlignment="Center" />
                         <StackPanel Grid.Row="1" Margin="8,29,8,0">
                             <TextBlock FontWeight="Bold" Text="{Binding User.Name}" />
@@ -129,7 +129,7 @@
                                 materialDesign:RippleAssist.IsCentered="True"
                                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.FavoriteCommnad}"
                                 CommandParameter="{Binding}"
-                                Foreground="{Binding Favorite, Converter={StaticResource Bool2ColorConverter}}"
+                                Foreground="{Binding Favorite, Converter={StaticResource BoolToSolidColorBrushConverter}}"
                                 Style="{StaticResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon Kind="Heart" />
                             </Button>

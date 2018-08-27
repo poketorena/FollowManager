@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using System.Windows.Media;
 using FollowManager.Account;
 
 namespace FollowManager.Converters
 {
-    public class FollowType2StringConverter : IValueConverter
+    public class FollowTypeToSolidColorBrushConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,15 +18,20 @@ namespace FollowManager.Converters
             switch ((FollowType)value)
             {
                 case FollowType.OneWay:
-                    return "片思い";
+                    // 水色
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#03A9F4"));
                 case FollowType.Fan:
-                    return "ファン";
+                    // ピンク
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#FF4081"));
                 case FollowType.Mutual:
-                    return "相互フォロー";
+                    // オレンジ
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#FF5722"));
                 case FollowType.BlockAndBlockRelease:
-                    return "B&BR済み";
+                    // 紫
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#E040FB"));
                 case FollowType.NotSet:
-                    return "未設定";
+                    // ブルーグレー
+                    return new SolidColorBrush((Color)new ColorConverter().ConvertFrom("#607D8B"));
                 default:
                     throw new ArgumentException();
             }

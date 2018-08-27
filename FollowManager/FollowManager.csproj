@@ -79,9 +79,9 @@
     </Compile>
     <Compile Include="CardPanel\CardPanelViewModel.cs" />
     <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
-    <Compile Include="Converters\Bool2ColorConverter.cs" />
-    <Compile Include="Converters\FollowType2ColorConverter.cs" />
-    <Compile Include="Converters\FollowType2StringConverter.cs" />
+    <Compile Include="Converters\BoolToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\FollowTypeToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\FollowTypeToStringConverter.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
