@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FollowManager.Account
+﻿namespace FollowManager.Account
 {
+    /// <summary>
+    /// 自分とユーザーの関係
+    /// </summary>
     public enum FollowType
     {
         OneWay,
