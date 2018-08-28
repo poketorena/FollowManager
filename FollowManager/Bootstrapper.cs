@@ -37,6 +37,7 @@ namespace FollowManager
             // シングルトンでコンテナに登録
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());
             Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<DialogService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<SidePanelModel>(new ContainerControlledLifetimeManager());
         }
     }

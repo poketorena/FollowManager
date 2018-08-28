@@ -10,8 +10,8 @@
     xmlns:prism="http://prismlibrary.com/"
     d:DataContext="{d:DesignInstance {x:Type local:TestCardPanelViewModel},
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="777"
-    d:DesignWidth="980"
+    d:DesignHeight="601"
+    d:DesignWidth="532"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{DynamicResource LightGrayPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"

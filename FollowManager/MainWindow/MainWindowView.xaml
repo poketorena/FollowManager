@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FollowManager.MainWindow"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     Title="FollowManager"
@@ -11,6 +12,8 @@
     Height="624"
     MinWidth="832"
     MinHeight="624"
+    d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel},
+                                     IsDesignTimeCreatable=False}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
@@ -23,8 +26,8 @@
         <Controls:WindowCommands>
             <Button Content="データの再取得" />
             <Button Content="アカウント" />
-            <Button Command="{Binding SettingOpenCommand}" Content="設定" />
-            <Button Command="{Binding AboutOpenCommand}" Content="FollowManagerについて" />
+            <Button Command="{Binding OpenSettingViewCommand}" Content="設定" />
+            <Button Command="{Binding OpenAboutViewCommand}" Content="FollowManagerについて" />
         </Controls:WindowCommands>
     </Controls:MetroWindow.RightWindowCommands>
 

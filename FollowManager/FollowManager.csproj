@@ -91,6 +91,7 @@
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\LoggingService.cs" />
     <Compile Include="Setting\SettingModel.cs" />
     <Compile Include="Setting\SettingView.xaml.cs">
