@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FollowManager.FilterAndSort
+﻿namespace FollowManager.FilterAndSort
 {
+    /// <summary>
+    /// ソート順の種類
+    /// </summary>
     public enum SortOrderType
     {
         Ascending,
