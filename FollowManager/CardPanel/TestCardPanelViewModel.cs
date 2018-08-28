@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CoreTweet;
 using FollowManager.Account;
-using Newtonsoft.Json;
 using Reactive.Bindings;
 
 namespace FollowManager.CardPanel
@@ -15,9 +9,11 @@ namespace FollowManager.CardPanel
     public class TestCardPanelViewModel
     {
         // プロパティ
+
         public ReactiveCollection<UserData> UserDatas { get; } = new ReactiveCollection<UserData>();
 
         // コンストラクタ
+
         public TestCardPanelViewModel()
         {
             var users = Observable
