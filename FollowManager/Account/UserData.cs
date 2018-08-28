@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CoreTweet;
+﻿using CoreTweet;
 using Newtonsoft.Json;
 using Prism.Mvvm;
 
 namespace FollowManager.Account
 {
+    /// <summary>
+    /// CoreTweetのUserのラッパークラス
+    /// </summary>
     public class UserData : BindableBase
     {
         // プロパティ
