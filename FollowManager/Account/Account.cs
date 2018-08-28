@@ -10,6 +10,9 @@ using Newtonsoft.Json;
 
 namespace FollowManager.Account
 {
+    /// <summary>
+    /// CoreTweetのトークンの保持、TwitterApiまたはローカルからのデータの取得及び保持を行います。
+    /// </summary>
     public class Account
     {
         // プロパティ
