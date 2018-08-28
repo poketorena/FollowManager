@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
 
@@ -11,9 +7,18 @@ namespace FollowManager.SidePanel
     public class SidePanelModel
     {
         // プロパティ
+
+        /// <summary>
+        /// 現在のフィルタとソートの設定
+        /// </summary>
         public FilterAndSortOption FilterAndSortOption { get; } = new FilterAndSortOption();
 
         // パブリック関数
+
+        /// <summary>
+        /// フィルタを変更します。
+        /// </summary>
+        /// <param name="filterType">変更後のフィルタ</param>
         public void ChangeFilterType(string filterType)
         {
             switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
@@ -41,6 +46,10 @@ namespace FollowManager.SidePanel
             }
         }
 
+        /// <summary>
+        /// ソートキ-を変更します。
+        /// </summary>
+        /// <param name="sortKeyType">変更後のソートキー</param>
         public void ChangeSortKeyType(string sortKeyType)
         {
             switch ((SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType))
@@ -63,6 +72,10 @@ namespace FollowManager.SidePanel
             }
         }
 
+        /// <summary>
+        /// ソートの順番を変更します。
+        /// </summary>
+        /// <param name="sortOrderType">変更後のソートの順番</param>
         public void ChangeSortOrderType(string sortOrderType)
         {
             switch ((SortOrderType)Enum.Parse(typeof(SortOrderType), sortOrderType))
@@ -83,13 +96,16 @@ namespace FollowManager.SidePanel
         // プライベート変数
 
         // DI注入される変数
+
         private readonly AccountManager _accountManager;
 
         // コンストラクタ
+
         public SidePanelModel(AccountManager accountManager)
         {
             _accountManager = accountManager;
         }
+
         // デストラクタ
 
         // プライベート関数
