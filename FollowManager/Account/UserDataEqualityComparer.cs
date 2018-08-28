@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FollowManager.Account
 {
+    /// <summary>
+    /// UserDataの等価比較をサポートするメソッドを提供します。
+    /// </summary>
     public class UserDataEqualityComparer : IEqualityComparer<UserData>
     {
+        /// <summary>
+        /// UserDataの等価比較をサポートします。
+        /// </summary>
+        /// <param name="x">1つ目のUserData</param>
+        /// <param name="y">2つ目のUserData</param>
+        /// <returns></returns>
         public bool Equals(UserData x, UserData y)
         {
             if (x == null && y == null)
@@ -32,6 +38,11 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// ユーザーIdを使ってハッシュコードを取得します。
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int GetHashCode(UserData obj)
         {
             if (obj.User.Id == null)
