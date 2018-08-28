@@ -43,6 +43,7 @@ namespace FollowManager.MainWindow
 
         public MainWindowViewModel(AccountManager accountManager, LoggingService loggingService, DialogService dialogService)
         {
+            // DI
             _accountManager = accountManager;
             _loggingService = loggingService;
             _dialogService = dialogService;

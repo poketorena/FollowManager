@@ -119,6 +119,9 @@ namespace FollowManager.CardPanel
 
         // イベント
 
+        /// <summary>
+        /// ロード完了時に発生するイベント
+        /// </summary>
         public event Action<List<UserData>> LoadCompleted;
 
         // プライベート変数
@@ -156,7 +159,7 @@ namespace FollowManager.CardPanel
             _loggingService = loggingService;
             _sidePanelModel = sidePanelModel;
 
-            // フィルタの変更を購読
+            // フィルタの変更を購読してユーザーのリストを読み込む
             _filter = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()

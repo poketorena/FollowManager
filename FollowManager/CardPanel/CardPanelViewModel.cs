@@ -96,7 +96,7 @@ namespace FollowManager.CardPanel
             // 起動時のロード
             //UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
 
-            // フィルタ
+            // ロード完了時に発生するイベント購読して現在表示しているユーザーデータのコレクションを更新する
             _filter = Observable.FromEvent<List<UserData>>(
                 handler => _cardPanelModel.LoadCompleted += handler,
                 handler => _cardPanelModel.LoadCompleted -= handler
@@ -109,7 +109,7 @@ namespace FollowManager.CardPanel
                     Sort();
                 });
 
-            // ソート
+            // ソートキー、ソート順を購読して現在表示しているユーザーデータのコレクションをソートする
             _sort = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
@@ -128,7 +128,7 @@ namespace FollowManager.CardPanel
         // プライベート関数
 
         /// <summary>
-        /// UserDatasのソートを行います。
+        /// 現在表示しているユーザーデータのコレクションをソートします。
         /// </summary>
         private async void Sort()
         {

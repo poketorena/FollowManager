@@ -73,7 +73,7 @@ namespace FollowManager.SidePanel
         }
 
         /// <summary>
-        /// ソートの順番を変更します。
+        /// ソート順を変更します。
         /// </summary>
         /// <param name="sortOrderType">変更後のソートの順番</param>
         public void ChangeSortOrderType(string sortOrderType)
