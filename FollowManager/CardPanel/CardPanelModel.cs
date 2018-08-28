@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using CoreTweet;
 using FollowManager.Account;
@@ -13,38 +11,52 @@ using FollowManager.Service;
 using FollowManager.SidePanel;
 using Prism.Mvvm;
 using Reactive.Bindings.Extensions;
-using System.ComponentModel;
 
 namespace FollowManager.CardPanel
 {
     public class CardPanelModel : BindableBase
     {
         // プロパティ
-        private List<UserData> _oneWay;
+
+        /// <summary>
+        /// 片思いのユーザーのリスト
+        /// </summary>
         public List<UserData> OneWay =>
             _oneWay ?? (_oneWay = CreateOneWayList());
 
-        private List<UserData> _fan;
+        /// <summary>
+        /// ファンのユーザーのリスト
+        /// </summary>
         public List<UserData> Fan =>
             _fan ?? (_fan = CreateFanList());
 
-        private List<UserData> _union;
+        /// <summary>
+        /// 和集合のユーザーのリスト
+        /// </summary>
         public List<UserData> Union =>
             _union ?? (_union = CreateUnionList());
 
-        private List<UserData> _mutual;
+        /// <summary>
+        /// 相互フォローのユーザーのリスト
+        /// </summary>
         public List<UserData> Mutual =>
             _mutual ?? (_mutual = CreateMutualList());
 
-        private List<UserData> _inactive;
+        /// <summary>
+        /// 30日間ツイートしていないユーザーのリスト
+        /// </summary>
         public List<UserData> Inactive =>
             _inactive ?? (_inactive = CreateInactiveList());
 
-        private List<UserData> _follows;
+        /// <summary>
+        /// フォローしているユーザーのリスト
+        /// </summary>
         public List<UserData> Follows =>
             _follows ?? (_follows = CreateFollowsList());
 
-        private List<UserData> _followers;
+        /// <summary>
+        /// フォローされているユーザーのリスト
+        /// </summary>
         public List<UserData> Followers =>
             _followers ?? (_followers = CreateFollowersList());
 
@@ -53,7 +65,7 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// Twitterのプロフィールページを規定のブラウザで開きます。
         /// </summary>
-        /// <param name="screenName">@hogeの場合は"hoge"</param>
+        /// <param name="screenName">@hogeの場合はhoge</param>
         public void OpenProfile(string screenName)
         {
             var url = "https://twitter.com/" + screenName;
@@ -106,17 +118,37 @@ namespace FollowManager.CardPanel
         }
 
         // イベント
+
         public event Action<List<UserData>> LoadCompleted;
 
         // プライベート変数
-        private IDisposable _filterAndSort;
+
+        private List<UserData> _oneWay;
+
+        private List<UserData> _fan;
+
+        private List<UserData> _union;
+
+        private List<UserData> _mutual;
+
+        private List<UserData> _inactive;
+
+        private List<UserData> _follows;
+
+        private List<UserData> _followers;
+
+        private readonly IDisposable _filter;
 
         // DI注入される変数
+
         private readonly AccountManager _accountManager;
+
         private readonly LoggingService _loggingService;
+
         private readonly SidePanelModel _sidePanelModel;
 
         // コンストラクタ
+
         public CardPanelModel(AccountManager accountManager, LoggingService loggingService, SidePanelModel sidePanelModel)
         {
             // DI
@@ -124,8 +156,8 @@ namespace FollowManager.CardPanel
             _loggingService = loggingService;
             _sidePanelModel = sidePanelModel;
 
-            // フィルターの変更を監視
-            _filterAndSort = _sidePanelModel
+            // フィルタの変更を購読
+            _filter = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
                 .Where(args => args.PropertyName == nameof(FilterType))
@@ -133,6 +165,16 @@ namespace FollowManager.CardPanel
                 .Subscribe(_ => Task.Run(() => Load()));
         }
 
+        // デストラクタ
+        ~CardPanelModel()
+        {
+            _filter.Dispose();
+        }
+        // プライベート関数
+
+        /// <summary>
+        /// ユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
+        /// </summary>
         private void Load()
         {
             var filterType = _sidePanelModel.FilterAndSortOption.FilterType;
@@ -162,9 +204,10 @@ namespace FollowManager.CardPanel
             }
         }
 
-        // デストラクタ
-
-        // プライベート関数
+        /// <summary>
+        /// 片思いのユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateOneWayList()
         {
             try
@@ -195,6 +238,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// ファンのユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateFanList()
         {
             try
@@ -225,6 +272,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// 和集合のユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateUnionList()
         {
             try
@@ -242,6 +293,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// 相互フォローのユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateMutualList()
         {
             try
@@ -274,6 +329,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// 30日間ツイートしていないユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateInactiveList()
         {
             try
@@ -315,6 +374,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// フォローしているユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateFollowsList()
         {
             try
@@ -331,6 +394,10 @@ namespace FollowManager.CardPanel
             }
         }
 
+        /// <summary>
+        /// フォローされているユーザーのリストを作成します。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns></returns>
         private List<UserData> CreateFollowersList()
         {
             try
