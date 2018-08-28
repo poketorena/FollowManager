@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using CoreTweet;
-using FollowManager.FilterAndSort;
 using FollowManager.Service;
 using Newtonsoft.Json;
 
@@ -17,38 +13,61 @@ namespace FollowManager.Account
     public class Account
     {
         // プロパティ
-        private List<UserData> _follows;
+
+        /// <summary>
+        /// フォローしているユーザーのリスト
+        /// </summary>
         public List<UserData> Follows =>
             _follows ?? (_follows = GetFollows());
 
-        private List<UserData> _followers;
+        /// <summary>
+        /// フォローされているユーザーのリスト
+        /// </summary>
         public List<UserData> Followers =>
             _followers ?? (_followers = GetFollowers());
 
-        private Dictionary<long, List<Status>> _userTweets;
+        /// <summary>
+        /// ユーザーのツイートのリストのディクショナリー
+        /// </summary>
+        /// <value>キーはユーザーId</value>
         public Dictionary<long, List<Status>> UserTweets =>
             _userTweets ?? (_userTweets = GetUserTweets());
 
+        /// <summary>
+        /// CoreTweetのトークン
+        /// </summary>
         public Tokens Tokens { get; set; } = new Tokens();
-
-        // 認証用データ
-        public Authentication Authentication { get; set; } = new Authentication();
 
         // パブリック関数
 
         // プライベート変数
 
+        private List<UserData> _follows;
+
+        private List<UserData> _followers;
+
+        private Dictionary<long, List<Status>> _userTweets;
+
         // DI注入される変数
+
         private readonly LoggingService _loggingService;
 
         // コンストラクタ
+
         public Account(LoggingService loggingService)
         {
+            // DI
             _loggingService = loggingService;
         }
+
         // デストラクタ
 
         // プライベート関数
+
+        /// <summary>
+        /// フォローしているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローしているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollows()
         {
             var userDatas = new List<UserData>();
@@ -75,6 +94,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// ローカルからフォローしているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローしているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowsFromLocal()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
@@ -154,6 +177,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// TwitterApiからフォローしているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローしているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowsFromTwitterApi()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
@@ -257,6 +284,10 @@ namespace FollowManager.Account
             return userDatas;
         }
 
+        /// <summary>
+        /// フォローされているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローされているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowers()
         {
             var userDatas = new List<UserData>();
@@ -283,6 +314,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// ローカルからフォローされているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローされているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowersFromLocal()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
@@ -362,6 +397,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// TwitterApiからフォローされているユーザーのリストを取得します。
+        /// </summary>
+        /// <returns>フォローされているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowersFromTwitterApi()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
@@ -465,6 +504,10 @@ namespace FollowManager.Account
             return userDatas;
         }
 
+        /// <summary>
+        /// ユーザーのツイートのリストのディクショナリーを取得します。
+        /// </summary>
+        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweets()
         {
             var userTweets = new Dictionary<long, List<Status>>();
@@ -491,6 +534,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// ローカルからユーザーのツイートのリストのディクショナリーを取得します。
+        /// </summary>
+        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromLocal()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
@@ -569,6 +616,10 @@ namespace FollowManager.Account
             }
         }
 
+        /// <summary>
+        /// TwitterApiからユーザーのツイートのリストのディクショナリーを取得します。
+        /// </summary>
+        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromTwitterApi()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
