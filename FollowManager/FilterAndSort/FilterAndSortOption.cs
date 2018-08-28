@@ -1,35 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 
 namespace FollowManager.FilterAndSort
 {
+    /// <summary>
+    /// フィルタとソートの設定
+    /// </summary>
     public class FilterAndSortOption : BindableBase
     {
-        private FilterType _filterType;
+        // プロパティ
+
+        /// <summary>
+        /// 現在使用しているフィルタ
+        /// </summary>
         public FilterType FilterType
         {
             get { return _filterType; }
             set { SetProperty(ref _filterType, value); }
         }
 
-        private SortKeyType _sortKeyType;
+        /// <summary>
+        /// 現在使用しているソートキー
+        /// </summary>
         public SortKeyType SortKeyType
         {
             get { return _sortKeyType; }
             set { SetProperty(ref _sortKeyType, value); }
         }
 
-        private SortOrderType _sortOrderType;
+        /// <summary>
+        /// 現在使用しているソート順
+        /// </summary>
         public SortOrderType SortOrderType
         {
             get { return _sortOrderType; }
             set { SetProperty(ref _sortOrderType, value); }
         }
+
+        // プライベート変数
+
+        private FilterType _filterType;
+
+        private SortKeyType _sortKeyType;
+
+        private SortOrderType _sortOrderType;
+
+        // コンストラクタ
 
         public FilterAndSortOption()
         {
