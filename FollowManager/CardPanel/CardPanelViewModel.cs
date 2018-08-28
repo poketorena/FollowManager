@@ -1,26 +1,26 @@
-﻿using FollowManager.Account;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Threading.Tasks;
+using FollowManager.Account;
+using FollowManager.FilterAndSort;
+using FollowManager.Service;
+using FollowManager.SidePanel;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reactive.Bindings;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Reactive.Bindings.Extensions;
-using System.Reactive.Linq;
-using FollowManager.Service;
-using Prism.Regions;
-using System.Diagnostics;
-using FollowManager.SidePanel;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using FollowManager.FilterAndSort;
 
 namespace FollowManager.CardPanel
 {
     public class CardPanelViewModel : BindableBase
     {
         // プロパティ
-        private ReactiveCollection<UserData> _userDatas;
+
+        /// <summary>
+        /// 現在表示しているユーザーデータのコレクション
+        /// </summary>
         public ReactiveCollection<UserData> UserDatas
         {
             get { return _userDatas; }
@@ -30,11 +30,16 @@ namespace FollowManager.CardPanel
         // パブリック関数
 
         // デリゲートコマンド
-        private DelegateCommand<string> _openProfileCommand;
+
+        /// <summary>
+        /// Twitterのプロフィールページを規定のブラウザで開くコマンド
+        /// </summary>
         public DelegateCommand<string> OpenProfileCommand =>
             _openProfileCommand ?? (_openProfileCommand = new DelegateCommand<string>(_cardPanelModel.OpenProfile));
 
-        private DelegateCommand<UserData> _favoriteCommand;
+        /// <summary>
+        /// Favoriteを切り替えるコマンド
+        /// </summary>
         public DelegateCommand<UserData> FavoriteCommnad =>
             _favoriteCommand ?? (_favoriteCommand = new DelegateCommand<UserData>(x =>
             {
@@ -42,7 +47,9 @@ namespace FollowManager.CardPanel
                 UserDatas.ElementAt(UserDatas.IndexOf(x)).Favorite = !UserDatas.ElementAt(UserDatas.IndexOf(x)).Favorite;
             }));
 
-        private DelegateCommand<UserData> _blockAndBlockReleaseCommnad;
+        /// <summary>
+        /// 指定したユーザーをブロックして、3秒後にブロック解除するコマンド
+        /// </summary>
         public DelegateCommand<UserData> BlockAndBlockReleaseCommand =>
             _blockAndBlockReleaseCommnad ?? (_blockAndBlockReleaseCommnad = new DelegateCommand<UserData>(async x =>
             {
@@ -53,25 +60,43 @@ namespace FollowManager.CardPanel
         // インタラクションリクエスト
 
         // プライベート変数
-        private IDisposable _filter;
-        private IDisposable _sort;
+
+        private ReactiveCollection<UserData> _userDatas;
+
+        private DelegateCommand<string> _openProfileCommand;
+
+        private DelegateCommand<UserData> _favoriteCommand;
+
+        private DelegateCommand<UserData> _blockAndBlockReleaseCommnad;
+
+        private readonly IDisposable _filter;
+
+        private readonly IDisposable _sort;
 
         // DI注入される変数
+
         private readonly AccountManager _accountManager;
+
         private readonly LoggingService _loggingService;
+
         private readonly CardPanelModel _cardPanelModel;
+
         private readonly SidePanelModel _sidePanelModel;
 
         // コンストラクタ
+
         public CardPanelViewModel(AccountManager accountManager, LoggingService loggingService, CardPanelModel cardPanelModel, SidePanelModel sidePanelModel)
         {
+            // DI
             _accountManager = accountManager;
             _loggingService = loggingService;
             _cardPanelModel = cardPanelModel;
             _sidePanelModel = sidePanelModel;
 
+            // 起動時のロード
             //UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
 
+            // フィルタ
             _filter = Observable.FromEvent<List<UserData>>(
                 handler => _cardPanelModel.LoadCompleted += handler,
                 handler => _cardPanelModel.LoadCompleted -= handler
@@ -84,6 +109,7 @@ namespace FollowManager.CardPanel
                     Sort();
                 });
 
+            // ソート
             _sort = _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
@@ -92,6 +118,7 @@ namespace FollowManager.CardPanel
         }
 
         // デストラクタ
+
         ~CardPanelViewModel()
         {
             _filter.Dispose();
@@ -99,6 +126,10 @@ namespace FollowManager.CardPanel
         }
 
         // プライベート関数
+
+        /// <summary>
+        /// UserDatasのソートを行います。
+        /// </summary>
         private async void Sort()
         {
             var sortKeyType = _sidePanelModel.FilterAndSortOption.SortKeyType;
