@@ -215,22 +215,41 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        UserDatas = _cardPanelModel.OneWay.AsEnumerable().Reverse().ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .OneWay
+                                            .AsEnumerable()
+                                            .Reverse()
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        UserDatas = _cardPanelModel.Fan.AsEnumerable().Reverse().ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Fan.AsEnumerable()
+                                            .Reverse()
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        UserDatas = _cardPanelModel.Mutual.AsEnumerable().Reverse().ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Mutual
+                                            .AsEnumerable()
+                                            .Reverse()
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        UserDatas = _cardPanelModel.Inactive.AsEnumerable().Reverse().ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Inactive
+                                            .AsEnumerable()
+                                            .Reverse()
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                             }
@@ -242,22 +261,34 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        UserDatas = _cardPanelModel.OneWay.ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .OneWay
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        UserDatas = _cardPanelModel.Fan.ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Fan
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        UserDatas = _cardPanelModel.Mutual.ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Mutual
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        UserDatas = _cardPanelModel.Inactive.ToObservable().ToReactiveCollection();
+                                        UserDatas = _cardPanelModel
+                                            .Inactive
+                                            .ToObservable()
+                                            .ToReactiveCollection();
                                         break;
                                     }
                             }
