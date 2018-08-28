@@ -1,8 +1,8 @@
-﻿using System;
-using Prism.Mvvm;
-
-namespace FollowManager.FilterAndSort
+﻿namespace FollowManager.FilterAndSort
 {
+    /// <summary>
+    /// ソートキーの種類
+    /// </summary>
     public enum SortKeyType
     {
         LastTweetDay,
