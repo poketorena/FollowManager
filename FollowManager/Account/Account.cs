@@ -15,7 +15,7 @@ namespace FollowManager.Account
     /// </summary>
     public class Account
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// フォローしているユーザーのリスト
@@ -41,8 +41,6 @@ namespace FollowManager.Account
         /// </summary>
         public Tokens Tokens { get; set; } = new Tokens();
 
-        // パブリック関数
-
         // プライベート変数
 
         private List<UserData> _follows;
@@ -62,8 +60,6 @@ namespace FollowManager.Account
             // DI
             _loggingService = loggingService;
         }
-
-        // デストラクタ
 
         // プライベート関数
 

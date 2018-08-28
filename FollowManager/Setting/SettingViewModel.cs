@@ -9,10 +9,11 @@ namespace FollowManager.Setting
 {
     public class SettingViewModel : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
         // パブリック関数
         // デリゲートコマンド
         // インタラクションリクエスト
+        // プライベートプロパティ
         // プライベート変数
         // DI注入される変数
         // コンストラクタ

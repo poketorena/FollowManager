@@ -5,6 +5,8 @@ namespace FollowManager.Service
 {
     public class LoggingService : BindableBase
     {
+        // パブリックプロパティ
+
         /// <summary>
         /// ログを保存するコレクション
         /// </summary>

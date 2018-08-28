@@ -9,13 +9,20 @@ namespace FollowManager.Account
     /// </summary>
     public class UserData : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
+
+        /// <summary>
+        /// CoreTweetのUser
+        /// </summary>
         public User User
         {
             get { return _user; }
             set { SetProperty(ref _user, value); }
         }
 
+        /// <summary>
+        /// 自分とユーザーの関係
+        /// </summary>
         [JsonIgnore]
         public FollowType FollowType
         {
@@ -23,6 +30,9 @@ namespace FollowManager.Account
             set { SetProperty(ref _followType, value); }
         }
 
+        /// <summary>
+        /// お気に入り
+        /// </summary>
         [JsonIgnore]
         public bool Favorite
         {

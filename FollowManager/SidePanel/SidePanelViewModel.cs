@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Reactive.Disposables;
+using System.Threading.Tasks;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
 using Prism.Commands;
@@ -10,7 +11,7 @@ namespace FollowManager.SidePanel
 {
     public class SidePanelViewModel : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 現在使用しているフィルタ
@@ -26,8 +27,6 @@ namespace FollowManager.SidePanel
         /// 現在使用しているソート順
         /// </summary>
         public ReactiveProperty<SortOrderType> SortOrderType { get; }
-
-        // パブリック関数
 
         // デリゲートコマンド
 
@@ -50,7 +49,9 @@ namespace FollowManager.SidePanel
         public DelegateCommand<string> ChangeSortOrderTypeCommand =>
             _changeSortOrderTypeCommand ?? (_changeSortOrderTypeCommand = new DelegateCommand<string>(_sidePanelModel.ChangeSortOrderType));
 
-        // インタラクションリクエスト
+        // プライベートプロパティ
+
+        private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
         // プライベート変数
 
@@ -77,21 +78,27 @@ namespace FollowManager.SidePanel
             // フィルタを購読して現在使用しているフィルタを更新する
             FilterType = _sidePanelModel
                 .FilterAndSortOption
-                .ToReactivePropertyAsSynchronized(x => x.FilterType);
+                .ToReactivePropertyAsSynchronized(x => x.FilterType)
+                .AddTo(Disposables);
 
             // ソートキーを購読して現在使用しているソートキーを更新する
             SortKeyType = _sidePanelModel
                 .FilterAndSortOption
-                .ToReactivePropertyAsSynchronized(x => x.SortKeyType);
+                .ToReactivePropertyAsSynchronized(x => x.SortKeyType)
+                .AddTo(Disposables);
 
             // ソート順を購読して現在使用しているソート順を更新する
             SortOrderType = _sidePanelModel
                 .FilterAndSortOption
-                .ToReactivePropertyAsSynchronized(x => x.SortOrderType);
+                .ToReactivePropertyAsSynchronized(x => x.SortOrderType)
+                .AddTo(Disposables);
         }
 
         // デストラクタ
 
-        // プライベート関数
+        ~SidePanelViewModel()
+        {
+            Disposables.Dispose();
+        }
     }
 }

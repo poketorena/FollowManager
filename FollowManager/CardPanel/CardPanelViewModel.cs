@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FollowManager.Account;
@@ -16,7 +17,7 @@ namespace FollowManager.CardPanel
 {
     public class CardPanelViewModel : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 現在表示しているユーザーデータのコレクション
@@ -27,8 +28,6 @@ namespace FollowManager.CardPanel
             set { SetProperty(ref _userDatas, value); }
         }
 
-        // パブリック関数
-
         // デリゲートコマンド
 
         /// <summary>
@@ -38,12 +37,12 @@ namespace FollowManager.CardPanel
             _openProfileCommand ?? (_openProfileCommand = new DelegateCommand<string>(_cardPanelModel.OpenProfile));
 
         /// <summary>
-        /// Favoriteを切り替えるコマンド
+        /// お気に入りを切り替えるコマンド
         /// </summary>
         public DelegateCommand<UserData> FavoriteCommnad =>
             _favoriteCommand ?? (_favoriteCommand = new DelegateCommand<UserData>(x =>
             {
-                // Favoriteを反転させる
+                // お気に入りを反転させる
                 UserDatas.ElementAt(UserDatas.IndexOf(x)).Favorite = !UserDatas.ElementAt(UserDatas.IndexOf(x)).Favorite;
             }));
 
@@ -57,7 +56,12 @@ namespace FollowManager.CardPanel
                 await _cardPanelModel.BlockAndBlockReleaseAsync(x.User);
             }));
 
-        // インタラクションリクエスト
+        // プライベートプロパティ
+
+        /// <summary>
+        /// IDisposableのコレクション
+        /// </summary>
+        private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
         // プライベート変数
 
@@ -68,10 +72,6 @@ namespace FollowManager.CardPanel
         private DelegateCommand<UserData> _favoriteCommand;
 
         private DelegateCommand<UserData> _blockAndBlockReleaseCommnad;
-
-        private readonly IDisposable _filter;
-
-        private readonly IDisposable _sort;
 
         // DI注入される変数
 
@@ -97,7 +97,7 @@ namespace FollowManager.CardPanel
             //UserDatas = new ReactiveCollection<UserData>(_accountManager.Current.Followers.Take(20).ToObservable());
 
             // ロード完了時に発生するイベント購読して現在表示しているユーザーデータのコレクションを更新する
-            _filter = Observable.FromEvent<List<UserData>>(
+            Observable.FromEvent<List<UserData>>(
                 handler => _cardPanelModel.LoadCompleted += handler,
                 handler => _cardPanelModel.LoadCompleted -= handler
                 )
@@ -107,22 +107,23 @@ namespace FollowManager.CardPanel
                     .ToObservable()
                     .ToReactiveCollection();
                     Sort();
-                });
+                })
+                .AddTo(Disposables);
 
             // ソートキー、ソート順を購読して現在表示しているユーザーデータのコレクションをソートする
-            _sort = _sidePanelModel
+            _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
                 .Where(args => args.PropertyName == nameof(SortKeyType) || args.PropertyName == nameof(SortOrderType))
-                .Subscribe(_ => Sort());
+                .Subscribe(_ => Sort())
+                .AddTo(Disposables);
         }
 
         // デストラクタ
 
         ~CardPanelViewModel()
         {
-            _filter.Dispose();
-            _sort.Dispose();
+            Disposables.Dispose();
         }
 
         // プライベート関数

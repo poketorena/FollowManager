@@ -9,7 +9,7 @@ namespace FollowManager.Account
     /// </summary>
     public class AccountManager
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 登録されているアカウントのリスト

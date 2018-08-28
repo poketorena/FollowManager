@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CoreTweet;
@@ -16,7 +17,7 @@ namespace FollowManager.CardPanel
 {
     public class CardPanelModel : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 片思いのユーザーのリスト
@@ -124,6 +125,13 @@ namespace FollowManager.CardPanel
         /// </summary>
         public event Action<List<UserData>> LoadCompleted;
 
+        // プライベートプロパティ
+
+        /// <summary>
+        /// IDisposableのコレクション
+        /// </summary>
+        private CompositeDisposable Disposables { get; } = new CompositeDisposable();
+
         // プライベート変数
 
         private List<UserData> _oneWay;
@@ -139,8 +147,6 @@ namespace FollowManager.CardPanel
         private List<UserData> _follows;
 
         private List<UserData> _followers;
-
-        private readonly IDisposable _filter;
 
         // DI注入される変数
 
@@ -160,19 +166,22 @@ namespace FollowManager.CardPanel
             _sidePanelModel = sidePanelModel;
 
             // フィルタの変更を購読してユーザーのリストを読み込む
-            _filter = _sidePanelModel
+            _sidePanelModel
                 .FilterAndSortOption
                 .PropertyChangedAsObservable()
                 .Where(args => args.PropertyName == nameof(FilterType))
                 // HACK: 非同期処理は要調整
-                .Subscribe(_ => Task.Run(() => Load()));
+                .Subscribe(_ => Task.Run(() => Load()))
+                .AddTo(Disposables);
         }
 
         // デストラクタ
+
         ~CardPanelModel()
         {
-            _filter.Dispose();
+            Disposables.Dispose();
         }
+
         // プライベート関数
 
         /// <summary>

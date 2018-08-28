@@ -7,7 +7,7 @@ namespace FollowManager.FilterAndSort
     /// </summary>
     public class FilterAndSortOption : BindableBase
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 現在使用しているフィルタ

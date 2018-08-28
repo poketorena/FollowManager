@@ -5,8 +5,6 @@ namespace FollowManager.Service
 {
     public class DialogService
     {
-        // プロパティ
-
         // パブリック関数
 
         /// <summary>
@@ -31,8 +29,6 @@ namespace FollowManager.Service
             window.ShowDialog();
         }
 
-        // プライベート変数
-
         // DI注入される変数
 
         private readonly LoggingService _loggingService;
@@ -43,9 +39,5 @@ namespace FollowManager.Service
         {
             _loggingService = loggingService;
         }
-
-        // デストラクタ
-
-        // プライベート関数
     }
 }

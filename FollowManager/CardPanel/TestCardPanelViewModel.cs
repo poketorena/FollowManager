@@ -8,7 +8,7 @@ namespace FollowManager.CardPanel
 {
     public class TestCardPanelViewModel
     {
-        // プロパティ
+        // パブリックプロパティ
 
         public ReactiveCollection<UserData> UserDatas { get; } = new ReactiveCollection<UserData>();
 

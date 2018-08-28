@@ -7,10 +7,6 @@ namespace FollowManager.MainWindow
 {
     public class MainWindowViewModel : BindableBase
     {
-        // プロパティ
-
-        // パブリック関数
-
         // デリゲートコマンド
 
         /// <summary>
@@ -48,9 +44,5 @@ namespace FollowManager.MainWindow
             _loggingService = loggingService;
             _dialogService = dialogService;
         }
-
-        // デストラクタ
-
-        // プライベート関数
     }
 }

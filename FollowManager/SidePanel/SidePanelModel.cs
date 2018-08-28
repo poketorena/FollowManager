@@ -6,7 +6,7 @@ namespace FollowManager.SidePanel
 {
     public class SidePanelModel
     {
-        // プロパティ
+        // パブリックプロパティ
 
         /// <summary>
         /// 現在のフィルタとソートの設定
@@ -93,8 +93,6 @@ namespace FollowManager.SidePanel
             }
         }
 
-        // プライベート変数
-
         // DI注入される変数
 
         private readonly AccountManager _accountManager;
@@ -105,9 +103,5 @@ namespace FollowManager.SidePanel
         {
             _accountManager = accountManager;
         }
-
-        // デストラクタ
-
-        // プライベート関数
     }
 }
