@@ -1,25 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using CoreTweet;
 using FollowManager.Service;
-using Newtonsoft.Json;
 
 namespace FollowManager.Account
 {
+    /// <summary>
+    /// アカウントを管理するクラス
+    /// </summary>
     public class AccountManager
     {
         // プロパティ
-        public ObservableCollection<Account> Accounts { get; } = new ObservableCollection<Account>();
 
+        /// <summary>
+        /// 登録されているアカウントのリスト
+        /// </summary>
+        public List<Account> Accounts { get; } = new List<Account>();
+
+        /// <summary>
+        /// 現在使用中のアカウント
+        /// </summary>
         public Account Current { get; }
 
         // コンストラクタ
+
         public AccountManager(LoggingService loggingService)
         {
             Current = new Account(loggingService);
