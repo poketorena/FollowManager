@@ -55,7 +55,7 @@ namespace FollowManager.Account
 
             if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
             {
-                if (!CreateDataDirectory())
+                if (!TryCreateDataDirectory())
                 {
                     return null;
                 }
@@ -263,7 +263,7 @@ namespace FollowManager.Account
 
             if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
             {
-                if (!CreateDataDirectory())
+                if (!TryCreateDataDirectory())
                 {
                     return null;
                 }
@@ -471,7 +471,7 @@ namespace FollowManager.Account
 
             if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
             {
-                if (!CreateDataDirectory())
+                if (!TryCreateDataDirectory())
                 {
                     return null;
                 }
@@ -680,10 +680,9 @@ namespace FollowManager.Account
 
         /// <summary>
         /// データ保存用のディレクトリを作成します。
-        /// ディレクトリの作成に成功したらtrue、失敗したらfalseを返します。
         /// </summary>
-        /// <returns>ディレクトリの作成に成功したかどうか</returns>
-        private bool CreateDataDirectory()
+        /// <returns>ディレクトリの作成に成功したらtrue、失敗したらfalseを返します。</returns>
+        private bool TryCreateDataDirectory()
         {
             var directoryName = $@"Data\{Tokens.ScreenName}";
 
