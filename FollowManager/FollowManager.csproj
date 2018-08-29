@@ -63,6 +63,15 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
+    <Compile Include="ConfigureAccount\ConfigureAccountView.xaml.cs">
+      <DependentUpon>ConfigureAccountView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigureAccount\ConfigureApiKeyView.xaml.cs">
+      <DependentUpon>ConfigureApiKeyView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigureAccount\ConfigurePincodeView.xaml.cs">
+      <DependentUpon>ConfigurePincodeView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountManager.cs" />
     <Compile Include="Account\Authentication.cs" />
@@ -106,6 +115,18 @@
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
     <Page Include="About\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigureAccount\ConfigureAccountView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigureAccount\ConfigureApiKeyView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigureAccount\ConfigurePincodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
