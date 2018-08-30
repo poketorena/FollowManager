@@ -63,6 +63,7 @@
             <MenuItem Height="30" Header="タブ">
                 <MenuItem Header="新規アカウントタブ" />
                 <MenuItem Header="新規比較タブ" />
+                <MenuItem Header="新規依存関係グラフタブ" />
                 <MenuItem Header="新規カスタムタブ" />
             </MenuItem>
             <MenuItem Height="30" Header="ツール">
