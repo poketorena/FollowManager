@@ -22,17 +22,9 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <Controls:MetroWindow.RightWindowCommands>
-        <Controls:WindowCommands>
-            <Button Content="データの再取得" />
-            <Button Content="アカウント" />
-            <Button Command="{Binding OpenSettingViewCommand}" Content="設定" />
-            <Button Command="{Binding OpenAboutViewCommand}" Content="FollowManagerについて" />
-        </Controls:WindowCommands>
-    </Controls:MetroWindow.RightWindowCommands>
-
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
             <RowDefinition Height="*" />
             <RowDefinition Height="23" />
         </Grid.RowDefinitions>
@@ -42,19 +34,61 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ContentControl
+        <Menu
             Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Height="30"
+            Background="{StaticResource LightGrayPaper}">
+            <MenuItem Height="30" Header="ファイル">
+                <MenuItem Header="終了" />
+                <MenuItem Header="再起動" />
+            </MenuItem>
+            <MenuItem Height="30" Header="アカウント">
+                <MenuItem Header="@science507">
+                    <MenuItem Header="アカウントの削除" />
+                    <MenuItem Header="認証データのエクスポート" />
+                </MenuItem>
+                <MenuItem Header="@science507">
+                    <MenuItem Header="アカウントの削除" />
+                    <MenuItem Header="認証データのエクスポート" />
+                </MenuItem>
+                <MenuItem Header="@science507">
+                    <MenuItem Header="アカウントの削除" />
+                    <MenuItem Header="認証データのエクスポート" />
+                </MenuItem>
+                <MenuItem Header="アカウントを追加" />
+                <MenuItem Header="アカウントを管理" />
+            </MenuItem>
+            <MenuItem Height="30" Header="タブ">
+                <MenuItem Header="新規アカウントタブ" />
+                <MenuItem Header="新規比較タブ" />
+                <MenuItem Header="新規カスタムタブ" />
+            </MenuItem>
+            <MenuItem Height="30" Header="ツール">
+                <MenuItem Header="再読み込み" />
+                <MenuItem Header="データの再取得" />
+                <MenuItem Command="{Binding OpenSettingViewCommand}" Header="設定" />
+            </MenuItem>
+            <MenuItem Height="30" Header="ヘルプ">
+                <MenuItem Header="使い方のヒント" />
+                <MenuItem Command="{Binding OpenAboutViewCommand}" Header="FollowManagerについて" />
+            </MenuItem>
+        </Menu>
+
+        <ContentControl
+            Grid.Row="1"
             Grid.Column="0"
             Width="300"
             prism:RegionManager.RegionName="SideRegion" />
 
         <ContentControl
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="1"
             prism:RegionManager.RegionName="ContentRegion" />
 
         <ContentControl
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
             Grid.ColumnSpan="2"
             Height="23"
