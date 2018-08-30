@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace FollowManager.ConfigureAccount
+namespace FollowManager.AddAccount
 {
     /// <summary>
     /// Interaction logic for ConfigurePincodeView.xaml

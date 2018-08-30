@@ -63,8 +63,8 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
-    <Compile Include="ConfigureAccount\ConfigureAccountView.xaml.cs">
-      <DependentUpon>ConfigureAccountView.xaml</DependentUpon>
+    <Compile Include="ConfigureAccount\AddAccountView.xaml.cs">
+      <DependentUpon>AddAccountView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ConfigureAccount\ConfigureApiKeyView.xaml.cs">
       <DependentUpon>ConfigureApiKeyView.xaml</DependentUpon>
@@ -118,7 +118,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigureAccount\ConfigureAccountView.xaml">
+    <Page Include="ConfigureAccount\AddAccountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

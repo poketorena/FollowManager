@@ -3,11 +3,11 @@
 namespace FollowManager.AddAccount
 {
     /// <summary>
-    /// Interaction logic for ConfigureApiKeyView.xaml
+    /// Interaction logic for AddAccountView.xaml
     /// </summary>
-    public partial class ConfigureApiKeyView : Window
+    public partial class AddAccountView : Window
     {
-        public ConfigureApiKeyView()
+        public AddAccountView()
         {
             InitializeComponent();
         }
