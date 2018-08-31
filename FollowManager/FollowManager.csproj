@@ -63,13 +63,14 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
-    <Compile Include="ConfigureAccount\AddAccountView.xaml.cs">
+    <Compile Include="AddAccount\AddAccountView.xaml.cs">
       <DependentUpon>AddAccountView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigureAccount\ConfigureApiKeyView.xaml.cs">
+    <Compile Include="AddAccount\ConfigureApiKeyView.xaml.cs">
       <DependentUpon>ConfigureApiKeyView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigureAccount\ConfigurePincodeView.xaml.cs">
+    <Compile Include="AddAccount\ConfigureApiKeyViewModel.cs" />
+    <Compile Include="AddAccount\ConfigurePincodeView.xaml.cs">
       <DependentUpon>ConfigurePincodeView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Account\Account.cs" />
@@ -114,19 +115,20 @@
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
+    <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
     <Page Include="About\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigureAccount\AddAccountView.xaml">
+    <Page Include="AddAccount\AddAccountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigureAccount\ConfigureApiKeyView.xaml">
+    <Page Include="AddAccount\ConfigureApiKeyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ConfigureAccount\ConfigurePincodeView.xaml">
+    <Page Include="AddAccount\ConfigurePincodeView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

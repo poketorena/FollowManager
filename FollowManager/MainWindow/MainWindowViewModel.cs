@@ -1,5 +1,7 @@
 ﻿using FollowManager.Account;
+using FollowManager.AddAccount;
 using FollowManager.Service;
+using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -21,11 +23,19 @@ namespace FollowManager.MainWindow
         public DelegateCommand OpenAboutViewCommand =>
             _openAboutViewCommand ?? (_openAboutViewCommand = new DelegateCommand(_dialogService.OpenAboutView));
 
+        /// <summary>
+        /// アカウント追加画面を開くコマンド
+        /// </summary>
+        public DelegateCommand OpenAddAccountViewCommand =>
+            _openAddAccountViewCommand ?? (_openAddAccountViewCommand = new DelegateCommand(_dialogService.OpenAddAccountView));
+
         // プライベート変数
 
         private DelegateCommand _openSettingViewCommand;
 
         private DelegateCommand _openAboutViewCommand;
+
+        private DelegateCommand _openAddAccountViewCommand;
 
         // DI注入される変数
 

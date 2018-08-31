@@ -5,6 +5,7 @@
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:FollowManager.MainWindow"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     Title="FollowManager"
@@ -57,7 +58,7 @@
                     <MenuItem Header="アカウントの削除" />
                     <MenuItem Header="認証データのエクスポート" />
                 </MenuItem>
-                <MenuItem Header="アカウントを追加" />
+                <MenuItem Command="{Binding OpenAddAccountViewCommand}" Header="アカウントを追加" />
                 <MenuItem Header="アカウントを管理" />
             </MenuItem>
             <MenuItem Height="30" Header="タブ">

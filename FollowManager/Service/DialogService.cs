@@ -1,5 +1,8 @@
-﻿using FollowManager.About;
+﻿using System;
+using FollowManager.About;
+using FollowManager.AddAccount;
 using FollowManager.Setting;
+using Microsoft.Practices.Unity;
 
 namespace FollowManager.Service
 {
@@ -33,11 +36,22 @@ namespace FollowManager.Service
 
         private readonly LoggingService _loggingService;
 
+        private readonly IUnityContainer _unityContainer;
+
         // コンストラクタ
 
-        public DialogService(LoggingService loggingService)
+        public DialogService(IUnityContainer unityContainer, LoggingService loggingService)
         {
+            _unityContainer = unityContainer;
             _loggingService = loggingService;
+        }
+
+        public void OpenAddAccountView()
+        {
+            var window = _unityContainer.Resolve<AddAccountView>();
+            window.Closed += (o, args) => _loggingService.Logs.Add("アカウント追加画面を閉じました。");
+            window.Closed += (o, args) => window = null;
+            window.ShowDialog();
         }
     }
 }
