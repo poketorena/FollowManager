@@ -234,11 +234,11 @@ namespace FollowManager.CardPanel
                     .Select(userData =>
                     {
                         return new UserData
-                        (
-                            userData.User,
-                            FollowType.OneWay,
-                            userData.Favorite
-                        );
+                        {
+                            User = userData.User,
+                            FollowType = FollowType.OneWay,
+                            Favorite = userData.Favorite
+                        };
                     })
                     .ToList();
             }
@@ -268,11 +268,11 @@ namespace FollowManager.CardPanel
                     .Select(userData =>
                     {
                         return new UserData
-                        (
-                            userData.User,
-                            FollowType.Fan,
-                            userData.Favorite
-                        );
+                        {
+                            User = userData.User,
+                            FollowType = FollowType.Fan,
+                            Favorite = userData.Favorite
+                        };
                     })
                     .ToList();
             }
@@ -325,11 +325,11 @@ namespace FollowManager.CardPanel
                         .Select(userData =>
                         {
                             return new UserData
-                            (
-                                userData.User,
-                                FollowType.Mutual,
-                                userData.Favorite
-                            );
+                            {
+                                User = userData.User,
+                                FollowType = FollowType.Mutual,
+                                Favorite = userData.Favorite
+                            };
                         })
                         .ToList();
             }

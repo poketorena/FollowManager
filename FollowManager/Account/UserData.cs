@@ -49,14 +49,5 @@ namespace FollowManager.Account
 
         [JsonIgnore]
         private bool _favorite;
-
-        // コンストラクタ
-
-        public UserData(User user, FollowType followType, bool favorite)
-        {
-            User = user;
-            FollowType = followType;
-            Favorite = favorite;
-        }
     }
 }

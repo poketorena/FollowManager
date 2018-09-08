@@ -196,7 +196,7 @@ namespace FollowManager.Account
                         count => 200
                         );
 
-                    userDatas.AddRange(friends.Result.Select(user => new UserData(user, FollowType.NotSet, false)));
+                    userDatas.AddRange(friends.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
 
                     cursorTmp = friends.NextCursor;
                 }
@@ -416,7 +416,7 @@ namespace FollowManager.Account
                         count => 200
                         );
 
-                    userDatas.AddRange(followers.Result.Select(user => new UserData(user, FollowType.NotSet, false)));
+                    userDatas.AddRange(followers.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
 
                     cursorTmp = followers.NextCursor;
                 }
