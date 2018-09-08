@@ -39,7 +39,7 @@ namespace FollowManager.Account
         /// <summary>
         /// CoreTweetのトークン
         /// </summary>
-        public Tokens Tokens { get; set; } = new Tokens();
+        public Tokens Tokens { get; set; }
 
         // プライベート変数
 

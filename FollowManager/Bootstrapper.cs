@@ -7,6 +7,7 @@ using FollowManager.Service;
 using FollowManager.Account;
 using FollowManager.CardPanel;
 using FollowManager.SidePanel;
+using FollowManager.AddAccount;
 
 namespace FollowManager
 {
@@ -32,12 +33,15 @@ namespace FollowManager
         {
             base.ConfigureContainer();
 
+            // 毎回作る
             Container.RegisterType<CardPanelModel>();
+            Container.RegisterType<Account.Account>();
 
             // シングルトンでコンテナに登録
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());
             Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<DialogService>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<AddAccountService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<SidePanelModel>(new ContainerControlledLifetimeManager());
         }
     }

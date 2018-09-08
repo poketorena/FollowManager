@@ -26,8 +26,8 @@ namespace FollowManager.MainWindow
         /// <summary>
         /// アカウント追加画面を開くコマンド
         /// </summary>
-        public DelegateCommand OpenAddAccountViewCommand =>
-            _openAddAccountViewCommand ?? (_openAddAccountViewCommand = new DelegateCommand(_dialogService.OpenAddAccountView));
+        public DelegateCommand OpenConfigureApiKeyViewCommand =>
+            _openConfigureApiKeyViewCommand ?? (_openConfigureApiKeyViewCommand = new DelegateCommand(_dialogService.OpenConfigureApiKeyView));
 
         // プライベート変数
 
@@ -35,7 +35,7 @@ namespace FollowManager.MainWindow
 
         private DelegateCommand _openAboutViewCommand;
 
-        private DelegateCommand _openAddAccountViewCommand;
+        private DelegateCommand _openConfigureApiKeyViewCommand;
 
         // DI注入される変数
 

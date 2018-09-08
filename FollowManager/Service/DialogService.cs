@@ -1,5 +1,4 @@
-﻿using System;
-using FollowManager.About;
+﻿using FollowManager.About;
 using FollowManager.AddAccount;
 using FollowManager.Setting;
 using Microsoft.Practices.Unity;
@@ -8,8 +7,6 @@ namespace FollowManager.Service
 {
     public class DialogService
     {
-        // パブリック関数
-
         /// <summary>
         /// 設定画面を開きます。
         /// </summary>
@@ -32,26 +29,57 @@ namespace FollowManager.Service
             window.ShowDialog();
         }
 
+        /// <summary>
+        /// Apiキー設定画面を開きます。
+        /// </summary>
+        public void OpenConfigureApiKeyView()
+        {
+            _configureApiKeyView = new ConfigureApiKeyView();
+            _configureApiKeyView.Closed += (o, args) => _configureApiKeyView = null;
+            _configureApiKeyView.ShowDialog();
+        }
+
+        /// <summary>
+        /// Apiキー設定画面を閉じます。
+        /// </summary>
+        public void CloseConfigureApiKeyView()
+        {
+            _configureApiKeyView.Close();
+        }
+
+        /// <summary>
+        /// Pinコード設定画面を開きます。
+        /// </summary>
+        public void OpenConfigurePincodeView()
+        {
+            _configurePincodeView = new ConfigurePincodeView();
+            _configurePincodeView.Closed += (o, args) => _configurePincodeView = null;
+            _configurePincodeView.ShowDialog();
+        }
+
+        /// <summary>
+        /// Pinコード設定画面を閉じます。
+        /// </summary>
+        public void CloseConfigurePincodeView()
+        {
+            _configurePincodeView.Close();
+        }
+
+        // プライベート変数
+
+        private ConfigureApiKeyView _configureApiKeyView;
+
+        private ConfigurePincodeView _configurePincodeView;
+
         // DI注入される変数
 
         private readonly LoggingService _loggingService;
 
-        private readonly IUnityContainer _unityContainer;
-
         // コンストラクタ
 
-        public DialogService(IUnityContainer unityContainer, LoggingService loggingService)
+        public DialogService(LoggingService loggingService)
         {
-            _unityContainer = unityContainer;
             _loggingService = loggingService;
-        }
-
-        public void OpenAddAccountView()
-        {
-            var window = _unityContainer.Resolve<AddAccountView>();
-            window.Closed += (o, args) => _loggingService.Logs.Add("アカウント追加画面を閉じました。");
-            window.Closed += (o, args) => window = null;
-            window.ShowDialog();
         }
     }
 }

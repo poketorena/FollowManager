@@ -63,9 +63,6 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
-    <Compile Include="AddAccount\AddAccountView.xaml.cs">
-      <DependentUpon>AddAccountView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AddAccount\ConfigureApiKeyView.xaml.cs">
       <DependentUpon>ConfigureApiKeyView.xaml</DependentUpon>
     </Compile>
@@ -79,6 +76,8 @@
     <Compile Include="Account\FollowType.cs" />
     <Compile Include="Account\UserData.cs" />
     <Compile Include="Account\UserDataEqualityComparer.cs" />
+    <Compile Include="AddAccount\ConfigurePincodeViewModel.cs" />
+    <Compile Include="Api\TwitterApiKey.cs" />
     <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
       <DependentUpon>BottomPanelView.xaml</DependentUpon>
     </Compile>
@@ -101,6 +100,7 @@
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="Service\AddAccountService.cs" />
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\LoggingService.cs" />
     <Compile Include="Setting\SettingModel.cs" />
@@ -117,10 +117,6 @@
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
     <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
     <Page Include="About\AboutView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AddAccount\AddAccountView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

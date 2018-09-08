@@ -1,11 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using MahApps.Metro.Controls;
 
 namespace FollowManager.AddAccount
 {
     /// <summary>
     /// Interaction logic for ConfigurePincodeView.xaml
     /// </summary>
-    public partial class ConfigurePincodeView : UserControl
+    public partial class ConfigurePincodeView : MetroWindow
     {
         public ConfigurePincodeView()
         {
