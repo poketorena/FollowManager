@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:FollowManager.AddAccount"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
-    xmlns:v="clr-namespace:FollowManager.Validation"
     xmlns:wpf="clr-namespace:MaterialDesignThemes.Wpf;assembly=MaterialDesignThemes.Wpf"
     d:DataContext="{d:DesignInstance {x:Type local:ConfigureApiKeyViewModel},
                                      IsDesignTimeCreatable=False}"
