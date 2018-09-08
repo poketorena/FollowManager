@@ -46,18 +46,6 @@
                 <MenuItem Header="再起動" />
             </MenuItem>
             <MenuItem Height="30" Header="アカウント">
-                <MenuItem Header="@science507">
-                    <MenuItem Header="アカウントの削除" />
-                    <MenuItem Header="認証データのエクスポート" />
-                </MenuItem>
-                <MenuItem Header="@science507">
-                    <MenuItem Header="アカウントの削除" />
-                    <MenuItem Header="認証データのエクスポート" />
-                </MenuItem>
-                <MenuItem Header="@science507">
-                    <MenuItem Header="アカウントの削除" />
-                    <MenuItem Header="認証データのエクスポート" />
-                </MenuItem>
                 <MenuItem Command="{Binding OpenConfigureApiKeyViewCommand}" Header="アカウントを追加" />
                 <MenuItem Header="アカウントを管理" />
             </MenuItem>
