@@ -200,6 +200,9 @@
     <PackageReference Include="CoreTweet">
       <Version>0.9.0.415</Version>
     </PackageReference>
+    <PackageReference Include="Dragablz">
+      <Version>0.0.3.203</Version>
+    </PackageReference>
     <PackageReference Include="MahApps.Metro">
       <Version>1.6.5</Version>
     </PackageReference>

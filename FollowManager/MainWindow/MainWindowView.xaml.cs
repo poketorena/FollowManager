@@ -12,12 +12,9 @@ namespace FollowManager.MainWindow
     /// </summary>
     public partial class MainWindowView : MetroWindow
     {
-        public MainWindowView(IRegionManager regionManager)
+        public MainWindowView()
         {
             InitializeComponent();
-            regionManager.RegisterViewWithRegion("SideRegion", typeof(SidePanelView));
-            regionManager.RegisterViewWithRegion("ContentRegion", typeof(CardPanelView));
-            regionManager.RegisterViewWithRegion("BottomRegion", typeof(BottomPanelView));
         }
     }
 }
