@@ -1,5 +1,7 @@
-﻿using FollowManager.About;
+﻿using System;
+using FollowManager.About;
 using FollowManager.AddAccount;
+using FollowManager.ManageAccount;
 using FollowManager.Setting;
 using Microsoft.Practices.Unity;
 
@@ -63,6 +65,17 @@ namespace FollowManager.Service
         public void CloseConfigurePincodeView()
         {
             _configurePincodeView.Close();
+        }
+
+        /// <summary>
+        /// アカウント管理画面を開きます。
+        /// </summary>
+        public void OpenManageAccountView()
+        {
+            var window = new ManageAccountView();
+            window.Closed += (o, args) => _loggingService.Logs.Add("アカウント管理画面を閉じました。");
+            window.Closed += (o, args) => window = null;
+            window.ShowDialog();
         }
 
         // プライベート変数

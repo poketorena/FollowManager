@@ -6,6 +6,9 @@ using Reactive.Bindings;
 
 namespace FollowManager.CardPanel
 {
+    /// <summary>
+    /// CardPanelViewModelのモック
+    /// </summary>
     public class TestCardPanelViewModel
     {
         // パブリックプロパティ

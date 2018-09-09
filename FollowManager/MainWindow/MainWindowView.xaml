@@ -47,7 +47,7 @@
             </MenuItem>
             <MenuItem Height="30" Header="アカウント">
                 <MenuItem Command="{Binding OpenConfigureApiKeyViewCommand}" Header="アカウントを追加" />
-                <MenuItem Header="アカウントを管理" />
+                <MenuItem Command="{Binding OpenManageAccountViewCommand}" Header="アカウントを管理" />
             </MenuItem>
             <MenuItem Height="30" Header="タブ">
                 <MenuItem Header="新規アカウントタブ" />

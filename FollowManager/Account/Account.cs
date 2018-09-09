@@ -41,6 +41,12 @@ namespace FollowManager.Account
         /// </summary>
         public Tokens Tokens { get; set; }
 
+        /// <summary>
+        /// 自分のUserデータ
+        /// </summary>
+        public User User =>
+            _user ?? (_user = GetMyUserData());
+
         // プライベート変数
 
         private List<UserData> _follows;
@@ -48,6 +54,8 @@ namespace FollowManager.Account
         private List<UserData> _followers;
 
         private Dictionary<long, List<Status>> _userTweets;
+
+        private User _user;
 
         // DI注入される変数
 
@@ -790,6 +798,29 @@ namespace FollowManager.Account
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// 自分のユーザーデータを取得します。
+        /// </summary>
+        /// <returns></returns>
+        private User GetMyUserData()
+        {
+            User user;
+
+            try
+            {
+                user = Tokens.Users.Show(
+                    user_id => Tokens.UserId,
+                    include_entities => true
+                    );
+            }
+            catch (Exception)
+            {
+                _loggingService.Logs.Add("自分のユーザーデータの取得に失敗しました。");
+                return null;
+            }
+                return user;
         }
     }
 }

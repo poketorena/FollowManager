@@ -29,6 +29,12 @@ namespace FollowManager.MainWindow
         public DelegateCommand OpenConfigureApiKeyViewCommand =>
             _openConfigureApiKeyViewCommand ?? (_openConfigureApiKeyViewCommand = new DelegateCommand(_dialogService.OpenConfigureApiKeyView));
 
+        /// <summary>
+        /// アカウント管理画面を開くコマンド
+        /// </summary>
+        public DelegateCommand OpenManageAccountViewCommand =>
+            _openManageAccountViewCommand ?? (_openManageAccountViewCommand = new DelegateCommand(_dialogService.OpenManageAccountView));
+
         // プライベート変数
 
         private DelegateCommand _openSettingViewCommand;
@@ -36,6 +42,8 @@ namespace FollowManager.MainWindow
         private DelegateCommand _openAboutViewCommand;
 
         private DelegateCommand _openConfigureApiKeyViewCommand;
+
+        private DelegateCommand _openManageAccountViewCommand;
 
         // DI注入される変数
 
