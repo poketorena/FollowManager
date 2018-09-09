@@ -43,7 +43,7 @@ namespace FollowManager.ManageAccount
             // DI
             _accountManager = accountManager;
 
-            // アカウントの監視
+            // アカウントを購読して現在登録されているアカウントを更新する
             Accounts = _accountManager
                 .Accounts
                 .ToReadOnlyReactiveCollection()
