@@ -101,6 +101,8 @@
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="MainWindow\MainWindowViewModelCopy.cs" />
+    <Compile Include="MainWindow\TestMainWindowViewModel.cs" />
     <Compile Include="ManageAccount\ManageAccountView.xaml.cs">
       <DependentUpon>ManageAccountView.xaml</DependentUpon>
     </Compile>
@@ -121,6 +123,12 @@
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
+    <Compile Include="Tab\MyInterTabClient.cs" />
+    <Compile Include="Tab\TabHostWindow.xaml.cs">
+      <DependentUpon>TabHostWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tab\TabItemData.cs" />
+    <Compile Include="Tab\TabManager.cs" />
     <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
     <Page Include="About\AboutView.xaml">
       <SubType>Designer</SubType>
@@ -169,6 +177,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SidePanel\SidePanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tab\TabHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

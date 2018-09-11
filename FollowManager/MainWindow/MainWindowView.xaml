@@ -18,8 +18,8 @@
     Height="642"
     MinWidth="832"
     MinHeight="624"
-    d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel},
-                                     IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance {x:Type local:TestMainWindowViewModel},
+                                     IsDesignTimeCreatable=True}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
@@ -64,56 +64,44 @@
         </Menu>
 
         <dockablz:Layout Grid.Row="1">
-            <dragablz:TabablzControl BorderThickness="0" Style="{StaticResource MaterialDesignTabablzControlStyle}">
+            <dragablz:TabablzControl
+                BorderThickness="0"
+                ItemsSource="{Binding TabItemDatas}"
+                Style="{StaticResource MaterialDesignTabablzControlStyle}">
                 <dragablz:TabablzControl.InterTabController>
                     <dragablz:InterTabController />
+                    <!--<dragablz:InterTabController InterTabClient="{Binding MyInterTabClient}" />-->
                 </dragablz:TabablzControl.InterTabController>
-                <TabItem Header="Item1">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="23" />
-                        </Grid.RowDefinitions>
+                <dragablz:TabablzControl.HeaderItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Header}" />
+                    </DataTemplate>
+                </dragablz:TabablzControl.HeaderItemTemplate>
+                <dragablz:TabablzControl.ContentTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="23" />
+                            </Grid.RowDefinitions>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="300" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="300" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                        <sidepanel:SidePanelView
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Width="300" />
-                        <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
-                        <bottompanel:BottomPanelView
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2" />
-                    </Grid>
-                </TabItem>
-                <TabItem Header="Item2">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="23" />
-                        </Grid.RowDefinitions>
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="300" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <sidepanel:SidePanelView
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            Width="300" />
-                        <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
-                        <bottompanel:BottomPanelView
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2" />
-                    </Grid>
-                </TabItem>
+                            <sidepanel:SidePanelView
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Width="300" />
+                            <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
+                            <bottompanel:BottomPanelView
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2" />
+                        </Grid>
+                    </DataTemplate>
+                </dragablz:TabablzControl.ContentTemplate>
             </dragablz:TabablzControl>
         </dockablz:Layout>
     </Grid>

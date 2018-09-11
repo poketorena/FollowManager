@@ -57,5 +57,10 @@ namespace FollowManager.Account
                 "ScreenName"
                 );
         }
+
+        ~AccountManager()
+        {
+
+        }
     }
 }

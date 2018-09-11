@@ -8,6 +8,7 @@ using FollowManager.Account;
 using FollowManager.CardPanel;
 using FollowManager.SidePanel;
 using FollowManager.AddAccount;
+using FollowManager.Tab;
 
 namespace FollowManager
 {
@@ -36,6 +37,7 @@ namespace FollowManager
             // 毎回作る
             Container.RegisterType<CardPanelModel>();
             Container.RegisterType<Account.Account>();
+            Container.RegisterType<TabManager>();
 
             // シングルトンでコンテナに登録
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());

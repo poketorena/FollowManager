@@ -11,7 +11,7 @@ using Reactive.Bindings;
 
 namespace FollowManager.MainWindow
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModelCopy : BindableBase
     {
         // パブリックプロパティ
 
@@ -79,7 +79,7 @@ namespace FollowManager.MainWindow
 
         // コンストラクタ
 
-        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager)
+        public MainWindowViewModelCopy(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager)
         {
             // DI
             _unityContainer = unityContainer;
@@ -87,15 +87,6 @@ namespace FollowManager.MainWindow
             _loggingService = loggingService;
             _dialogService = dialogService;
             _tabManager = tabManager;
-
-            //var tabItemDatas = Observable
-            //    .Range(0, 5)
-            //    .Select(num => new TabItemData
-            //    {
-            //        Header = "@science50" + (num++).ToString(),
-            //    });
-
-            //TabItemDatas = tabItemDatas.ToReactiveCollection();
         }
     }
 }
