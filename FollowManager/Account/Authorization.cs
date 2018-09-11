@@ -3,7 +3,7 @@
     /// <summary>
     /// CoreTweetのトークンを作るための認証用データ
     /// </summary>
-    public class Authentication
+    public class Authorization
     {
         // パブリックプロパティ
 

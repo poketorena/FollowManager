@@ -63,6 +63,7 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
+    <Compile Include="Account\Authorization.cs" />
     <Compile Include="Account\TestAccount.cs" />
     <Compile Include="AddAccount\ConfigureApiKeyView.xaml.cs">
       <DependentUpon>ConfigureApiKeyView.xaml</DependentUpon>
@@ -73,7 +74,6 @@
     </Compile>
     <Compile Include="Account\Account.cs" />
     <Compile Include="Account\AccountManager.cs" />
-    <Compile Include="Account\Authentication.cs" />
     <Compile Include="Account\FollowType.cs" />
     <Compile Include="Account\UserData.cs" />
     <Compile Include="Account\UserDataEqualityComparer.cs" />
