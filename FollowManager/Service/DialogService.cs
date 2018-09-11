@@ -1,9 +1,8 @@
-﻿using System;
-using FollowManager.About;
+﻿using FollowManager.About;
 using FollowManager.AddAccount;
 using FollowManager.ManageAccount;
 using FollowManager.Setting;
-using Microsoft.Practices.Unity;
+using FollowManager.Tab;
 
 namespace FollowManager.Service
 {
@@ -78,11 +77,31 @@ namespace FollowManager.Service
             window.ShowDialog();
         }
 
+        /// <summary>
+        /// アカウントタブ追加画面を開きます。
+        /// </summary>
+        public void OpenAddAccountTabView()
+        {
+            _addAccountTabView = new AddAccountTabView();
+            _addAccountTabView.Closed += (o, args) => _addAccountTabView = null;
+            _addAccountTabView.ShowDialog();
+        }
+
+        /// <summary>
+        /// アカウントタブ追加画面を閉じます。
+        /// </summary>
+        public void CloseAddAccountTabView()
+        {
+            _addAccountTabView.Close();
+        }
+
         // プライベート変数
 
         private ConfigureApiKeyView _configureApiKeyView;
 
         private ConfigurePincodeView _configurePincodeView;
+
+        private AddAccountTabView _addAccountTabView;
 
         // DI注入される変数
 

@@ -123,7 +123,11 @@
       <DependentUpon>SidePanelView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SidePanel\SidePanelViewModel.cs" />
-    <Compile Include="Tab\MyInterTabClient.cs" />
+    <Compile Include="Tab\AddAccountTabModel.cs" />
+    <Compile Include="Tab\AddAccountTabView.xaml.cs">
+      <DependentUpon>AddAccountTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tab\AddAccountTabViewModel.cs" />
     <Compile Include="Tab\TabHostWindow.xaml.cs">
       <DependentUpon>TabHostWindow.xaml</DependentUpon>
     </Compile>
@@ -177,6 +181,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SidePanel\SidePanelView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tab\AddAccountTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,13 +1,12 @@
-﻿using System.Reactive.Linq;
+﻿using System.Reactive.Disposables;
 using FollowManager.Account;
-using FollowManager.AddAccount;
 using FollowManager.Service;
 using FollowManager.Tab;
-using MaterialDesignThemes.Wpf;
 using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace FollowManager.MainWindow
 {
@@ -18,14 +17,7 @@ namespace FollowManager.MainWindow
         /// <summary>
         /// タブのコレクション
         /// </summary>
-        public ReactiveCollection<TabItemData> TabItemDatas { get; set; }
-
-
-        /// <summary>
-        /// タブの分割に使う
-        /// </summary>
-        public MyInterTabClient MyInterTabClient =>
-            _myInterTabClient ?? (_myInterTabClient = new MyInterTabClient(_unityContainer));
+        public ReadOnlyReactiveCollection<TabItemData> TabItemDatas { get; }
 
         // デリゲートコマンド
 
@@ -53,6 +45,19 @@ namespace FollowManager.MainWindow
         public DelegateCommand OpenManageAccountViewCommand =>
             _openManageAccountViewCommand ?? (_openManageAccountViewCommand = new DelegateCommand(_dialogService.OpenManageAccountView));
 
+        /// <summary>
+        /// 新規アカウントタブを開くコマンド
+        /// </summary>
+        public DelegateCommand OpenAddAccountTabViewCommand =>
+            _openAddAccountTabViewCommand ?? (_openAddAccountTabViewCommand = new DelegateCommand(_dialogService.OpenAddAccountTabView));
+
+        // プライベートプロパティ
+
+        /// <summary>
+        /// IDisposableのコレクション
+        /// </summary>
+        private CompositeDisposable Disposables { get; } = new CompositeDisposable();
+
         // プライベート変数
 
         private DelegateCommand _openSettingViewCommand;
@@ -63,7 +68,7 @@ namespace FollowManager.MainWindow
 
         private DelegateCommand _openManageAccountViewCommand;
 
-        private MyInterTabClient _myInterTabClient;
+        private DelegateCommand _openAddAccountTabViewCommand;
 
         // DI注入される変数
 
@@ -88,6 +93,12 @@ namespace FollowManager.MainWindow
             _dialogService = dialogService;
             _tabManager = tabManager;
 
+            // モデルのタブのコレクションの変更を購読してタブのコレクションを更新する
+            TabItemDatas = _tabManager
+                .TabItemDatas
+                .ToReadOnlyReactiveCollection()
+                .AddTo(Disposables);
+
             //var tabItemDatas = Observable
             //    .Range(0, 5)
             //    .Select(num => new TabItemData
@@ -96,6 +107,13 @@ namespace FollowManager.MainWindow
             //    });
 
             //TabItemDatas = tabItemDatas.ToReactiveCollection();
+        }
+
+        // デストラクタ
+
+        ~MainWindowViewModel()
+        {
+            Disposables.Dispose();
         }
     }
 }

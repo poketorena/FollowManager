@@ -9,7 +9,6 @@
     xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
     xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
     xmlns:local="clr-namespace:FollowManager.MainWindow"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:sidepanel="clr-namespace:FollowManager.SidePanel"
@@ -19,7 +18,7 @@
     MinWidth="832"
     MinHeight="624"
     d:DataContext="{d:DesignInstance {x:Type local:TestMainWindowViewModel},
-                                     IsDesignTimeCreatable=True}"
+                                     IsDesignTimeCreatable=False}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
@@ -47,7 +46,7 @@
                 <MenuItem Command="{Binding OpenManageAccountViewCommand}" Header="アカウントを管理" />
             </MenuItem>
             <MenuItem Height="30" Header="タブ">
-                <MenuItem Header="新規アカウントタブ" />
+                <MenuItem Command="{Binding OpenAddAccountTabViewCommand}" Header="新規アカウントタブ" />
                 <MenuItem Header="新規比較タブ" />
                 <MenuItem Header="新規依存関係グラフタブ" />
                 <MenuItem Header="新規カスタムタブ" />
@@ -68,10 +67,6 @@
                 BorderThickness="0"
                 ItemsSource="{Binding TabItemDatas}"
                 Style="{StaticResource MaterialDesignTabablzControlStyle}">
-                <dragablz:TabablzControl.InterTabController>
-                    <dragablz:InterTabController />
-                    <!--<dragablz:InterTabController InterTabClient="{Binding MyInterTabClient}" />-->
-                </dragablz:TabablzControl.InterTabController>
                 <dragablz:TabablzControl.HeaderItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Header}" />

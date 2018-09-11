@@ -9,6 +9,9 @@ namespace FollowManager.Tab
 {
     public class TabManager
     {
+        /// <summary>
+        /// タブのコレクション
+        /// </summary>
         public ObservableCollection<TabItemData> TabItemDatas { get; set; } = new ObservableCollection<TabItemData>();
     }
 }

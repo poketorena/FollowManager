@@ -20,13 +20,6 @@ namespace FollowManager.MainWindow
         /// </summary>
         public ReactiveCollection<TabItemData> TabItemDatas { get; set; }
 
-
-        /// <summary>
-        /// タブの分割に使う
-        /// </summary>
-        public MyInterTabClient MyInterTabClient =>
-            _myInterTabClient ?? (_myInterTabClient = new MyInterTabClient(_unityContainer));
-
         // デリゲートコマンド
 
         /// <summary>
@@ -63,7 +56,7 @@ namespace FollowManager.MainWindow
 
         private DelegateCommand _openManageAccountViewCommand;
 
-        private MyInterTabClient _myInterTabClient;
+        //private MyInterTabClient _myInterTabClient;
 
         // DI注入される変数
 
