@@ -1,7 +1,9 @@
 ﻿using System;
 using FollowManager.Account;
+using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
 using FollowManager.MultiBinding.CommandAndConverterParameter;
+using Prism.Events;
 
 namespace FollowManager.SidePanel
 {
@@ -19,35 +21,67 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// フィルタを変更します。
         /// </summary>
-        /// <param name="filterRequest">フィルタを適応するタブのデータとフィルタタイプを指定するためのオブジェクト</param>
+        /// <param name="filterRequest">フィルタを適応するタブのデータとフィルタタイプ</param>
         public void ChangeFilterType(FilterRequest filterRequest)
         {
             var filterType = filterRequest.FilterType;
-            var tabId = filterRequest.TabData.TabId;
-
-            // ここまでできたのでここからやる（Tokenを使ってAPI呼び出したりする）
 
             switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
             {
                 case FilterType.OneWay:
                     {
-                        // ここでtabIdを使ってCardPanelModelにメッセージを飛ばす！！！
                         FilterAndSortOption.FilterType = FilterType.OneWay;
+
+                        var filterChangedEventArgs = new FilterChangedEventArgs
+                        {
+                            TabData = filterRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<FilterChangedEvent>().Publish(filterChangedEventArgs);
+
                         break;
                     }
                 case FilterType.Fan:
                     {
                         FilterAndSortOption.FilterType = FilterType.Fan;
+
+                        var filterChangedEventArgs = new FilterChangedEventArgs
+                        {
+                            TabData = filterRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<FilterChangedEvent>().Publish(filterChangedEventArgs);
+
                         break;
                     }
                 case FilterType.Mutual:
                     {
                         FilterAndSortOption.FilterType = FilterType.Mutual;
+
+                        var filterChangedEventArgs = new FilterChangedEventArgs
+                        {
+                            TabData = filterRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<FilterChangedEvent>().Publish(filterChangedEventArgs);
+
                         break;
                     }
                 case FilterType.Inactive:
                     {
                         FilterAndSortOption.FilterType = FilterType.Inactive;
+
+                        var filterChangedEventArgs = new FilterChangedEventArgs
+                        {
+                            TabData = filterRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<FilterChangedEvent>().Publish(filterChangedEventArgs);
+
                         break;
                     }
             }
@@ -102,12 +136,15 @@ namespace FollowManager.SidePanel
 
         // DI注入される変数
 
+        private readonly IEventAggregator _eventAggregator;
+
         private readonly AccountManager _accountManager;
 
         // コンストラクタ
 
-        public SidePanelModel(AccountManager accountManager)
+        public SidePanelModel(IEventAggregator eventAggregator, AccountManager accountManager)
         {
+            _eventAggregator = eventAggregator;
             _accountManager = accountManager;
         }
     }

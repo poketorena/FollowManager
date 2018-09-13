@@ -96,6 +96,8 @@
     <Compile Include="Converters\SortKeyTypeToStyleConverter.cs" />
     <Compile Include="Converters\SortOrderTypeToStyleConverter.cs" />
     <Compile Include="Converters\TabItemDataToFilterRequestConverter.cs" />
+    <Compile Include="EventAggregator\FilterChangedEvent.cs" />
+    <Compile Include="EventAggregator\FilterChangedEventArgs.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">

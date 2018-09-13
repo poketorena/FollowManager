@@ -13,18 +13,12 @@ namespace FollowManager.Account
     /// </summary>
     public class AccountManager
     {
-
         // パブリックプロパティ
 
         /// <summary>
         /// 登録されているアカウントのリスト
         /// </summary>
         public ObservableCollection<Account> Accounts { get; } = new ObservableCollection<Account>();
-
-        /// <summary>
-        /// 現在使用中のアカウント
-        /// </summary>
-        public Account Current { get; }
 
         // パブリック関数
 
@@ -95,8 +89,6 @@ namespace FollowManager.Account
                         Accounts.Add(account);
                     }
                 }
-
-                Current = Accounts.First();
             }
         }
 

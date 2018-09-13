@@ -48,7 +48,7 @@
             Grid.Row="1"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeFilterTypeCommand}"
-            CommandParameter="{Binding TabData, ElementName=self, Mode=OneTime, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=Fan}"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=Fan}"
             Content="ファン">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource FilterTypeToStyleConverter}" ConverterParameter="Fan">

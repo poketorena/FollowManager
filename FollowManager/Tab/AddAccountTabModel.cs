@@ -16,9 +16,9 @@ namespace FollowManager.Tab
         {
             var account = (Account.Account)accounts.FirstOrDefault();
 
-            var tabItemData = new TabData { Header = account.Tokens.ScreenName, TabId = Guid.NewGuid().ToString(), Tokens = account.Tokens };
+            var tabData = new TabData { Header = account.Tokens.ScreenName, TabId = Guid.NewGuid().ToString(), Tokens = account.Tokens };
 
-            _tabManager.TabDatas.Add(tabItemData);
+            _tabManager.TabDatas.Add(tabData);
 
             _dialogService.CloseAddAccountTabView();
         }

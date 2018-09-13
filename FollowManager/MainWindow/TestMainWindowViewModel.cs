@@ -22,14 +22,14 @@ namespace FollowManager.MainWindow
 
         public TestMainWindowViewModel()
         {
-            var tabItemDatas = Observable
+            var tabDatas = Observable
                 .Range(0, 5)
                 .Select(_ => new TabData
                 {
                     Header = "@science507",
                 });
 
-            TabDatas = tabItemDatas.ToReactiveCollection();
+            TabDatas = tabDatas.ToReactiveCollection();
         }
     }
 }

@@ -90,7 +90,10 @@
                             Grid.Column="0"
                             Width="300"
                             TabData="{Binding ElementName=grid, Path=DataContext, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
-                        <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
+                        <cardpanel:CardPanelView
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            TabData="{Binding ElementName=grid, Path=DataContext, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
                         <bottompanel:BottomPanelView
                             Grid.Row="1"
                             Grid.Column="0"

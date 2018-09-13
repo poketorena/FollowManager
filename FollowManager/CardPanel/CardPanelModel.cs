@@ -7,9 +7,10 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using CoreTweet;
 using FollowManager.Account;
+using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
 using FollowManager.Service;
-using FollowManager.SidePanel;
+using Prism.Events;
 using Prism.Mvvm;
 using Reactive.Bindings.Extensions;
 
@@ -20,46 +21,9 @@ namespace FollowManager.CardPanel
         // パブリックプロパティ
 
         /// <summary>
-        /// 片思いのユーザーのリスト
+        /// タブのId
         /// </summary>
-        public List<UserData> OneWay =>
-            _oneWay ?? (_oneWay = CreateOneWayList());
-
-        /// <summary>
-        /// ファンのユーザーのリスト
-        /// </summary>
-        public List<UserData> Fan =>
-            _fan ?? (_fan = CreateFanList());
-
-        /// <summary>
-        /// 和集合のユーザーのリスト
-        /// </summary>
-        public List<UserData> Union =>
-            _union ?? (_union = CreateUnionList());
-
-        /// <summary>
-        /// 相互フォローのユーザーのリスト
-        /// </summary>
-        public List<UserData> Mutual =>
-            _mutual ?? (_mutual = CreateMutualList());
-
-        /// <summary>
-        /// 30日間ツイートしていないユーザーのリスト
-        /// </summary>
-        public List<UserData> Inactive =>
-            _inactive ?? (_inactive = CreateInactiveList());
-
-        /// <summary>
-        /// フォローしているユーザーのリスト
-        /// </summary>
-        public List<UserData> Follows =>
-            _follows ?? (_follows = CreateFollowsList());
-
-        /// <summary>
-        /// フォローされているユーザーのリスト
-        /// </summary>
-        public List<UserData> Followers =>
-            _followers ?? (_followers = CreateFollowersList());
+        public string TabId { get; set; }
 
         // パブリック関数
 
@@ -93,7 +57,8 @@ namespace FollowManager.CardPanel
         {
             try
             {
-                await _accountManager.Current.Tokens.Blocks.CreateAsync(user_id => user.Id);
+                // 後で直す
+                //await _accountManager.Current.Tokens.Blocks.CreateAsync(user_id => user.Id);
                 _loggingService.Logs.Add($"{user.Name}をブロックしました。");
                 Debug.WriteLine($"{user.Name}をブロックしました。");
             }
@@ -107,7 +72,8 @@ namespace FollowManager.CardPanel
 
             try
             {
-                await _accountManager.Current.Tokens.Blocks.DestroyAsync(user_id => user.Id);
+                // 後で直す
+                //await _accountManager.Current.Tokens.Blocks.DestroyAsync(user_id => user.Id);
                 _loggingService.Logs.Add($"{user.Name}のブロックを解除しました。");
                 Debug.WriteLine($"{user.Name}のブロックを解除しました。");
             }
@@ -123,7 +89,7 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// ロード完了時に発生するイベント
         /// </summary>
-        public event Action<List<UserData>> LoadCompleted;
+        public event Action<IEnumerable<UserData>> LoadCompleted;
 
         // プライベートプロパティ
 
@@ -134,44 +100,67 @@ namespace FollowManager.CardPanel
 
         // プライベート変数
 
-        private List<UserData> _oneWay;
+        /// <summary>
+        /// 現在表示中のリスト
+        /// </summary>
+        private IEnumerable<UserData> _current;
 
-        private List<UserData> _fan;
+        /// <summary>
+        /// 片思いのユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _oneWay;
 
-        private List<UserData> _union;
+        /// <summary>
+        /// ファンのユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _fan;
 
-        private List<UserData> _mutual;
+        /// <summary>
+        /// 和集合のユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _union;
 
-        private List<UserData> _inactive;
+        /// <summary>
+        /// 相互フォローのユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _mutual;
 
-        private List<UserData> _follows;
+        /// <summary>
+        /// 30日間ツイートしていないユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _inactive;
 
-        private List<UserData> _followers;
+        /// <summary>
+        /// フォローしているユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _follows;
+
+        /// <summary>
+        /// フォローされているユーザーのコレクション
+        /// </summary>
+        private IEnumerable<UserData> _followers;
 
         // DI注入される変数
+
+        private readonly IEventAggregator _eventAggregator;
 
         private readonly AccountManager _accountManager;
 
         private readonly LoggingService _loggingService;
 
-        private readonly SidePanelModel _sidePanelModel;
-
         // コンストラクタ
 
-        public CardPanelModel(AccountManager accountManager, LoggingService loggingService, SidePanelModel sidePanelModel)
+        public CardPanelModel(IEventAggregator eventAggregator, AccountManager accountManager, LoggingService loggingService)
         {
             // DI
+            _eventAggregator = eventAggregator;
             _accountManager = accountManager;
             _loggingService = loggingService;
-            _sidePanelModel = sidePanelModel;
 
-            // フィルタの変更を購読してユーザーのリストを読み込む
-            _sidePanelModel
-                .FilterAndSortOption
-                .PropertyChangedAsObservable()
-                .Where(args => args.PropertyName == nameof(FilterType))
-                // HACK: 非同期処理は要調整
-                .Subscribe(_ => Task.Run(() => Load()))
+            // フィルタの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ受け取る）
+            _eventAggregator
+                .GetEvent<FilterChangedEvent>()
+                .Subscribe(Load, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
                 .AddTo(Disposables);
         }
 
@@ -187,48 +176,348 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// ユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
         /// </summary>
-        private void Load()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        private void Load(FilterChangedEventArgs filterChangedEventArgs)
         {
-            var filterType = _sidePanelModel.FilterAndSortOption.FilterType;
-
-            switch (filterType)
+            switch (filterChangedEventArgs.FilterAndSortOption.FilterType)
             {
                 case FilterType.OneWay:
                     {
-                        LoadCompleted?.Invoke(OneWay);
+                        _current = GetOneWayList(filterChangedEventArgs) ?? new List<UserData>();
+                        Sort(filterChangedEventArgs);
+                        LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Fan:
                     {
-                        LoadCompleted?.Invoke(Fan);
+                        _current = GetFanList(filterChangedEventArgs) ?? new List<UserData>();
+                        Sort(filterChangedEventArgs);
+                        LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Mutual:
                     {
-                        LoadCompleted?.Invoke(Mutual);
+                        _current = GetMutualList(filterChangedEventArgs) ?? new List<UserData>();
+                        Sort(filterChangedEventArgs);
+                        LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Inactive:
                     {
-                        LoadCompleted?.Invoke(Inactive);
+                        _current = GetInactiveList(filterChangedEventArgs) ?? new List<UserData>();
+                        Sort(filterChangedEventArgs);
+                        LoadCompleted?.Invoke(_current);
                         break;
                     }
             }
         }
 
         /// <summary>
+        /// 現在表示中のリストをソートします。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        private async void Sort(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            var filterType = filterChangedEventArgs.FilterAndSortOption.FilterType;
+            var sortKeyType = filterChangedEventArgs.FilterAndSortOption.SortKeyType;
+            var sortOrderType = filterChangedEventArgs.FilterAndSortOption.SortOrderType;
+
+            switch (sortKeyType)
+            {
+                case SortKeyType.LastTweetDay:
+                    {
+                        if (sortOrderType == SortOrderType.Ascending)
+                        {
+                            try
+                            {
+                                // HACK: 非同期処理は要調整
+                                _current = _current.OrderBy(userData =>
+                                {
+                                    var result = _accountManager
+                                .Accounts
+                                .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
+                                .UserTweets
+                                .TryGetValue((long)userData.User.Id, out var statuses);
+                                    if (result)
+                                    {
+                                        var status = statuses.ElementAtOrDefault(1);
+
+                                        if (status != null)
+                                        {
+                                            return status.CreatedAt.UtcDateTime;
+                                        }
+                                        else
+                                        {
+                                            // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
+                                            return DateTime.MaxValue.ToUniversalTime();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
+                                        return DateTime.MaxValue.ToUniversalTime();
+                                    }
+                                });
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                _loggingService.Logs.Add(errorMessage);
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                // HACK: 非同期処理は要調整
+                                _current = _current.OrderByDescending(userData =>
+                                {
+                                    var result = _accountManager
+                                    .Accounts
+                                    .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .UserTweets
+                                    .TryGetValue((long)userData.User.Id, out var statuses);
+                                    if (result)
+                                    {
+                                        var status = statuses.ElementAtOrDefault(1);
+
+                                        if (status != null)
+                                        {
+                                            return status.CreatedAt.UtcDateTime;
+                                        }
+                                        else
+                                        {
+                                            // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
+                                            return DateTime.MinValue.ToUniversalTime();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
+                                        return DateTime.MinValue.ToUniversalTime();
+                                    }
+                                });
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                _loggingService.Logs.Add(errorMessage);
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                        }
+                        break;
+                    }
+                case SortKeyType.FollowDay:
+                    {
+                        if (sortOrderType == SortOrderType.Ascending)
+                        {
+                            switch (filterType)
+                            {
+                                case FilterType.OneWay:
+                                    {
+                                        _current = GetOneWayList(filterChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Fan:
+                                    {
+                                        _current = GetFanList(filterChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Mutual:
+                                    {
+                                        _current = GetMutualList(filterChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Inactive:
+                                    {
+                                        _current = GetInactiveList(filterChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        break;
+                                    }
+                            }
+                        }
+                        else
+                        {
+                            switch (filterType)
+                            {
+                                case FilterType.OneWay:
+                                    {
+                                        _current = GetOneWayList(filterChangedEventArgs) ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Fan:
+                                    {
+                                        _current = GetFanList(filterChangedEventArgs) ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Mutual:
+                                    {
+                                        _current = GetMutualList(filterChangedEventArgs) ?? new List<UserData>();
+                                        break;
+                                    }
+                                case FilterType.Inactive:
+                                    {
+                                        _current = GetInactiveList(filterChangedEventArgs) ?? new List<UserData>();
+                                        break;
+                                    }
+                            }
+                        }
+                        break;
+                    }
+                case SortKeyType.TweetsPerDay:
+                    {
+                        if (sortOrderType == SortOrderType.Ascending)
+                        {
+                            try
+                            {
+                                // HACK: 非同期処理は要調整
+                                _current = _current.OrderBy(userData =>
+                                {
+                                    var result = _accountManager
+                                    .Accounts
+                                    .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .UserTweets
+                                    .TryGetValue((long)userData.User.Id, out var statuses);
+
+                                    if (result)
+                                    {
+                                        var recentlyStatus = statuses.ElementAtOrDefault(1);
+                                        var oldStatus = statuses.LastOrDefault();
+
+                                        if (recentlyStatus != null && oldStatus != null)
+                                        {
+                                            var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
+                                            return statuses.Count / days;
+                                        }
+                                        else
+                                        {
+                                            // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
+                                            return int.MaxValue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
+                                        return int.MaxValue;
+                                    }
+                                });
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                _loggingService.Logs.Add(errorMessage);
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                        }
+                        else
+                        {
+                            try
+                            {
+                                // HACK: 非同期処理は要調整
+                                _current = _current.OrderByDescending(userData =>
+                                {
+                                    var result = _accountManager
+                                    .Accounts
+                                    .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .UserTweets
+                                    .TryGetValue((long)userData.User.Id, out var statuses);
+
+                                    if (result)
+                                    {
+                                        var recentlyStatus = statuses.ElementAtOrDefault(1);
+                                        var oldStatus = statuses.LastOrDefault();
+
+                                        if (recentlyStatus != null && oldStatus != null)
+                                        {
+                                            var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
+                                            return statuses.Count / days;
+                                        }
+                                        else
+                                        {
+                                            // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
+                                            return int.MinValue;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
+                                        return int.MinValue;
+                                    }
+                                });
+                            }
+                            catch (InvalidOperationException)
+                            {
+                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                _loggingService.Logs.Add(errorMessage);
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                            catch (ArgumentNullException)
+                            {
+                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                Debug.WriteLine(errorMessage);
+                                _current = new List<UserData>();
+                            }
+                        }
+                        break;
+                    }
+            }
+        }
+
+        /// <summary>
+        /// 片思いのユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>片思いのユーザーのリスト</returns>
+        private IEnumerable<UserData> GetOneWayList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_oneWay != null)
+            {
+                return _oneWay;
+            }
+            else
+            {
+                _oneWay = CreateOneWayList(filterChangedEventArgs);
+                return _oneWay;
+            }
+        }
+
+        /// <summary>
         /// 片思いのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateOneWayList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>片思いのユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateOneWayList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
                 return _accountManager
-                .Current
+                .Accounts
+                .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
                 .Follows
                 .Except(
-                    Mutual,
+                    GetMutualList(filterChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -239,8 +528,7 @@ namespace FollowManager.CardPanel
                             FollowType = FollowType.OneWay,
                             Favorite = userData.Favorite
                         };
-                    })
-                    .ToList();
+                    });
             }
             catch (ArgumentNullException)
             {
@@ -248,21 +536,48 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
+            catch (InvalidOperationException)
+            {
+                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// ファンのユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>ファンのユーザーのリスト</returns>
+        private IEnumerable<UserData> GetFanList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_fan != null)
+            {
+                return _fan;
+            }
+            else
+            {
+                _fan = CreateFanList(filterChangedEventArgs);
+                return _fan;
+            }
         }
 
         /// <summary>
         /// ファンのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateFanList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>ファンのユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateFanList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
                 return _accountManager
-                .Current
-                .Followers
-                .Except(
-                    Mutual,
+                    .Accounts
+                    .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Followers
+                    .Except(
+                    GetMutualList(filterChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -273,8 +588,7 @@ namespace FollowManager.CardPanel
                             FollowType = FollowType.Fan,
                             Favorite = userData.Favorite
                         };
-                    })
-                    .ToList();
+                    });
             }
             catch (ArgumentNullException)
             {
@@ -282,20 +596,45 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
+            catch (InvalidOperationException)
+            {
+                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 和集合のユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>和集合のユーザーのリスト</returns>
+        private IEnumerable<UserData> GetUnionList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_union != null)
+            {
+                return _union;
+            }
+            else
+            {
+                _union = CreateUnionList(filterChangedEventArgs);
+                return _union;
+            }
         }
 
         /// <summary>
         /// 和集合のユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateUnionList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>和集合のユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateUnionList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
-                return OneWay
-                    .Union(Mutual)
-                    .Union(Fan)
-                    .ToList();
+                return GetOneWayList(filterChangedEventArgs)
+                    .Union(GetMutualList(filterChangedEventArgs))
+                    .Union(GetFanList(filterChangedEventArgs));
             }
             catch (ArgumentNullException)
             {
@@ -306,19 +645,40 @@ namespace FollowManager.CardPanel
         }
 
         /// <summary>
+        /// 相互フォローのユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>相互フォローのユーザーのリスト</returns>
+        private IEnumerable<UserData> GetMutualList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_mutual != null)
+            {
+                return _mutual;
+            }
+            else
+            {
+                _mutual = CreateMutualList(filterChangedEventArgs);
+                return _mutual;
+            }
+        }
+
+        /// <summary>
         /// 相互フォローのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateMutualList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>相互フォローのユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateMutualList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
                 return _accountManager
-                    .Current
+                    .Accounts
+                    .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
                     .Follows
                     .Intersect(
                         _accountManager
-                        .Current
+                        .Accounts
+                        .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
                         .Followers,
                         new UserDataEqualityComparer()
                         )
@@ -330,8 +690,7 @@ namespace FollowManager.CardPanel
                                 FollowType = FollowType.Mutual,
                                 Favorite = userData.Favorite
                             };
-                        })
-                        .ToList();
+                        });
             }
             catch (ArgumentNullException)
             {
@@ -339,22 +698,49 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
+            catch (InvalidOperationException)
+            {
+                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 30日間ツイートしていないユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>30日間ツイートしていないユーザーのリスト</returns>
+        private IEnumerable<UserData> GetInactiveList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_inactive != null)
+            {
+                return _inactive;
+            }
+            else
+            {
+                _inactive = CreateInactiveList(filterChangedEventArgs);
+                return _inactive;
+            }
         }
 
         /// <summary>
         /// 30日間ツイートしていないユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateInactiveList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>30日間ツイートしていないユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateInactiveList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
-                return Union
+                return GetUnionList(filterChangedEventArgs)
                     .Where(
                     userData =>
                     {
                         var result = _accountManager
-                        .Current
+                        .Accounts
+                        .Single(account => account.Tokens.ScreenName == filterChangedEventArgs.TabData.Tokens.ScreenName)
                         .UserTweets
                         .TryGetValue((long)userData.User.Id, out var statuses);
 
@@ -375,8 +761,7 @@ namespace FollowManager.CardPanel
                         {
                             return true;
                         }
-                    })
-                    .ToList();
+                    });
             }
             catch (ArgumentNullException)
             {
@@ -384,19 +769,44 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
+            catch (InvalidOperationException)
+            {
+                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// フォローしているユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>フォローしているユーザーのリスト</returns>
+        private IEnumerable<UserData> GetFollowsList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_follows != null)
+            {
+                return _follows;
+            }
+            else
+            {
+                _follows = CreateFollowsList(filterChangedEventArgs);
+                return _follows;
+            }
         }
 
         /// <summary>
         /// フォローしているユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateFollowsList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>フォローしているユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateFollowsList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
-                return OneWay
-                    .Union(Mutual)
-                    .ToList();
+                return GetOneWayList(filterChangedEventArgs)
+                    .Union(GetMutualList(filterChangedEventArgs));
             }
             catch (ArgumentNullException)
             {
@@ -407,16 +817,34 @@ namespace FollowManager.CardPanel
         }
 
         /// <summary>
+        /// フォローされているユーザーのリストを取得します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>フォローされているユーザーのリスト</returns>
+        private IEnumerable<UserData> GetFollowersList(FilterChangedEventArgs filterChangedEventArgs)
+        {
+            if (_followers != null)
+            {
+                return _followers;
+            }
+            else
+            {
+                _followers = CreateFollowersList(filterChangedEventArgs);
+                return _followers;
+            }
+        }
+
+        /// <summary>
         /// フォローされているユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <returns></returns>
-        private List<UserData> CreateFollowersList()
+        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
+        /// <returns>フォローされているユーザーのリスト</returns>
+        private IEnumerable<UserData> CreateFollowersList(FilterChangedEventArgs filterChangedEventArgs)
         {
             try
             {
-                return Mutual
-                    .Union(Fan)
-                    .ToList();
+                return GetMutualList(filterChangedEventArgs)
+                    .Union(GetFanList(filterChangedEventArgs));
             }
             catch (ArgumentNullException)
             {

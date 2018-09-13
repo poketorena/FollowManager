@@ -36,6 +36,7 @@ namespace FollowManager
 
             // 毎回作る
             Container.RegisterType<CardPanelModel>();
+            Container.RegisterType<SidePanelModel>();
             Container.RegisterType<Account.Account>();
             Container.RegisterType<AddAccountTabModel>();
 
@@ -44,7 +45,6 @@ namespace FollowManager
             Container.RegisterType<LoggingService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<DialogService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<AddAccountService>(new ContainerControlledLifetimeManager());
-            Container.RegisterType<SidePanelModel>(new ContainerControlledLifetimeManager());
             Container.RegisterType<TabManager>(new ContainerControlledLifetimeManager());
         }
     }

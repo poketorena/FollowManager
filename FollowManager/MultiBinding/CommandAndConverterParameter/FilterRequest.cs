@@ -3,7 +3,7 @@
 namespace FollowManager.MultiBinding.CommandAndConverterParameter
 {
     /// <summary>
-    /// フィルタを適応するタブのデータとフィルタタイプを指定するためのオブジェクト
+    /// フィルタを適応するタブのデータとフィルタタイプ
     /// </summary>
     public class FilterRequest
     {
