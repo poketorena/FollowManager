@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using FollowManager.Service;
 
 namespace FollowManager.Tab
@@ -14,11 +15,11 @@ namespace FollowManager.Tab
         public void AddAccountTab(object[] accounts)
         {
             var account = (Account.Account)accounts.FirstOrDefault();
-            _tabManager.TabItemDatas.Add(
-                new TabItemData
-                {
-                    Header = account.Tokens.ScreenName
-                });
+
+            var tabItemData = new TabData { Header = account.Tokens.ScreenName, TabId = Guid.NewGuid().ToString(), Tokens = account.Tokens };
+
+            _tabManager.TabDatas.Add(tabItemData);
+
             _dialogService.CloseAddAccountTabView();
         }
 

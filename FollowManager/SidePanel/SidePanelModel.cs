@@ -1,6 +1,7 @@
 ﻿using System;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
+using FollowManager.MultiBinding.CommandAndConverterParameter;
 
 namespace FollowManager.SidePanel
 {
@@ -18,13 +19,19 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// フィルタを変更します。
         /// </summary>
-        /// <param name="filterType">変更後のフィルタ</param>
-        public void ChangeFilterType(string filterType)
+        /// <param name="filterRequest">フィルタを適応するタブのデータとフィルタタイプを指定するためのオブジェクト</param>
+        public void ChangeFilterType(FilterRequest filterRequest)
         {
+            var filterType = filterRequest.FilterType;
+            var tabId = filterRequest.TabData.TabId;
+
+            // ここまでできたのでここからやる（Tokenを使ってAPI呼び出したりする）
+
             switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
             {
                 case FilterType.OneWay:
                     {
+                        // ここでtabIdを使ってCardPanelModelにメッセージを飛ばす！！！
                         FilterAndSortOption.FilterType = FilterType.OneWay;
                         break;
                     }

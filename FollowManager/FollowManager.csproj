@@ -95,19 +95,20 @@
     <Compile Include="Converters\FollowTypeToStringConverter.cs" />
     <Compile Include="Converters\SortKeyTypeToStyleConverter.cs" />
     <Compile Include="Converters\SortOrderTypeToStyleConverter.cs" />
+    <Compile Include="Converters\TabItemDataToFilterRequestConverter.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
-    <Compile Include="MainWindow\MainWindowViewModelCopy.cs" />
     <Compile Include="MainWindow\TestMainWindowViewModel.cs" />
     <Compile Include="ManageAccount\ManageAccountView.xaml.cs">
       <DependentUpon>ManageAccountView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ManageAccount\ManageAccountViewModel.cs" />
     <Compile Include="ManageAccount\TestManageAccountViewModel.cs" />
+    <Compile Include="MultiBinding\CommandAndConverterParameter\FilterRequest.cs" />
     <Compile Include="Service\AddAccountService.cs" />
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\LoggingService.cs" />
@@ -128,10 +129,7 @@
       <DependentUpon>AddAccountTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tab\AddAccountTabViewModel.cs" />
-    <Compile Include="Tab\TabHostWindow.xaml.cs">
-      <DependentUpon>TabHostWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Tab\TabItemData.cs" />
+    <Compile Include="Tab\TabData.cs" />
     <Compile Include="Tab\TabManager.cs" />
     <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
     <Page Include="About\AboutView.xaml">
@@ -185,10 +183,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Tab\AddAccountTabView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Tab\TabHostWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

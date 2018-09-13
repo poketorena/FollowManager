@@ -17,7 +17,7 @@
     Height="642"
     MinWidth="832"
     MinHeight="624"
-    d:DataContext="{d:DesignInstance {x:Type local:TestMainWindowViewModel},
+    d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel},
                                      IsDesignTimeCreatable=False}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"
@@ -62,42 +62,42 @@
             </MenuItem>
         </Menu>
 
-        <dockablz:Layout Grid.Row="1">
-            <dragablz:TabablzControl
-                BorderThickness="0"
-                ItemsSource="{Binding TabItemDatas}"
-                Style="{StaticResource MaterialDesignTabablzControlStyle}">
-                <dragablz:TabablzControl.HeaderItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Header}" />
-                    </DataTemplate>
-                </dragablz:TabablzControl.HeaderItemTemplate>
-                <dragablz:TabablzControl.ContentTemplate>
-                    <DataTemplate>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="23" />
-                            </Grid.RowDefinitions>
+        <dragablz:TabablzControl
+            Grid.Row="1"
+            BorderThickness="0"
+            ItemsSource="{Binding TabDatas}"
+            Style="{StaticResource MaterialDesignTabablzControlStyle}">
+            <dragablz:TabablzControl.HeaderItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}" />
+                </DataTemplate>
+            </dragablz:TabablzControl.HeaderItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <Grid Name="grid">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="23" />
+                        </Grid.RowDefinitions>
 
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="300" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
 
-                            <sidepanel:SidePanelView
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Width="300" />
-                            <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
-                            <bottompanel:BottomPanelView
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="2" />
-                        </Grid>
-                    </DataTemplate>
-                </dragablz:TabablzControl.ContentTemplate>
-            </dragablz:TabablzControl>
-        </dockablz:Layout>
+                        <sidepanel:SidePanelView
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Width="300"
+                            TabData="{Binding ElementName=grid, Path=DataContext, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <cardpanel:CardPanelView Grid.Row="0" Grid.Column="1" />
+                        <bottompanel:BottomPanelView
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2" />
+                    </Grid>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </dragablz:TabablzControl>
     </Grid>
 </Controls:MetroWindow>

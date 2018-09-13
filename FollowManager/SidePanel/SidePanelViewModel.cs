@@ -1,7 +1,7 @@
 ﻿using System.Reactive.Disposables;
-using System.Threading.Tasks;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
+using FollowManager.MultiBinding.CommandAndConverterParameter;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reactive.Bindings;
@@ -33,9 +33,9 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// フィルタを変更するコマンド
         /// </summary>
-        public DelegateCommand<string> ChangeFilterTypeCommand =>
+        public DelegateCommand<object> ChangeFilterTypeCommand =>
             // HACK: 非同期処理は要調整
-            _changeFilterTypeCommand ?? (_changeFilterTypeCommand = new DelegateCommand<string>(filterType => Task.Run(() => _sidePanelModel.ChangeFilterType(filterType))));
+            _changeFilterTypeCommand ?? (_changeFilterTypeCommand = new DelegateCommand<object>(filterRequest => _sidePanelModel.ChangeFilterType((FilterRequest)filterRequest)));
 
         /// <summary>
         /// ソートキーを変更するコマンド
@@ -55,7 +55,7 @@ namespace FollowManager.SidePanel
 
         // プライベート変数
 
-        private DelegateCommand<string> _changeFilterTypeCommand;
+        private DelegateCommand<object> _changeFilterTypeCommand;
 
         private DelegateCommand<string> _changeSortKeyTypeCommand;
 

@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using FollowManager.Tab;
 
 namespace FollowManager.SidePanel
 {
@@ -11,5 +13,14 @@ namespace FollowManager.SidePanel
         {
             InitializeComponent();
         }
+
+        public TabData TabData
+        {
+            get { return (TabData)GetValue(TabDataProperty); }
+            set { SetValue(TabDataProperty, value); }
+        }
+
+        public static readonly DependencyProperty TabDataProperty =
+            DependencyProperty.Register("TabData", typeof(TabData), typeof(SidePanelView), new UIPropertyMetadata());
     }
 }

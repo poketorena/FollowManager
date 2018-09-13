@@ -16,7 +16,7 @@ namespace FollowManager.MainWindow
         /// <summary>
         /// タブのコレクション
         /// </summary>
-        public ReactiveCollection<TabItemData> TabItemDatas { get; set; }
+        public ReactiveCollection<TabData> TabDatas { get; set; }
 
         // コンストラクタ
 
@@ -24,12 +24,12 @@ namespace FollowManager.MainWindow
         {
             var tabItemDatas = Observable
                 .Range(0, 5)
-                .Select(_ => new TabItemData
+                .Select(_ => new TabData
                 {
                     Header = "@science507",
                 });
 
-            TabItemDatas = tabItemDatas.ToReactiveCollection();
+            TabDatas = tabItemDatas.ToReactiveCollection();
         }
     }
 }

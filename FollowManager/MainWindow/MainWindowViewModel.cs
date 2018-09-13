@@ -17,7 +17,7 @@ namespace FollowManager.MainWindow
         /// <summary>
         /// タブのコレクション
         /// </summary>
-        public ReadOnlyReactiveCollection<TabItemData> TabItemDatas { get; }
+        public ReadOnlyReactiveCollection<TabData> TabDatas { get; }
 
         // デリゲートコマンド
 
@@ -94,8 +94,8 @@ namespace FollowManager.MainWindow
             _tabManager = tabManager;
 
             // モデルのタブのコレクションの変更を購読してタブのコレクションを更新する
-            TabItemDatas = _tabManager
-                .TabItemDatas
+            TabDatas = _tabManager
+                .TabDatas
                 .ToReadOnlyReactiveCollection()
                 .AddTo(Disposables);
 

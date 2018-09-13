@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace FollowManager.Tab
 {
+    /// <summary>
+    /// タブを管理するオブジェクト
+    /// </summary>
     public class TabManager
     {
         /// <summary>
         /// タブのコレクション
         /// </summary>
-        public ObservableCollection<TabItemData> TabItemDatas { get; set; } = new ObservableCollection<TabItemData>();
+        public ObservableCollection<TabData> TabDatas { get; set; } = new ObservableCollection<TabData>();
     }
 }

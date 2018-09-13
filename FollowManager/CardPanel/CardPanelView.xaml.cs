@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace FollowManager.CardPanel
 {
@@ -11,5 +12,14 @@ namespace FollowManager.CardPanel
         {
             InitializeComponent();
         }
+
+        public string TabId
+        {
+            get { return (string)GetValue(TabIdProperty); }
+            set { SetValue(TabIdProperty, value); }
+        }
+
+        public static readonly DependencyProperty TabIdProperty =
+            DependencyProperty.Register("TabId", typeof(string), typeof(CardPanelView), new PropertyMetadata());
     }
 }

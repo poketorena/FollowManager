@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using CoreTweet;
 using FollowManager.Service;
 using Newtonsoft.Json;
@@ -94,6 +95,8 @@ namespace FollowManager.Account
                         Accounts.Add(account);
                     }
                 }
+
+                Current = Accounts.First();
             }
         }
 
