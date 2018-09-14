@@ -8,6 +8,7 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    x:Name="self"
     d:DataContext="{d:DesignInstance {x:Type local:TestCardPanelViewModel},
                                      IsDesignTimeCreatable=True}"
     d:DesignHeight="601"
@@ -33,6 +34,7 @@
             <c:FollowTypeToSolidColorBrushConverter x:Key="FollowTypeToSolidColorBrushConverter" />
             <c:FollowTypeToStringConverter x:Key="FollowTypeToStringConverter" />
             <c:BoolToSolidColorBrushConverter x:Key="BoolToSolidColorBrushConverter" />
+            <c:UserDataToBlockAndBlockReleaseRequestConverter x:Key="UserDataToBlockAndBlockReleaseRequestConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <ListBox
@@ -119,9 +121,18 @@
                                 Padding="2,0,2,0"
                                 materialDesign:RippleAssist.IsCentered="True"
                                 Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.BlockAndBlockReleaseCommand}"
-                                CommandParameter="{Binding}"
                                 Style="{StaticResource MaterialDesignToolButton}">
                                 <materialDesign:PackIcon Kind="BlockHelper" />
+                                <Button.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource UserDataToBlockAndBlockReleaseRequestConverter}">
+                                        <Binding />
+                                        <Binding
+                                            ElementName="self"
+                                            Mode="OneWay"
+                                            Path="TabData"
+                                            UpdateSourceTrigger="PropertyChanged" />
+                                    </MultiBinding>
+                                </Button.CommandParameter>
                             </Button>
                             <Button
                                 Width="30"

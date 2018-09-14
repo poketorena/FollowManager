@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using FollowManager.Account;
 using FollowManager.FilterAndSort;
+using FollowManager.MultiBinding.MultiParameter;
 using FollowManager.Service;
 using FollowManager.SidePanel;
 using Prism.Commands;
@@ -54,11 +55,11 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 指定したユーザーをブロックして、3秒後にブロック解除するコマンド
         /// </summary>
-        public DelegateCommand<UserData> BlockAndBlockReleaseCommand =>
-            _blockAndBlockReleaseCommnad ?? (_blockAndBlockReleaseCommnad = new DelegateCommand<UserData>(async x =>
+        public DelegateCommand<object> BlockAndBlockReleaseCommand =>
+            _blockAndBlockReleaseCommnad ?? (_blockAndBlockReleaseCommnad = new DelegateCommand<object>(async blockAndBlockReleaseRequest =>
             {
-                UserDatas.ElementAt(UserDatas.IndexOf(x)).FollowType = FollowType.BlockAndBlockRelease;
-                await _cardPanelModel.BlockAndBlockReleaseAsync(x.User);
+                UserDatas.ElementAt(UserDatas.IndexOf(((BlockAndBlockReleaseRequest)blockAndBlockReleaseRequest).UserData)).FollowType = FollowType.BlockAndBlockRelease;
+                await _cardPanelModel.BlockAndBlockReleaseAsync((BlockAndBlockReleaseRequest)blockAndBlockReleaseRequest).ConfigureAwait(false);
             }));
 
         // プライベートプロパティ
@@ -76,7 +77,7 @@ namespace FollowManager.CardPanel
 
         private DelegateCommand<UserData> _favoriteCommand;
 
-        private DelegateCommand<UserData> _blockAndBlockReleaseCommnad;
+        private DelegateCommand<object> _blockAndBlockReleaseCommnad;
 
         // DI注入される変数
 

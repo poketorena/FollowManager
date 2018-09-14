@@ -9,6 +9,7 @@ using CoreTweet;
 using FollowManager.Account;
 using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
+using FollowManager.MultiBinding.MultiParameter;
 using FollowManager.Service;
 using Prism.Events;
 using Prism.Mvvm;
@@ -51,36 +52,38 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 指定したユーザーをブロックして、3秒後にブロック解除します。
         /// </summary>
-        /// <param name="user">ブロックしてブロック解除するユーザー</param>
+        /// <param name="blockAndBlockReleaseRequest">タブのデータとブロックしてブロック解除するユーザーデータ</param>
         /// <returns></returns>
-        public async Task BlockAndBlockReleaseAsync(User user)
+        public async Task BlockAndBlockReleaseAsync(BlockAndBlockReleaseRequest blockAndBlockReleaseRequest)
         {
-            try
-            {
-                // 後で直す
-                //await _accountManager.Current.Tokens.Blocks.CreateAsync(user_id => user.Id);
-                _loggingService.Logs.Add($"{user.Name}をブロックしました。");
-                Debug.WriteLine($"{user.Name}をブロックしました。");
-            }
-            catch (Exception)
-            {
-                _loggingService.Logs.Add($"{user.Name}のブロックに失敗しました。");
-                Debug.WriteLine($"{user.Name}のブロックに失敗しました。");
-            }
-
-            await Task.Delay(3000);
+            var userId = blockAndBlockReleaseRequest.TabData.Tokens.UserId;
+            var targetId = blockAndBlockReleaseRequest.UserData.User.Id;
+            var targetScreenName = blockAndBlockReleaseRequest.UserData.User.Name;
 
             try
             {
-                // 後で直す
-                //await _accountManager.Current.Tokens.Blocks.DestroyAsync(user_id => user.Id);
-                _loggingService.Logs.Add($"{user.Name}のブロックを解除しました。");
-                Debug.WriteLine($"{user.Name}のブロックを解除しました。");
+                await _accountManager.Accounts.Single(account => account.User.Id == userId).Tokens.Blocks.CreateAsync(user_id => targetId).ConfigureAwait(false);
+                _loggingService.Logs.Add($"{targetScreenName}をブロックしました。");
+                Debug.WriteLine($"{targetScreenName}をブロックしました。");
             }
             catch (Exception)
             {
-                _loggingService.Logs.Add($"{user.Name}のブロックの解除に失敗しました。");
-                Debug.WriteLine($"{user.Name}のブロックの解除に失敗しました。");
+                _loggingService.Logs.Add($"{targetScreenName}のブロックに失敗しました。");
+                Debug.WriteLine($"{targetScreenName}のブロックに失敗しました。");
+            }
+
+            await Task.Delay(3000).ConfigureAwait(false);
+
+            try
+            {
+                await _accountManager.Accounts.Single(account => account.User.Id == userId).Tokens.Blocks.DestroyAsync(user_id => targetId).ConfigureAwait(false);
+                _loggingService.Logs.Add($"{targetScreenName}のブロックを解除しました。");
+                Debug.WriteLine($"{targetScreenName}のブロックを解除しました。");
+            }
+            catch (Exception)
+            {
+                _loggingService.Logs.Add($"{targetScreenName}のブロックの解除に失敗しました。");
+                Debug.WriteLine($"{targetScreenName}のブロックの解除に失敗しました。");
             }
         }
 
