@@ -6,7 +6,7 @@ namespace FollowManager.EventAggregator
     /// <summary>
     /// タブのデータとフィルタとソートの設定
     /// </summary>
-    public class FilterChangedEventArgs : IDataChangedEventArgs
+    public class SortKeyChangedEventArgs : IDataChangedEventArgs
     {
         // パブリックプロパティ
 

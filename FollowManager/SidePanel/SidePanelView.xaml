@@ -19,6 +19,7 @@
             <c:SortKeyTypeToStyleConverter x:Key="SortKeyTypeToStyleConverter" />
             <c:SortOrderTypeToStyleConverter x:Key="SortOrderTypeToStyleConverter" />
             <c:TabDataToFilterRequestConverter x:Key="TabDataToFilterRequestConverter" />
+            <c:TabDataToSortRequestConverter x:Key="TabDataToSortRequestConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -113,7 +114,7 @@
             Grid.Row="6"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
-            CommandParameter="LastTweetDay"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortRequestConverter}, ConverterParameter=LastTweetDay}"
             Content="最終ツイート日">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="LastTweetDay">
@@ -128,7 +129,7 @@
             Grid.Row="7"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
-            CommandParameter="FollowDay"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortRequestConverter}, ConverterParameter=FollowDay}"
             Content="フォローした日">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="FollowDay">
@@ -143,7 +144,7 @@
             Grid.Row="8"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortKeyTypeCommand}"
-            CommandParameter="TweetsPerDay"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortRequestConverter}, ConverterParameter=TweetsPerDay}"
             Content="1日あたりのツイート数">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource SortKeyTypeToStyleConverter}" ConverterParameter="TweetsPerDay">

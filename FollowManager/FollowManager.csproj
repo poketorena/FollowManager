@@ -96,9 +96,13 @@
     <Compile Include="Converters\SortKeyTypeToStyleConverter.cs" />
     <Compile Include="Converters\SortOrderTypeToStyleConverter.cs" />
     <Compile Include="Converters\TabDataToFilterRequestConverter.cs" />
+    <Compile Include="Converters\TabDataToSortRequestConverter.cs" />
     <Compile Include="Converters\UserDataToBlockAndBlockReleaseRequestConverter.cs" />
     <Compile Include="EventAggregator\FilterChangedEvent.cs" />
     <Compile Include="EventAggregator\FilterChangedEventArgs.cs" />
+    <Compile Include="EventAggregator\IDataChangedEventArgs.cs" />
+    <Compile Include="EventAggregator\SortKeyChangedEvent.cs" />
+    <Compile Include="EventAggregator\SortKeyChangedEventArgs.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">
@@ -112,6 +116,7 @@
     <Compile Include="ManageAccount\ManageAccountViewModel.cs" />
     <Compile Include="ManageAccount\TestManageAccountViewModel.cs" />
     <Compile Include="MultiBinding\CommandAndConverterParameter\FilterRequest.cs" />
+    <Compile Include="MultiBinding\CommandAndConverterParameter\SortRequest.cs" />
     <Compile Include="MultiBinding\MultiParameter\BlockAndBlockReleaseRequest.cs" />
     <Compile Include="Service\AddAccountService.cs" />
     <Compile Include="Service\DialogService.cs" />

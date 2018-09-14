@@ -1,11 +1,12 @@
-﻿using FollowManager.Tab;
+﻿using FollowManager.FilterAndSort;
+using FollowManager.Tab;
 
 namespace FollowManager.MultiBinding.CommandAndConverterParameter
 {
     /// <summary>
-    /// タブのデータとフィルタタイプ
+    /// タブのデータとソートキータイプ
     /// </summary>
-    public class FilterRequest
+    public class SortRequest
     {
         // パブリックプロパティ
 
@@ -15,8 +16,8 @@ namespace FollowManager.MultiBinding.CommandAndConverterParameter
         public TabData TabData { get; set; }
 
         /// <summary>
-        /// フィルタタイプ
+        /// ソートキータイプ
         /// </summary>
-        public string FilterType { get; set; }
+        public string SortKeyType { get; set; }
     }
 }

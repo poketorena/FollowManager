@@ -4,20 +4,20 @@ using FollowManager.Tab;
 namespace FollowManager.EventAggregator
 {
     /// <summary>
-    /// タブのデータとフィルタとソートの設定
+    /// SidePanelで発生したイベントデータ
     /// </summary>
-    public class FilterChangedEventArgs : IDataChangedEventArgs
+    public interface IDataChangedEventArgs
     {
         // パブリックプロパティ
 
         /// <summary>
         /// タブのデータ
         /// </summary>
-        public TabData TabData { get; set; }
+        TabData TabData { get; set; }
 
         /// <summary>
         /// フィルタとソートの設定
         /// </summary>
-        public FilterAndSortOption FilterAndSortOption { get; set; }
+        FilterAndSortOption FilterAndSortOption { get; set; }
     }
 }

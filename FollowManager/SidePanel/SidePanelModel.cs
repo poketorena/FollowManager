@@ -21,7 +21,7 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// フィルタを変更します。
         /// </summary>
-        /// <param name="filterRequest">フィルタを適応するタブのデータとフィルタタイプ</param>
+        /// <param name="filterRequest">タブのデータとフィルタタイプ</param>
         public void ChangeFilterType(FilterRequest filterRequest)
         {
             var filterType = filterRequest.FilterType;
@@ -90,24 +90,53 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// ソートキ-を変更します。
         /// </summary>
-        /// <param name="sortKeyType">変更後のソートキー</param>
-        public void ChangeSortKeyType(string sortKeyType)
+        /// <param name="sortRequest">変更後のソートキー</param>
+        public void ChangeSortKeyType(SortRequest sortRequest)
         {
+            var sortKeyType = sortRequest.SortKeyType;
+
             switch ((SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType))
             {
                 case SortKeyType.LastTweetDay:
                     {
                         FilterAndSortOption.SortKeyType = SortKeyType.LastTweetDay;
+
+                        var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
+                        {
+                            TabData = sortRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<SortKeyChangedEvent>().Publish(sortKeyChangedEventArgs);
+
                         break;
                     }
                 case SortKeyType.FollowDay:
                     {
                         FilterAndSortOption.SortKeyType = SortKeyType.FollowDay;
+
+                        var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
+                        {
+                            TabData = sortRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<SortKeyChangedEvent>().Publish(sortKeyChangedEventArgs);
+
                         break;
                     }
                 case SortKeyType.TweetsPerDay:
                     {
                         FilterAndSortOption.SortKeyType = SortKeyType.TweetsPerDay;
+
+                        var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
+                        {
+                            TabData = sortRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<SortKeyChangedEvent>().Publish(sortKeyChangedEventArgs);
+
                         break;
                     }
             }

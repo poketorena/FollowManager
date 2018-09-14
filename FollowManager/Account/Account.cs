@@ -633,7 +633,7 @@ namespace FollowManager.Account
 
             var userTweets = new Dictionary<long, List<Status>>();
 
-            foreach (var userData in Follows.Union(Followers))
+            foreach (var userData in Follows.Union(Followers, new UserDataEqualityComparer()))
             {
                 IEnumerable<Status> statuses;
                 try
@@ -820,7 +820,7 @@ namespace FollowManager.Account
                 _loggingService.Logs.Add("自分のユーザーデータの取得に失敗しました。");
                 return null;
             }
-                return user;
+            return user;
         }
     }
 }

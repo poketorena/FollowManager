@@ -7,27 +7,27 @@ using FollowManager.Tab;
 namespace FollowManager.Converters
 {
     /// <summary>
-    /// TabDataをFilterRequest型に変換するコンバーター
+    /// TabDataをSortRequest型に変換するコンバーター
     /// </summary>
-    public class TabDataToFilterRequestConverter : IValueConverter
+    public class TabDataToSortRequestConverter : IValueConverter
     {
         /// <summary>
-        /// TabDataをFilterRequest型に変換します。
+        /// TabDataをSortRequest型に変換します。
         /// </summary>
         /// <param name="value">タブのデータ</param>
         /// <param name="targetType">未使用</param>
-        /// <param name="parameter">Viewで指定するFilterTypeの文字列</param>
+        /// <param name="parameter">Viewで指定するSortKeyTypeの文字列</param>
         /// <param name="culture">未使用</param>
-        /// <returns>タブのデータとフィルタタイプ</returns>
+        /// <returns>タブのデータとソートキータイプ</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TabData tabData && parameter is string filterType)
+            if (value is TabData tabData && parameter is string sortKeyType)
             {
-                return new FilterRequest { TabData = tabData, FilterType = filterType };
+                return new SortRequest { TabData = tabData, SortKeyType = sortKeyType };
             }
             else
             {
-                return new FilterRequest();
+                return new SortRequest();
             }
         }
 
