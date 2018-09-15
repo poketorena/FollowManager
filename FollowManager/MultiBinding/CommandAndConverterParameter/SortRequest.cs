@@ -1,4 +1,5 @@
-﻿using FollowManager.Tab;
+﻿using FollowManager.FilterAndSort;
+using FollowManager.Tab;
 
 namespace FollowManager.MultiBinding.CommandAndConverterParameter
 {
@@ -17,6 +18,6 @@ namespace FollowManager.MultiBinding.CommandAndConverterParameter
         /// <summary>
         /// ソートキーの種類
         /// </summary>
-        public string SortKeyType { get; set; }
+        public SortKeyType SortKeyType { get; set; }
     }
 }

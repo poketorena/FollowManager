@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using FollowManager.FilterAndSort;
 using FollowManager.MultiBinding.CommandAndConverterParameter;
 using FollowManager.Tab;
 
@@ -23,7 +24,12 @@ namespace FollowManager.Converters
         {
             if (value is TabData tabData && parameter is string filterType)
             {
-                return new FilterRequest { TabData = tabData, FilterType = filterType };
+
+                return new FilterRequest
+                {
+                    TabData = tabData,
+                    FilterType = (FilterType)Enum.Parse(typeof(FilterType), filterType)
+                };
             }
             else
             {

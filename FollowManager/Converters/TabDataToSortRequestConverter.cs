@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using FollowManager.FilterAndSort;
 using FollowManager.MultiBinding.CommandAndConverterParameter;
 using FollowManager.Tab;
 
@@ -23,7 +24,11 @@ namespace FollowManager.Converters
         {
             if (value is TabData tabData && parameter is string sortKeyType)
             {
-                return new SortKeyRequest { TabData = tabData, SortKeyType = sortKeyType };
+                return new SortKeyRequest
+                {
+                    TabData = tabData,
+                    SortKeyType = (SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType)
+                };
             }
             else
             {

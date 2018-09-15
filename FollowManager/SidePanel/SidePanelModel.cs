@@ -24,9 +24,7 @@ namespace FollowManager.SidePanel
         /// <param name="filterRequest">タブのデータとフィルタの種類</param>
         public void ChangeFilterType(FilterRequest filterRequest)
         {
-            var filterType = filterRequest.FilterType;
-
-            switch ((FilterType)Enum.Parse(typeof(FilterType), filterType))
+            switch (filterRequest.FilterType)
             {
                 case FilterType.OneWay:
                     {
@@ -93,9 +91,7 @@ namespace FollowManager.SidePanel
         /// <param name="sortKeyRequest">変更後のソートキー</param>
         public void ChangeSortKeyType(SortKeyRequest sortKeyRequest)
         {
-            var sortKeyType = sortKeyRequest.SortKeyType;
-
-            switch ((SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType))
+            switch (sortKeyRequest.SortKeyType)
             {
                 case SortKeyType.LastTweetDay:
                     {
