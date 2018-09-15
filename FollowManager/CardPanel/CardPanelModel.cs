@@ -228,28 +228,28 @@ namespace FollowManager.CardPanel
             {
                 case FilterType.OneWay:
                     {
-                        _current = GetOneWayList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        _current = GetOneWayListOrDefault(sidePanelChangedEventArgs) ?? new List<UserData>();
                         SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Fan:
                     {
-                        _current = GetFanList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        _current = GetFanListOrDefault(sidePanelChangedEventArgs) ?? new List<UserData>();
                         SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Mutual:
                     {
-                        _current = GetMutualList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        _current = GetMutualListOrDefault(sidePanelChangedEventArgs) ?? new List<UserData>();
                         SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Inactive:
                     {
-                        _current = GetInactiveList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        _current = GetInactiveListOrDefault(sidePanelChangedEventArgs) ?? new List<UserData>();
                         SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
@@ -288,10 +288,13 @@ namespace FollowManager.CardPanel
             {
                 case SortKeyType.LastTweetDay:
                     {
-                        var userTweets = GetUserTweetsOrDefault();
+                        var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
 
                         if (userTweets == null)
                         {
+                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
                             break;
                         }
 
@@ -360,25 +363,25 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        var userDatas = GetOneWayList(sidePanelChangedEventArgs)?.Reverse();
+                                        var userDatas = GetOneWayListOrDefault(sidePanelChangedEventArgs)?.Reverse();
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        var userDatas = GetFanList(sidePanelChangedEventArgs)?.Reverse();
+                                        var userDatas = GetFanListOrDefault(sidePanelChangedEventArgs)?.Reverse();
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        var userDatas = GetMutualList(sidePanelChangedEventArgs)?.Reverse();
+                                        var userDatas = GetMutualListOrDefault(sidePanelChangedEventArgs)?.Reverse();
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        var userDatas = GetInactiveList(sidePanelChangedEventArgs)?.Reverse();
+                                        var userDatas = GetInactiveListOrDefault(sidePanelChangedEventArgs)?.Reverse();
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
@@ -390,25 +393,25 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        var userDatas = GetOneWayList(sidePanelChangedEventArgs);
+                                        var userDatas = GetOneWayListOrDefault(sidePanelChangedEventArgs);
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        var userDatas = GetFanList(sidePanelChangedEventArgs);
+                                        var userDatas = GetFanListOrDefault(sidePanelChangedEventArgs);
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        var userDatas = GetMutualList(sidePanelChangedEventArgs);
+                                        var userDatas = GetMutualListOrDefault(sidePanelChangedEventArgs);
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        var userDatas = GetInactiveList(sidePanelChangedEventArgs);
+                                        var userDatas = GetInactiveListOrDefault(sidePanelChangedEventArgs);
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
@@ -437,10 +440,13 @@ namespace FollowManager.CardPanel
                     }
                 case SortKeyType.TweetsPerDay:
                     {
-                        var userTweets = GetUserTweetsOrDefault();
+                        var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
 
                         if (userTweets == null)
                         {
+                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
                             break;
                         }
 
@@ -508,29 +514,6 @@ namespace FollowManager.CardPanel
                         }
                         break;
                     }
-
-                    /// <summary>
-                    /// ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。
-                    /// </summary>
-                    /// <returns>ツイートのリストのディクショナリー</returns>
-                    Dictionary<long, List<Status>> GetUserTweetsOrDefault()
-                    {
-                        try
-                        {
-                            return _accountManager
-                                .Accounts
-                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                .UserTweets;
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
-                            _loggingService.Logs.Add(errorMessage);
-                            Debug.WriteLine(errorMessage);
-                            _current = new List<UserData>();
-                            return null;
-                        }
-                    }
             }
         }
 
@@ -539,7 +522,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>片思いのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetOneWayList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetOneWayListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_oneWay != null)
             {
@@ -547,7 +530,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _oneWay = CreateOneWayList(sidePanelChangedEventArgs);
+                _oneWay = CreateOneWayListOrDefault(sidePanelChangedEventArgs);
                 return _oneWay;
             }
         }
@@ -557,7 +540,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>片思いのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateOneWayList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateOneWayListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
@@ -566,7 +549,7 @@ namespace FollowManager.CardPanel
                 .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                 .Follows
                 .Except(
-                    GetMutualList(sidePanelChangedEventArgs),
+                    GetMutualListOrDefault(sidePanelChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -587,7 +570,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "アカウントが追加されていません。";
+                const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -599,7 +582,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>ファンのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFanList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetFanListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_fan != null)
             {
@@ -607,7 +590,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _fan = CreateFanList(sidePanelChangedEventArgs);
+                _fan = CreateFanListOrDefault(sidePanelChangedEventArgs);
                 return _fan;
             }
         }
@@ -617,7 +600,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>ファンのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFanList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateFanListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
@@ -626,7 +609,7 @@ namespace FollowManager.CardPanel
                     .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                     .Followers
                     .Except(
-                    GetMutualList(sidePanelChangedEventArgs),
+                    GetMutualListOrDefault(sidePanelChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -647,7 +630,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "アカウントが追加されていません。";
+                const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -659,7 +642,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>和集合のユーザーのリスト</returns>
-        private IEnumerable<UserData> GetUnionList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetUnionListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_union != null)
             {
@@ -667,7 +650,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _union = CreateUnionList(sidePanelChangedEventArgs);
+                _union = CreateUnionListOrDefault(sidePanelChangedEventArgs);
                 return _union;
             }
         }
@@ -677,13 +660,13 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>和集合のユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateUnionList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateUnionListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetOneWayList(sidePanelChangedEventArgs)
-                    .Union(GetMutualList(sidePanelChangedEventArgs), new UserDataEqualityComparer())
-                    .Union(GetFanList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
+                return GetOneWayListOrDefault(sidePanelChangedEventArgs)
+                    .Union(GetMutualListOrDefault(sidePanelChangedEventArgs), new UserDataEqualityComparer())
+                    .Union(GetFanListOrDefault(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {
@@ -698,7 +681,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>相互フォローのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetMutualList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetMutualListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_mutual != null)
             {
@@ -706,7 +689,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _mutual = CreateMutualList(sidePanelChangedEventArgs);
+                _mutual = CreateMutualListOrDefault(sidePanelChangedEventArgs);
                 return _mutual;
             }
         }
@@ -716,7 +699,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>相互フォローのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateMutualList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateMutualListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
@@ -749,7 +732,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "アカウントが追加されていません。";
+                const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -761,7 +744,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private IEnumerable<UserData> GetInactiveList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetInactiveListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_inactive != null)
             {
@@ -769,7 +752,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _inactive = CreateInactiveList(sidePanelChangedEventArgs);
+                _inactive = CreateInactiveListOrDefault(sidePanelChangedEventArgs);
                 return _inactive;
             }
         }
@@ -779,18 +762,25 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateInactiveList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateInactiveListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
+            var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
+
+            if (userTweets == null)
+            {
+                const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                return null;
+            }
+
             try
             {
-                return GetUnionList(sidePanelChangedEventArgs)
+                return GetUnionListOrDefault(sidePanelChangedEventArgs)
                     .Where(
                     userData =>
                     {
-                        var result = _accountManager
-                        .Accounts
-                        .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                        .UserTweets
+                        var result = userTweets
                         .TryGetValue((long)userData.User.Id, out var statuses);
 
                         if (!result)
@@ -818,13 +808,6 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
-            catch (InvalidOperationException)
-            {
-                const string errorMessage = "アカウントが追加されていません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
         }
 
         /// <summary>
@@ -832,7 +815,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローしているユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFollowsList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetFollowsListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_follows != null)
             {
@@ -840,7 +823,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _follows = CreateFollowsList(sidePanelChangedEventArgs);
+                _follows = CreateFollowsListOrDefault(sidePanelChangedEventArgs);
                 return _follows;
             }
         }
@@ -850,12 +833,12 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローしているユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFollowsList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateFollowsListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetOneWayList(sidePanelChangedEventArgs)
-                    .Union(GetMutualList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
+                return GetOneWayListOrDefault(sidePanelChangedEventArgs)
+                    .Union(GetMutualListOrDefault(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {
@@ -870,7 +853,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローされているユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFollowersList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetFollowersListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_followers != null)
             {
@@ -878,7 +861,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _followers = CreateFollowersList(sidePanelChangedEventArgs);
+                _followers = CreateFollowersListOrDefault(sidePanelChangedEventArgs);
                 return _followers;
             }
         }
@@ -888,17 +871,41 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローされているユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFollowersList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateFollowersListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetMutualList(sidePanelChangedEventArgs)
-                    .Union(GetFanList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
+                return GetMutualListOrDefault(sidePanelChangedEventArgs)
+                    .Union(GetFanListOrDefault(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {
                 const string errorMessage = "Followersの作成に失敗しました。LINQの引数が null です。";
                 Debug.WriteLine(errorMessage);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。
+        /// </summary>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <returns>ツイートのリストのディクショナリー</returns>
+        private Dictionary<long, List<Status>> GetUserTweetsOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        {
+            try
+            {
+                return _accountManager
+                    .Accounts
+                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                    .UserTweets;
+            }
+            catch (InvalidOperationException)
+            {
+                const string errorMessage = "ツイートのリストのディクショナリーの取得に失敗しました。アカウントが追加されていません。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
+                _current = new List<UserData>();
                 return null;
             }
         }
