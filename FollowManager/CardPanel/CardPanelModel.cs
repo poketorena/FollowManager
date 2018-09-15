@@ -69,13 +69,21 @@ namespace FollowManager.CardPanel
                     .CreateAsync(user_id => targetId)
                     .ConfigureAwait(false);
 
-                _loggingService.Logs.Add($"{targetScreenName}をブロックしました。");
-                Debug.WriteLine($"{targetScreenName}をブロックしました。");
+                var message = $"{targetScreenName}をブロックしました。";
+                _loggingService.Logs.Add(message);
+                Debug.WriteLine(message);
+            }
+            catch (InvalidOperationException)
+            {
+                var errorMessage = $"{targetScreenName}のブロックに失敗しました。アカウントが追加されていません。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
             }
             catch (Exception)
             {
-                _loggingService.Logs.Add($"{targetScreenName}のブロックに失敗しました。");
-                Debug.WriteLine($"{targetScreenName}のブロックに失敗しました。");
+                var errorMessage = $"{targetScreenName}のブロックに失敗しました。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
             }
 
             await Task.Delay(3000).ConfigureAwait(false);
@@ -90,13 +98,21 @@ namespace FollowManager.CardPanel
                     .DestroyAsync(user_id => targetId)
                     .ConfigureAwait(false);
 
-                _loggingService.Logs.Add($"{targetScreenName}のブロックを解除しました。");
-                Debug.WriteLine($"{targetScreenName}のブロックを解除しました。");
+                var message = $"{targetScreenName}のブロックを解除しました。";
+                _loggingService.Logs.Add(message);
+                Debug.WriteLine(message);
+            }
+            catch (InvalidOperationException)
+            {
+                var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。アカウントが追加されていません。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
             }
             catch (Exception)
             {
-                _loggingService.Logs.Add($"{targetScreenName}のブロックの解除に失敗しました。");
-                Debug.WriteLine($"{targetScreenName}のブロックの解除に失敗しました。");
+                var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。";
+                _loggingService.Logs.Add(errorMessage);
+                Debug.WriteLine(errorMessage);
             }
         }
 
@@ -176,19 +192,19 @@ namespace FollowManager.CardPanel
             // フィルタの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<FilterChangedEvent>()
-                .Subscribe(LoadFilterChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadFilteredAndSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
                 .AddTo(Disposables);
 
             // ソートキーの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<SortKeyChangedEvent>()
-                .Subscribe(LoadSortKeyAndSortOrderChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
                 .AddTo(Disposables);
 
             // ソート順の変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<SortOrderChangedEvent>()
-                .Subscribe(LoadSortKeyAndSortOrderChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
                 .AddTo(Disposables);
         }
 
@@ -202,38 +218,38 @@ namespace FollowManager.CardPanel
         // プライベート関数
 
         /// <summary>
-        /// フィルタを変更したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
+        /// フィルタとソートを適応したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
         /// </summary>
-        /// <param name="filterChangedEventArgs">タブのデータとフィルタとソートの設定</param>
-        private void LoadFilterChangedCollection(FilterChangedEventArgs filterChangedEventArgs)
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        private void LoadFilteredAndSortedCollection(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
-            switch (filterChangedEventArgs.FilterAndSortOption.FilterType)
+            switch (sidePanelChangedEventArgs.FilterAndSortOption.FilterType)
             {
                 case FilterType.OneWay:
                     {
-                        _current = GetOneWayList(filterChangedEventArgs) ?? new List<UserData>();
-                        SortCurrentList(filterChangedEventArgs);
+                        _current = GetOneWayList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Fan:
                     {
-                        _current = GetFanList(filterChangedEventArgs) ?? new List<UserData>();
-                        SortCurrentList(filterChangedEventArgs);
+                        _current = GetFanList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Mutual:
                     {
-                        _current = GetMutualList(filterChangedEventArgs) ?? new List<UserData>();
-                        SortCurrentList(filterChangedEventArgs);
+                        _current = GetMutualList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
                 case FilterType.Inactive:
                     {
-                        _current = GetInactiveList(filterChangedEventArgs) ?? new List<UserData>();
-                        SortCurrentList(filterChangedEventArgs);
+                        _current = GetInactiveList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                        SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
                     }
@@ -241,13 +257,20 @@ namespace FollowManager.CardPanel
         }
 
         /// <summary>
-        /// ソートキーとソート順を変更したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
+        /// ソートを適応したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
-        private void LoadSortKeyAndSortOrderChangedCollection(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private void LoadSortedCollection(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
-            SortCurrentList(sidePanelChangedEventArgs);
-            LoadCompleted?.Invoke(_current);
+            if (_current != null)
+            {
+                SortCurrentList(sidePanelChangedEventArgs);
+                LoadCompleted?.Invoke(_current);
+            }
+            else
+            {
+                LoadFilteredAndSortedCollection(sidePanelChangedEventArgs);
+            }
         }
 
         /// <summary>
@@ -299,14 +322,15 @@ namespace FollowManager.CardPanel
                             }
                             catch (InvalidOperationException)
                             {
-                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                const string errorMessage = "アカウントが追加されていません。";
                                 _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
                             catch (ArgumentNullException)
                             {
-                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                const string errorMessage = "ソートに失敗しました。";
+                                _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
@@ -346,14 +370,15 @@ namespace FollowManager.CardPanel
                             }
                             catch (InvalidOperationException)
                             {
-                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                const string errorMessage = "アカウントが追加されていません。";
                                 _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
                             catch (ArgumentNullException)
                             {
-                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                const string errorMessage = "ソートに失敗しました。";
+                                _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
@@ -456,14 +481,15 @@ namespace FollowManager.CardPanel
                             }
                             catch (InvalidOperationException)
                             {
-                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                const string errorMessage = "アカウントが追加されていません。";
                                 _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
                             catch (ArgumentNullException)
                             {
-                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                const string errorMessage = "ソートに失敗しました。";
+                                _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
@@ -506,14 +532,15 @@ namespace FollowManager.CardPanel
                             }
                             catch (InvalidOperationException)
                             {
-                                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                                const string errorMessage = "アカウントが追加されていません。";
                                 _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
                             catch (ArgumentNullException)
                             {
-                                const string errorMessage = "ソートに失敗しました。再試行してください";
+                                const string errorMessage = "ソートに失敗しました。";
+                                _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
@@ -576,7 +603,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                const string errorMessage = "アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -636,7 +663,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                const string errorMessage = "アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -738,7 +765,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                const string errorMessage = "アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -809,7 +836,7 @@ namespace FollowManager.CardPanel
             }
             catch (InvalidOperationException)
             {
-                const string errorMessage = "指定したアカウントが追加されていません。タブを閉じてからもう一度タブを作成し、再試行してください。";
+                const string errorMessage = "アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
