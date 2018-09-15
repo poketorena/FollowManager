@@ -18,7 +18,7 @@ namespace FollowManager.Converters
         /// <param name="targetType">未使用</param>
         /// <param name="parameter">Viewで指定するFilterTypeの文字列</param>
         /// <param name="culture">未使用</param>
-        /// <returns>タブのデータとフィルタタイプ</returns>
+        /// <returns>タブのデータとフィルタの種類</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is TabData tabData && parameter is string filterType)

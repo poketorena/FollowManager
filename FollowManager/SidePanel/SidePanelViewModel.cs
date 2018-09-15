@@ -41,7 +41,7 @@ namespace FollowManager.SidePanel
         /// ソートキーを変更するコマンド
         /// </summary>
         public DelegateCommand<object> ChangeSortKeyTypeCommand =>
-            _changeSortKeyTypeCommand ?? (_changeSortKeyTypeCommand = new DelegateCommand<object>(sortRequest => _sidePanelModel.ChangeSortKeyType((SortRequest)sortRequest)));
+            _changeSortKeyTypeCommand ?? (_changeSortKeyTypeCommand = new DelegateCommand<object>(sortKeyRequest => _sidePanelModel.ChangeSortKeyType((SortKeyRequest)sortKeyRequest)));
 
         /// <summary>
         /// ソート順を変更するコマンド

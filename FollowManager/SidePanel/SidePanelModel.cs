@@ -21,7 +21,7 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// フィルタを変更します。
         /// </summary>
-        /// <param name="filterRequest">タブのデータとフィルタタイプ</param>
+        /// <param name="filterRequest">タブのデータとフィルタの種類</param>
         public void ChangeFilterType(FilterRequest filterRequest)
         {
             var filterType = filterRequest.FilterType;
@@ -90,10 +90,10 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// ソートキ-を変更します。
         /// </summary>
-        /// <param name="sortRequest">変更後のソートキー</param>
-        public void ChangeSortKeyType(SortRequest sortRequest)
+        /// <param name="sortKeyRequest">変更後のソートキー</param>
+        public void ChangeSortKeyType(SortKeyRequest sortKeyRequest)
         {
-            var sortKeyType = sortRequest.SortKeyType;
+            var sortKeyType = sortKeyRequest.SortKeyType;
 
             switch ((SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType))
             {
@@ -103,7 +103,7 @@ namespace FollowManager.SidePanel
 
                         var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
                         {
-                            TabData = sortRequest.TabData,
+                            TabData = sortKeyRequest.TabData,
                             FilterAndSortOption = FilterAndSortOption
                         };
 
@@ -117,7 +117,7 @@ namespace FollowManager.SidePanel
 
                         var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
                         {
-                            TabData = sortRequest.TabData,
+                            TabData = sortKeyRequest.TabData,
                             FilterAndSortOption = FilterAndSortOption
                         };
 
@@ -131,7 +131,7 @@ namespace FollowManager.SidePanel
 
                         var sortKeyChangedEventArgs = new SortKeyChangedEventArgs
                         {
-                            TabData = sortRequest.TabData,
+                            TabData = sortKeyRequest.TabData,
                             FilterAndSortOption = FilterAndSortOption
                         };
 

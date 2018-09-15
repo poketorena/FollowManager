@@ -7,27 +7,27 @@ using FollowManager.Tab;
 namespace FollowManager.Converters
 {
     /// <summary>
-    /// TabDataをSortRequest型に変換するコンバーター
+    /// TabDataをSortKeyRequest型に変換するコンバーター
     /// </summary>
-    public class TabDataToSortRequestConverter : IValueConverter
+    public class TabDataToSortKeyRequestConverter : IValueConverter
     {
         /// <summary>
-        /// TabDataをSortRequest型に変換します。
+        /// TabDataをSortKeyRequest型に変換します。
         /// </summary>
         /// <param name="value">タブのデータ</param>
         /// <param name="targetType">未使用</param>
         /// <param name="parameter">Viewで指定するSortKeyTypeの文字列</param>
         /// <param name="culture">未使用</param>
-        /// <returns>タブのデータとソートキータイプ</returns>
+        /// <returns>タブのデータとソートキーの種類</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is TabData tabData && parameter is string sortKeyType)
             {
-                return new SortRequest { TabData = tabData, SortKeyType = sortKeyType };
+                return new SortKeyRequest { TabData = tabData, SortKeyType = sortKeyType };
             }
             else
             {
-                return new SortRequest();
+                return new SortKeyRequest();
             }
         }
 

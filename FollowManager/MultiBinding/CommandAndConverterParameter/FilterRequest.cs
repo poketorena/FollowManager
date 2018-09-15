@@ -3,7 +3,7 @@
 namespace FollowManager.MultiBinding.CommandAndConverterParameter
 {
     /// <summary>
-    /// タブのデータとフィルタタイプ
+    /// タブのデータとフィルタの種類
     /// </summary>
     public class FilterRequest
     {
@@ -15,7 +15,7 @@ namespace FollowManager.MultiBinding.CommandAndConverterParameter
         public TabData TabData { get; set; }
 
         /// <summary>
-        /// フィルタタイプ
+        /// フィルタの種類
         /// </summary>
         public string FilterType { get; set; }
     }
