@@ -30,7 +30,7 @@ namespace FollowManager.Account
             _followers ?? (_followers = GetFollowers());
 
         /// <summary>
-        /// ユーザーのツイートのリストのディクショナリー
+        /// ツイートのリストのディクショナリー
         /// </summary>
         /// <value>キーはユーザーId</value>
         public Dictionary<long, List<Status>> UserTweets =>
@@ -512,9 +512,9 @@ namespace FollowManager.Account
         }
 
         /// <summary>
-        /// ユーザーのツイートのリストのディクショナリーを取得します。
+        /// ツイートのリストのディクショナリーを取得します。
         /// </summary>
-        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
+        /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweets()
         {
             var userTweets = new Dictionary<long, List<Status>>();
@@ -542,9 +542,9 @@ namespace FollowManager.Account
         }
 
         /// <summary>
-        /// ローカルからユーザーのツイートのリストのディクショナリーを取得します。
+        /// ローカルからツイートのリストのディクショナリーを取得します。
         /// </summary>
-        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
+        /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromLocal()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
@@ -624,9 +624,9 @@ namespace FollowManager.Account
         }
 
         /// <summary>
-        /// TwitterApiからユーザーのツイートのリストのディクショナリーを取得します。
+        /// TwitterApiからツイートのリストのディクショナリーを取得します。
         /// </summary>
-        /// <returns>ユーザーのツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
+        /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromTwitterApi()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";

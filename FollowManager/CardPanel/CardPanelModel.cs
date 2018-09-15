@@ -288,20 +288,10 @@ namespace FollowManager.CardPanel
             {
                 case SortKeyType.LastTweetDay:
                     {
-                        Dictionary<long,List<Status>> userTweets;
-                        try
+                        var userTweets = GetUserTweetsOrDefault();
+
+                        if (userTweets == null)
                         {
-                            userTweets = _accountManager
-                                .Accounts
-                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                .UserTweets;
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
-                            _loggingService.Logs.Add(errorMessage);
-                            Debug.WriteLine(errorMessage);
-                            _current = new List<UserData>();
                             break;
                         }
 
@@ -447,19 +437,10 @@ namespace FollowManager.CardPanel
                     }
                 case SortKeyType.TweetsPerDay:
                     {
-                        Account.Account userAccount;
-                        try
+                        var userTweets = GetUserTweetsOrDefault();
+
+                        if (userTweets == null)
                         {
-                            userAccount = _accountManager
-                                .Accounts
-                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName);
-                        }
-                        catch (InvalidOperationException)
-                        {
-                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
-                            _loggingService.Logs.Add(errorMessage);
-                            Debug.WriteLine(errorMessage);
-                            _current = new List<UserData>();
                             break;
                         }
 
@@ -468,8 +449,7 @@ namespace FollowManager.CardPanel
                             // HACK: 非同期処理は要調整
                             _current = _current.OrderBy(userData =>
                             {
-                                var result = userAccount
-                                .UserTweets
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
 
                                 if (result)
@@ -500,8 +480,7 @@ namespace FollowManager.CardPanel
                             // HACK: 非同期処理は要調整
                             _current = _current.OrderByDescending(userData =>
                             {
-                                var result = userAccount
-                                .UserTweets
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
 
                                 if (result)
@@ -528,6 +507,29 @@ namespace FollowManager.CardPanel
                             });
                         }
                         break;
+                    }
+
+                    /// <summary>
+                    /// ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。
+                    /// </summary>
+                    /// <returns>ツイートのリストのディクショナリー</returns>
+                    Dictionary<long, List<Status>> GetUserTweetsOrDefault()
+                    {
+                        try
+                        {
+                            return _accountManager
+                                .Accounts
+                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                                .UserTweets;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            _current = new List<UserData>();
+                            return null;
+                        }
                     }
             }
         }
