@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using CoreTweet;
 using FollowManager.Account;
 using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
@@ -287,101 +288,77 @@ namespace FollowManager.CardPanel
             {
                 case SortKeyType.LastTweetDay:
                     {
-                        if (sortOrderType == SortOrderType.Ascending)
+                        Dictionary<long,List<Status>> userTweets;
+                        try
                         {
-                            try
-                            {
-                                // HACK: 非同期処理は要調整
-                                _current = _current.OrderBy(userData =>
-                                {
-                                    var result = _accountManager
+                            userTweets = _accountManager
                                 .Accounts
                                 .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                .UserTweets
-                                .TryGetValue((long)userData.User.Id, out var statuses);
-                                    if (result)
-                                    {
-                                        var status = statuses.ElementAtOrDefault(1);
+                                .UserTweets;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            _current = new List<UserData>();
+                            break;
+                        }
 
-                                        if (status != null)
-                                        {
-                                            return status.CreatedAt.UtcDateTime;
-                                        }
-                                        else
-                                        {
-                                            // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
-                                            return DateTime.MaxValue.ToUniversalTime();
-                                        }
+                        if (sortOrderType == SortOrderType.Ascending)
+                        {
+                            // HACK: 非同期処理は要調整
+                            _current = _current.OrderBy(userData =>
+                            {
+                                var result = userTweets
+                                .TryGetValue((long)userData.User.Id, out var statuses);
+                                if (result)
+                                {
+                                    var status = statuses.ElementAtOrDefault(1);
+
+                                    if (status != null)
+                                    {
+                                        return status.CreatedAt.UtcDateTime;
                                     }
                                     else
                                     {
-                                        // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
+                                        // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
                                         return DateTime.MaxValue.ToUniversalTime();
                                     }
-                                });
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                const string errorMessage = "アカウントが追加されていません。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
-                            catch (ArgumentNullException)
-                            {
-                                const string errorMessage = "ソートに失敗しました。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
+                                }
+                                else
+                                {
+                                    // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでUTCの最大値を返すと末尾になる）
+                                    return DateTime.MaxValue.ToUniversalTime();
+                                }
+                            });
                         }
                         else
                         {
-                            try
+                            _current = _current.OrderByDescending(userData =>
                             {
-                                // HACK: 非同期処理は要調整
-                                _current = _current.OrderByDescending(userData =>
+                                var result = userTweets
+                                .TryGetValue((long)userData.User.Id, out var statuses);
+                                if (result)
                                 {
-                                    var result = _accountManager
-                                    .Accounts
-                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                    .UserTweets
-                                    .TryGetValue((long)userData.User.Id, out var statuses);
-                                    if (result)
-                                    {
-                                        var status = statuses.ElementAtOrDefault(1);
+                                    var status = statuses.ElementAtOrDefault(1);
 
-                                        if (status != null)
-                                        {
-                                            return status.CreatedAt.UtcDateTime;
-                                        }
-                                        else
-                                        {
-                                            // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
-                                            return DateTime.MinValue.ToUniversalTime();
-                                        }
+                                    if (status != null)
+                                    {
+                                        return status.CreatedAt.UtcDateTime;
                                     }
                                     else
                                     {
-                                        // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
+                                        // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
                                         return DateTime.MinValue.ToUniversalTime();
                                     }
-                                });
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                const string errorMessage = "アカウントが追加されていません。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
-                            catch (ArgumentNullException)
-                            {
-                                const string errorMessage = "ソートに失敗しました。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
+                                }
+                                else
+                                {
+                                    // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでUTCの最小値を返すと末尾になる）
+                                    return DateTime.MinValue.ToUniversalTime();
+                                }
+                            });
                         }
                         break;
                     }
@@ -393,22 +370,26 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        _current = GetOneWayList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        var userDatas = GetOneWayList(sidePanelChangedEventArgs)?.Reverse();
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        _current = GetFanList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        var userDatas = GetFanList(sidePanelChangedEventArgs)?.Reverse();
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        _current = GetMutualList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        var userDatas = GetMutualList(sidePanelChangedEventArgs)?.Reverse();
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        _current = GetInactiveList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        var userDatas = GetInactiveList(sidePanelChangedEventArgs)?.Reverse();
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                             }
@@ -419,131 +400,132 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        _current = GetOneWayList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                                        var userDatas = GetOneWayList(sidePanelChangedEventArgs);
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        _current = GetFanList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                                        var userDatas = GetFanList(sidePanelChangedEventArgs);
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        _current = GetMutualList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                                        var userDatas = GetMutualList(sidePanelChangedEventArgs);
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        _current = GetInactiveList(sidePanelChangedEventArgs) ?? new List<UserData>();
+                                        var userDatas = GetInactiveList(sidePanelChangedEventArgs);
+                                        CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
                             }
                         }
                         break;
-                    }
-                case SortKeyType.TweetsPerDay:
-                    {
-                        if (sortOrderType == SortOrderType.Ascending)
+
+                        /// <summary>
+                        /// 一時的なユーザーデータをチェックし、現在表示中のリストを更新します。
+                        /// </summary>
+                        /// <param name="userDatas">一時的なユーザーデータのコレクション</param>
+                        void CheckTemporaryUserDatasAndUpdateCurrentUserDataList(IEnumerable<UserData> userDatas)
                         {
-                            try
+                            if (userDatas != null)
                             {
-                                // HACK: 非同期処理は要調整
-                                _current = _current.OrderBy(userData =>
-                                {
-                                    var result = _accountManager
-                                    .Accounts
-                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                    .UserTweets
-                                    .TryGetValue((long)userData.User.Id, out var statuses);
-
-                                    if (result)
-                                    {
-                                        var recentlyStatus = statuses.ElementAtOrDefault(1);
-                                        var oldStatus = statuses.LastOrDefault();
-
-                                        if (recentlyStatus != null && oldStatus != null)
-                                        {
-                                            var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
-                                            return statuses.Count / days;
-                                        }
-                                        else
-                                        {
-                                            // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
-                                            return int.MaxValue;
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
-                                        return int.MaxValue;
-                                    }
-                                });
+                                _current = userDatas;
                             }
-                            catch (InvalidOperationException)
+                            else
                             {
-                                const string errorMessage = "アカウントが追加されていません。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
-                            catch (ArgumentNullException)
-                            {
-                                const string errorMessage = "ソートに失敗しました。";
+                                const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
                                 _loggingService.Logs.Add(errorMessage);
                                 Debug.WriteLine(errorMessage);
                                 _current = new List<UserData>();
                             }
                         }
-                        else
+                    }
+                case SortKeyType.TweetsPerDay:
+                    {
+                        Account.Account userAccount;
+                        try
                         {
-                            try
+                            userAccount = _accountManager
+                                .Accounts
+                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName);
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            const string errorMessage = "ソートに失敗しました。アカウントが追加されていません。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            _current = new List<UserData>();
+                            break;
+                        }
+
+                        if (sortOrderType == SortOrderType.Ascending)
+                        {
+                            // HACK: 非同期処理は要調整
+                            _current = _current.OrderBy(userData =>
                             {
-                                // HACK: 非同期処理は要調整
-                                _current = _current.OrderByDescending(userData =>
+                                var result = userAccount
+                                .UserTweets
+                                .TryGetValue((long)userData.User.Id, out var statuses);
+
+                                if (result)
                                 {
-                                    var result = _accountManager
-                                    .Accounts
-                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
-                                    .UserTweets
-                                    .TryGetValue((long)userData.User.Id, out var statuses);
+                                    var recentlyStatus = statuses.ElementAtOrDefault(1);
+                                    var oldStatus = statuses.LastOrDefault();
 
-                                    if (result)
+                                    if (recentlyStatus != null && oldStatus != null)
                                     {
-                                        var recentlyStatus = statuses.ElementAtOrDefault(1);
-                                        var oldStatus = statuses.LastOrDefault();
-
-                                        if (recentlyStatus != null && oldStatus != null)
-                                        {
-                                            var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
-                                            return statuses.Count / days;
-                                        }
-                                        else
-                                        {
-                                            // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
-                                            return int.MinValue;
-                                        }
+                                        var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
+                                        return statuses.Count / days;
                                     }
                                     else
                                     {
-                                        // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
+                                        // ユーザーのツイート数が少なすぎるため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
+                                        return int.MaxValue;
+                                    }
+                                }
+                                else
+                                {
+                                    // UserTweetsからツイートが見つからなかったため末尾に追加（昇順なのでint型の最大値を返すと末尾になる）
+                                    return int.MaxValue;
+                                }
+                            });
+                        }
+                        else
+                        {
+                            // HACK: 非同期処理は要調整
+                            _current = _current.OrderByDescending(userData =>
+                            {
+                                var result = userAccount
+                                .UserTweets
+                                .TryGetValue((long)userData.User.Id, out var statuses);
+
+                                if (result)
+                                {
+                                    var recentlyStatus = statuses.ElementAtOrDefault(1);
+                                    var oldStatus = statuses.LastOrDefault();
+
+                                    if (recentlyStatus != null && oldStatus != null)
+                                    {
+                                        var days = (recentlyStatus.CreatedAt - oldStatus.CreatedAt).Days + 1;
+                                        return statuses.Count / days;
+                                    }
+                                    else
+                                    {
+                                        // ユーザーのツイート数が少なすぎるため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
                                         return int.MinValue;
                                     }
-                                });
-                            }
-                            catch (InvalidOperationException)
-                            {
-                                const string errorMessage = "アカウントが追加されていません。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
-                            catch (ArgumentNullException)
-                            {
-                                const string errorMessage = "ソートに失敗しました。";
-                                _loggingService.Logs.Add(errorMessage);
-                                Debug.WriteLine(errorMessage);
-                                _current = new List<UserData>();
-                            }
+                                }
+                                else
+                                {
+                                    // UserTweetsからツイートが見つからなかったため末尾に追加（降順なのでint型の最小値を返すと末尾になる）
+                                    return int.MinValue;
+                                }
+                            });
                         }
                         break;
                     }
