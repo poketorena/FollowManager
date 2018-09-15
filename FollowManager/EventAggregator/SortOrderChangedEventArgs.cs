@@ -3,10 +3,7 @@ using FollowManager.Tab;
 
 namespace FollowManager.EventAggregator
 {
-    /// <summary>
-    /// タブのデータとフィルタとソートの設定
-    /// </summary>
-    public class FilterChangedEventArgs : ISidePanelChangedEventArgs
+    public class SortOrderChangedEventArgs : ISidePanelChangedEventArgs
     {
         // パブリックプロパティ
 

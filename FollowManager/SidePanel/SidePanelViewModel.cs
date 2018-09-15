@@ -46,8 +46,8 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// ソート順を変更するコマンド
         /// </summary>
-        public DelegateCommand<string> ChangeSortOrderTypeCommand =>
-            _changeSortOrderTypeCommand ?? (_changeSortOrderTypeCommand = new DelegateCommand<string>(_sidePanelModel.ChangeSortOrderType));
+        public DelegateCommand<object> ChangeSortOrderTypeCommand =>
+            _changeSortOrderTypeCommand ?? (_changeSortOrderTypeCommand = new DelegateCommand<object>(sortOrderRequest => _sidePanelModel.ChangeSortOrderType((SortOrderRequest)sortOrderRequest)));
 
         // プライベートプロパティ
 
@@ -59,7 +59,7 @@ namespace FollowManager.SidePanel
 
         private DelegateCommand<object> _changeSortKeyTypeCommand;
 
-        private DelegateCommand<string> _changeSortOrderTypeCommand;
+        private DelegateCommand<object> _changeSortOrderTypeCommand;
 
         // DI注入される変数
 

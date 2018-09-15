@@ -8,32 +8,31 @@ using FollowManager.Tab;
 namespace FollowManager.Converters
 {
     /// <summary>
-    /// TabData型をFilterRequest型に変換するコンバーター
+    /// TabData型をSortKeyRequest型に変換するコンバーター
     /// </summary>
-    public class TabDataToFilterRequestConverter : IValueConverter
+    public class TabDataToSortKeyRequestConverter : IValueConverter
     {
         /// <summary>
-        /// TabData型をFilterRequest型に変換します。
+        /// TabData型をSortKeyRequest型に変換します。
         /// </summary>
         /// <param name="value">タブのデータ</param>
         /// <param name="targetType">未使用</param>
-        /// <param name="parameter">Viewで指定するFilterTypeの文字列</param>
+        /// <param name="parameter">Viewで指定するSortKeyTypeの文字列</param>
         /// <param name="culture">未使用</param>
-        /// <returns>タブのデータとフィルタの種類</returns>
+        /// <returns>タブのデータとソートキーの種類</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TabData tabData && parameter is string filterType)
+            if (value is TabData tabData && parameter is string sortKeyType)
             {
-
-                return new FilterRequest
+                return new SortKeyRequest
                 {
                     TabData = tabData,
-                    FilterType = (FilterType)Enum.Parse(typeof(FilterType), filterType)
+                    SortKeyType = (SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType)
                 };
             }
             else
             {
-                return new FilterRequest();
+                return new SortKeyRequest();
             }
         }
 

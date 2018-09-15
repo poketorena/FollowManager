@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using CoreTweet;
 using FollowManager.Account;
 using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
@@ -31,14 +30,14 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// Twitterのプロフィールページを規定のブラウザで開きます。
         /// </summary>
-        /// <param name="screenName">@hogeの場合はhoge</param>
+        /// <param name="screenName">スクリーンネーム</param>
         public void OpenProfile(string screenName)
         {
             var url = "https://twitter.com/" + screenName;
 
             try
             {
-                System.Diagnostics.Process.Start(url);
+                Process.Start(url);
                 _loggingService.Logs.Add($"ブラウザで@{screenName}のプロフィールページを開きました。");
                 Debug.WriteLine($"@{screenName}のプロフィールページを開きました。");
             }
@@ -62,7 +61,14 @@ namespace FollowManager.CardPanel
 
             try
             {
-                await _accountManager.Accounts.Single(account => account.User.Id == userId).Tokens.Blocks.CreateAsync(user_id => targetId).ConfigureAwait(false);
+                await _accountManager
+                    .Accounts
+                    .Single(account => account.User.Id == userId)
+                    .Tokens
+                    .Blocks
+                    .CreateAsync(user_id => targetId)
+                    .ConfigureAwait(false);
+
                 _loggingService.Logs.Add($"{targetScreenName}をブロックしました。");
                 Debug.WriteLine($"{targetScreenName}をブロックしました。");
             }
@@ -76,7 +82,14 @@ namespace FollowManager.CardPanel
 
             try
             {
-                await _accountManager.Accounts.Single(account => account.User.Id == userId).Tokens.Blocks.DestroyAsync(user_id => targetId).ConfigureAwait(false);
+                await _accountManager
+                    .Accounts
+                    .Single(account => account.User.Id == userId)
+                    .Tokens
+                    .Blocks
+                    .DestroyAsync(user_id => targetId)
+                    .ConfigureAwait(false);
+
                 _loggingService.Logs.Add($"{targetScreenName}のブロックを解除しました。");
                 Debug.WriteLine($"{targetScreenName}のブロックを解除しました。");
             }
@@ -169,10 +182,15 @@ namespace FollowManager.CardPanel
             // ソートキーの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<SortKeyChangedEvent>()
-                .Subscribe(LoadSortKeyChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadSortKeyAndSortOrderChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .AddTo(Disposables);
+
+            // ソート順の変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
+            _eventAggregator
+                .GetEvent<SortOrderChangedEvent>()
+                .Subscribe(LoadSortKeyAndSortOrderChangedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
                 .AddTo(Disposables);
         }
-
 
         // デストラクタ
 
@@ -223,24 +241,24 @@ namespace FollowManager.CardPanel
         }
 
         /// <summary>
-        /// ソートキーを変更したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
+        /// ソートキーとソート順を変更したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
         /// </summary>
-        /// <param name="sortKeyChangedEventArgs">タブのデータとフィルタとソートの設定</param>
-        private void LoadSortKeyChangedCollection(SortKeyChangedEventArgs sortKeyChangedEventArgs)
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        private void LoadSortKeyAndSortOrderChangedCollection(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
-            SortCurrentList(sortKeyChangedEventArgs);
+            SortCurrentList(sidePanelChangedEventArgs);
             LoadCompleted?.Invoke(_current);
         }
 
         /// <summary>
         /// 現在表示中のリストをソートします。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
-        private async void SortCurrentList(IDataChangedEventArgs dataChangedEventArgs)
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        private async void SortCurrentList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
-            var filterType = dataChangedEventArgs.FilterAndSortOption.FilterType;
-            var sortKeyType = dataChangedEventArgs.FilterAndSortOption.SortKeyType;
-            var sortOrderType = dataChangedEventArgs.FilterAndSortOption.SortOrderType;
+            var filterType = sidePanelChangedEventArgs.FilterAndSortOption.FilterType;
+            var sortKeyType = sidePanelChangedEventArgs.FilterAndSortOption.SortKeyType;
+            var sortOrderType = sidePanelChangedEventArgs.FilterAndSortOption.SortOrderType;
 
             switch (sortKeyType)
             {
@@ -255,7 +273,7 @@ namespace FollowManager.CardPanel
                                 {
                                     var result = _accountManager
                                 .Accounts
-                                .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                                 .UserTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
                                     if (result)
@@ -302,7 +320,7 @@ namespace FollowManager.CardPanel
                                 {
                                     var result = _accountManager
                                     .Accounts
-                                    .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                                     .UserTweets
                                     .TryGetValue((long)userData.User.Id, out var statuses);
                                     if (result)
@@ -350,22 +368,22 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        _current = GetOneWayList(dataChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        _current = GetOneWayList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        _current = GetFanList(dataChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        _current = GetFanList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        _current = GetMutualList(dataChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        _current = GetMutualList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        _current = GetInactiveList(dataChangedEventArgs)?.Reverse() ?? new List<UserData>();
+                                        _current = GetInactiveList(sidePanelChangedEventArgs)?.Reverse() ?? new List<UserData>();
                                         break;
                                     }
                             }
@@ -376,22 +394,22 @@ namespace FollowManager.CardPanel
                             {
                                 case FilterType.OneWay:
                                     {
-                                        _current = GetOneWayList(dataChangedEventArgs) ?? new List<UserData>();
+                                        _current = GetOneWayList(sidePanelChangedEventArgs) ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Fan:
                                     {
-                                        _current = GetFanList(dataChangedEventArgs) ?? new List<UserData>();
+                                        _current = GetFanList(sidePanelChangedEventArgs) ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Mutual:
                                     {
-                                        _current = GetMutualList(dataChangedEventArgs) ?? new List<UserData>();
+                                        _current = GetMutualList(sidePanelChangedEventArgs) ?? new List<UserData>();
                                         break;
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        _current = GetInactiveList(dataChangedEventArgs) ?? new List<UserData>();
+                                        _current = GetInactiveList(sidePanelChangedEventArgs) ?? new List<UserData>();
                                         break;
                                     }
                             }
@@ -409,7 +427,7 @@ namespace FollowManager.CardPanel
                                 {
                                     var result = _accountManager
                                     .Accounts
-                                    .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                                     .UserTweets
                                     .TryGetValue((long)userData.User.Id, out var statuses);
 
@@ -459,7 +477,7 @@ namespace FollowManager.CardPanel
                                 {
                                     var result = _accountManager
                                     .Accounts
-                                    .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                                     .UserTweets
                                     .TryGetValue((long)userData.User.Id, out var statuses);
 
@@ -508,9 +526,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 片思いのユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>片思いのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetOneWayList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetOneWayList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_oneWay != null)
             {
@@ -518,7 +536,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _oneWay = CreateOneWayList(dataChangedEventArgs);
+                _oneWay = CreateOneWayList(sidePanelChangedEventArgs);
                 return _oneWay;
             }
         }
@@ -526,18 +544,18 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 片思いのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>片思いのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateOneWayList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateOneWayList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
                 return _accountManager
                 .Accounts
-                .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                 .Follows
                 .Except(
-                    GetMutualList(dataChangedEventArgs),
+                    GetMutualList(sidePanelChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -568,9 +586,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// ファンのユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>ファンのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFanList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetFanList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_fan != null)
             {
@@ -578,7 +596,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _fan = CreateFanList(dataChangedEventArgs);
+                _fan = CreateFanList(sidePanelChangedEventArgs);
                 return _fan;
             }
         }
@@ -586,18 +604,18 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// ファンのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>ファンのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFanList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateFanList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
                 return _accountManager
                     .Accounts
-                    .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                     .Followers
                     .Except(
-                    GetMutualList(dataChangedEventArgs),
+                    GetMutualList(sidePanelChangedEventArgs),
                     new UserDataEqualityComparer()
                     )
                     .Select(userData =>
@@ -628,9 +646,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 和集合のユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>和集合のユーザーのリスト</returns>
-        private IEnumerable<UserData> GetUnionList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetUnionList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_union != null)
             {
@@ -638,7 +656,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _union = CreateUnionList(dataChangedEventArgs);
+                _union = CreateUnionList(sidePanelChangedEventArgs);
                 return _union;
             }
         }
@@ -646,15 +664,15 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 和集合のユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>和集合のユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateUnionList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateUnionList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetOneWayList(dataChangedEventArgs)
-                    .Union(GetMutualList(dataChangedEventArgs), new UserDataEqualityComparer())
-                    .Union(GetFanList(dataChangedEventArgs), new UserDataEqualityComparer());
+                return GetOneWayList(sidePanelChangedEventArgs)
+                    .Union(GetMutualList(sidePanelChangedEventArgs), new UserDataEqualityComparer())
+                    .Union(GetFanList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {
@@ -667,9 +685,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 相互フォローのユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>相互フォローのユーザーのリスト</returns>
-        private IEnumerable<UserData> GetMutualList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetMutualList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_mutual != null)
             {
@@ -677,7 +695,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _mutual = CreateMutualList(dataChangedEventArgs);
+                _mutual = CreateMutualList(sidePanelChangedEventArgs);
                 return _mutual;
             }
         }
@@ -685,20 +703,20 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 相互フォローのユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>相互フォローのユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateMutualList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateMutualList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
                 return _accountManager
                     .Accounts
-                    .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                     .Follows
                     .Intersect(
                         _accountManager
                         .Accounts
-                        .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                        .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                         .Followers,
                         new UserDataEqualityComparer()
                         )
@@ -730,9 +748,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 30日間ツイートしていないユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private IEnumerable<UserData> GetInactiveList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetInactiveList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_inactive != null)
             {
@@ -740,7 +758,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _inactive = CreateInactiveList(dataChangedEventArgs);
+                _inactive = CreateInactiveList(sidePanelChangedEventArgs);
                 return _inactive;
             }
         }
@@ -748,19 +766,19 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// 30日間ツイートしていないユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateInactiveList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateInactiveList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetUnionList(dataChangedEventArgs)
+                return GetUnionList(sidePanelChangedEventArgs)
                     .Where(
                     userData =>
                     {
                         var result = _accountManager
                         .Accounts
-                        .Single(account => account.Tokens.ScreenName == dataChangedEventArgs.TabData.Tokens.ScreenName)
+                        .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
                         .UserTweets
                         .TryGetValue((long)userData.User.Id, out var statuses);
 
@@ -801,9 +819,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// フォローしているユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローしているユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFollowsList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetFollowsList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_follows != null)
             {
@@ -811,7 +829,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _follows = CreateFollowsList(dataChangedEventArgs);
+                _follows = CreateFollowsList(sidePanelChangedEventArgs);
                 return _follows;
             }
         }
@@ -819,14 +837,14 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// フォローしているユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローしているユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFollowsList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateFollowsList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetOneWayList(dataChangedEventArgs)
-                    .Union(GetMutualList(dataChangedEventArgs), new UserDataEqualityComparer());
+                return GetOneWayList(sidePanelChangedEventArgs)
+                    .Union(GetMutualList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {
@@ -839,9 +857,9 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// フォローされているユーザーのリストを取得します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローされているユーザーのリスト</returns>
-        private IEnumerable<UserData> GetFollowersList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> GetFollowersList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_followers != null)
             {
@@ -849,7 +867,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _followers = CreateFollowersList(dataChangedEventArgs);
+                _followers = CreateFollowersList(sidePanelChangedEventArgs);
                 return _followers;
             }
         }
@@ -857,14 +875,14 @@ namespace FollowManager.CardPanel
         /// <summary>
         /// フォローされているユーザーのリストを作成します。例外発生時はnullを返します。
         /// </summary>
-        /// <param name="dataChangedEventArgs">SidePanelで発生したイベントデータ</param>
+        /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>フォローされているユーザーのリスト</returns>
-        private IEnumerable<UserData> CreateFollowersList(IDataChangedEventArgs dataChangedEventArgs)
+        private IEnumerable<UserData> CreateFollowersList(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return GetMutualList(dataChangedEventArgs)
-                    .Union(GetFanList(dataChangedEventArgs), new UserDataEqualityComparer());
+                return GetMutualList(sidePanelChangedEventArgs)
+                    .Union(GetFanList(sidePanelChangedEventArgs), new UserDataEqualityComparer());
             }
             catch (ArgumentNullException)
             {

@@ -8,31 +8,31 @@ using FollowManager.Tab;
 namespace FollowManager.Converters
 {
     /// <summary>
-    /// TabDataをSortKeyRequest型に変換するコンバーター
+    /// TabData型をSortOrderRequest型に変換するコンバーター
     /// </summary>
-    public class TabDataToSortKeyRequestConverter : IValueConverter
+    public class TabDataToSortOrderRequestConverter : IValueConverter
     {
         /// <summary>
-        /// TabDataをSortKeyRequest型に変換します。
+        /// TabData型をSortOrderRequest型に変換します。
         /// </summary>
         /// <param name="value">タブのデータ</param>
         /// <param name="targetType">未使用</param>
-        /// <param name="parameter">Viewで指定するSortKeyTypeの文字列</param>
+        /// <param name="parameter">Viewで指定するSortOrderの文字列</param>
         /// <param name="culture">未使用</param>
-        /// <returns>タブのデータとソートキーの種類</returns>
+        /// <returns>タブのデータとソート順の種類</returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TabData tabData && parameter is string sortKeyType)
+            if (value is TabData tabData && parameter is string sortOrderType)
             {
-                return new SortKeyRequest
+                return new SortOrderRequest
                 {
                     TabData = tabData,
-                    SortKeyType = (SortKeyType)Enum.Parse(typeof(SortKeyType), sortKeyType)
+                    SortOrderType = (SortOrderType)Enum.Parse(typeof(SortOrderType), sortOrderType)
                 };
             }
             else
             {
-                return new SortKeyRequest();
+                return new SortOrderRequest();
             }
         }
 

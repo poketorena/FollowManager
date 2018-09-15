@@ -6,7 +6,7 @@ namespace FollowManager.EventAggregator
     /// <summary>
     /// SidePanelで発生したイベントデータ
     /// </summary>
-    public interface IDataChangedEventArgs
+    public interface ISidePanelChangedEventArgs
     {
         // パブリックプロパティ
 

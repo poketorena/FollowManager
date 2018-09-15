@@ -1,5 +1,4 @@
-﻿using System;
-using FollowManager.Account;
+﻿using FollowManager.Account;
 using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
 using FollowManager.MultiBinding.CommandAndConverterParameter;
@@ -88,7 +87,7 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// ソートキ-を変更します。
         /// </summary>
-        /// <param name="sortKeyRequest">変更後のソートキー</param>
+        /// <param name="sortKeyRequest">タブのデータとソートキーの種類</param>
         public void ChangeSortKeyType(SortKeyRequest sortKeyRequest)
         {
             switch (sortKeyRequest.SortKeyType)
@@ -141,19 +140,37 @@ namespace FollowManager.SidePanel
         /// <summary>
         /// ソート順を変更します。
         /// </summary>
-        /// <param name="sortOrderType">変更後のソートの順番</param>
-        public void ChangeSortOrderType(string sortOrderType)
+        /// <param name="sortOrderRequest">タブのデータとソート順の種類</param>
+        public void ChangeSortOrderType(SortOrderRequest sortOrderRequest)
         {
-            switch ((SortOrderType)Enum.Parse(typeof(SortOrderType), sortOrderType))
+            switch (sortOrderRequest.SortOrderType)
             {
                 case SortOrderType.Ascending:
                     {
                         FilterAndSortOption.SortOrderType = SortOrderType.Ascending;
+
+                        var sortOrderChangedEventArgs = new SortOrderChangedEventArgs
+                        {
+                            TabData = sortOrderRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<SortOrderChangedEvent>().Publish(sortOrderChangedEventArgs);
+
                         break;
                     }
                 case SortOrderType.Descending:
                     {
                         FilterAndSortOption.SortOrderType = SortOrderType.Descending;
+
+                        var sortOrderChangedEventArgs = new SortOrderChangedEventArgs
+                        {
+                            TabData = sortOrderRequest.TabData,
+                            FilterAndSortOption = FilterAndSortOption
+                        };
+
+                        _eventAggregator.GetEvent<SortOrderChangedEvent>().Publish(sortOrderChangedEventArgs);
+
                         break;
                     }
             }

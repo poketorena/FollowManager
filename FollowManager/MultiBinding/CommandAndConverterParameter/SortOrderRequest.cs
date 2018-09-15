@@ -1,12 +1,12 @@
 ﻿using FollowManager.FilterAndSort;
 using FollowManager.Tab;
 
-namespace FollowManager.EventAggregator
+namespace FollowManager.MultiBinding.CommandAndConverterParameter
 {
     /// <summary>
-    /// タブのデータとフィルタとソートの設定
+    /// タブのデータとソート順の種類
     /// </summary>
-    public class FilterChangedEventArgs : ISidePanelChangedEventArgs
+    public class SortOrderRequest
     {
         // パブリックプロパティ
 
@@ -16,8 +16,8 @@ namespace FollowManager.EventAggregator
         public TabData TabData { get; set; }
 
         /// <summary>
-        /// フィルタとソートの設定
+        /// ソート順の種類
         /// </summary>
-        public FilterAndSortOption FilterAndSortOption { get; set; }
+        public SortOrderType SortOrderType { get; set; }
     }
 }

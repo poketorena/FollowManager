@@ -20,6 +20,7 @@
             <c:SortOrderTypeToStyleConverter x:Key="SortOrderTypeToStyleConverter" />
             <c:TabDataToFilterRequestConverter x:Key="TabDataToFilterRequestConverter" />
             <c:TabDataToSortKeyRequestConverter x:Key="TabDataToSortKeyRequestConverter" />
+            <c:TabDataToSortOrderRequestConverter x:Key="TabDataToSortOrderRequestConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -164,7 +165,7 @@
             Grid.Row="10"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
-            CommandParameter="Ascending"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortOrderRequestConverter}, ConverterParameter=Ascending}"
             Content="昇順">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource SortOrderTypeToStyleConverter}" ConverterParameter="Ascending">
@@ -179,7 +180,7 @@
             Grid.Row="11"
             Margin="0,2.5,0,2.5"
             Command="{Binding ChangeSortOrderTypeCommand}"
-            CommandParameter="Descending"
+            CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortOrderRequestConverter}, ConverterParameter=Descending}"
             Content="降順">
             <Button.Style>
                 <MultiBinding Converter="{StaticResource SortOrderTypeToStyleConverter}" ConverterParameter="Descending">
