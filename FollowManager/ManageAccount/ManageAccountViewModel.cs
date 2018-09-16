@@ -1,4 +1,6 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using FollowManager.Account;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,14 +16,18 @@ namespace FollowManager.ManageAccount
         /// <summary>
         /// アカウント
         /// </summary>
-        public ReadOnlyReactiveCollection<Account.Account> Accounts { get; }
+        public ReadOnlyReactiveCollection<Account.Account> Accounts
+        {
+            get { return _accounts; }
+            private set { SetProperty(ref _accounts, value); }
+        }
 
         // デリゲートコマンド
 
         /// <summary>
         /// アカウントを削除するコマンド
         /// </summary>
-        public DelegateCommand<Account.Account> DeleteAccountCommand  =>
+        public DelegateCommand<Account.Account> DeleteAccountCommand =>
             _deleteAccountCommand ?? (_deleteAccountCommand = new DelegateCommand<Account.Account>(_accountManager.DeleteAccount));
 
         // プライベートプロパティ
@@ -29,6 +35,8 @@ namespace FollowManager.ManageAccount
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
         // プライベート変数
+
+        private ReadOnlyReactiveCollection<Account.Account> _accounts;
 
         private DelegateCommand<Account.Account> _deleteAccountCommand;
 
@@ -44,10 +52,25 @@ namespace FollowManager.ManageAccount
             _accountManager = accountManager;
 
             // アカウントを購読して現在登録されているアカウントを更新する
+            _accountManager
+                .Accounts
+                .CollectionChangedAsObservable()
+                .Subscribe(_ =>
+                {
+                    Accounts = _accountManager
+                    .Accounts
+                    .Values
+                    .ToObservable()
+                    .ToReadOnlyReactiveCollection();
+                })
+            .AddTo(Disposables);
+
+            // 最初の1回は手動で代入する
             Accounts = _accountManager
                 .Accounts
-                .ToReadOnlyReactiveCollection()
-                .AddTo(Disposables);
+                .Values
+                .ToObservable()
+                .ToReadOnlyReactiveCollection();
         }
 
         // デストラクタ

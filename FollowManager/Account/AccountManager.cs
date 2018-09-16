@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using CoreTweet;
+using FollowManager.Collections.Generic;
 using FollowManager.Service;
 using Newtonsoft.Json;
 
@@ -18,7 +18,7 @@ namespace FollowManager.Account
         /// <summary>
         /// 登録されているアカウントのリスト
         /// </summary>
-        public ObservableCollection<Account> Accounts { get; } = new ObservableCollection<Account>();
+        public ObservableDictionary<long, Account> Accounts { get; } = new ObservableDictionary<long, Account>();
 
         // パブリック関数
 
@@ -29,8 +29,15 @@ namespace FollowManager.Account
         public void DeleteAccount(Account account)
         {
             var screenName = account.Tokens.ScreenName;
-            Accounts.Remove(account);
-            _loggingService.Logs.Add($"@{screenName}を削除しました。");
+            try
+            {
+                Accounts.Remove((long)(account.User.Id));
+                _loggingService.Logs.Add($"@{screenName}を削除しました。");
+            }
+            catch (Exception)
+            {
+                _loggingService.Logs.Add($"@{screenName}の削除に失敗しました。");
+            }
         }
 
         // DI注入される変数
@@ -86,7 +93,7 @@ namespace FollowManager.Account
                                 )
                         };
 
-                        Accounts.Add(account);
+                        Accounts.Add((long)account.User.Id,account);
                     }
                 }
             }
@@ -101,12 +108,12 @@ namespace FollowManager.Account
             {
                 var authorization = new Authorization()
                 {
-                    ConsumerKey = account.Tokens.ConsumerKey,
-                    ConsumerSecret = account.Tokens.ConsumerSecret,
-                    AccessToken = account.Tokens.AccessToken,
-                    AccessTokenSecret = account.Tokens.AccessTokenSecret,
-                    UserId = account.Tokens.UserId,
-                    ScreenName = account.Tokens.ScreenName
+                    ConsumerKey = account.Value.Tokens.ConsumerKey,
+                    ConsumerSecret = account.Value.Tokens.ConsumerSecret,
+                    AccessToken = account.Value.Tokens.AccessToken,
+                    AccessTokenSecret = account.Value.Tokens.AccessTokenSecret,
+                    UserId = account.Value.Tokens.UserId,
+                    ScreenName = account.Value.Tokens.ScreenName
                 };
                 authorizations.Add(authorization);
             }

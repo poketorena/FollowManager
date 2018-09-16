@@ -63,8 +63,7 @@ namespace FollowManager.CardPanel
             try
             {
                 await _accountManager
-                    .Accounts
-                    .Single(account => account.User.Id == userId)
+                    .Accounts[userId]
                     .Tokens
                     .Blocks
                     .CreateAsync(user_id => targetId)
@@ -74,7 +73,7 @@ namespace FollowManager.CardPanel
                 _loggingService.Logs.Add(message);
                 Debug.WriteLine(message);
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 var errorMessage = $"{targetScreenName}のブロックに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
@@ -92,8 +91,7 @@ namespace FollowManager.CardPanel
             try
             {
                 await _accountManager
-                    .Accounts
-                    .Single(account => account.User.Id == userId)
+                    .Accounts[userId]
                     .Tokens
                     .Blocks
                     .DestroyAsync(user_id => targetId)
@@ -103,7 +101,7 @@ namespace FollowManager.CardPanel
                 _loggingService.Logs.Add(message);
                 Debug.WriteLine(message);
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
@@ -545,8 +543,7 @@ namespace FollowManager.CardPanel
             try
             {
                 return _accountManager
-                .Accounts
-                .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
                 .Follows
                 .Except(
                     GetMutualListOrDefault(sidePanelChangedEventArgs),
@@ -568,7 +565,7 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
@@ -605,8 +602,7 @@ namespace FollowManager.CardPanel
             try
             {
                 return _accountManager
-                    .Accounts
-                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
                     .Followers
                     .Except(
                     GetMutualListOrDefault(sidePanelChangedEventArgs),
@@ -628,7 +624,7 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
@@ -704,13 +700,11 @@ namespace FollowManager.CardPanel
             try
             {
                 return _accountManager
-                    .Accounts
-                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
                     .Follows
                     .Intersect(
                         _accountManager
-                        .Accounts
-                        .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                        .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
                         .Followers,
                         new UserDataEqualityComparer()
                         )
@@ -730,7 +724,7 @@ namespace FollowManager.CardPanel
                 Debug.WriteLine(errorMessage);
                 return null;
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 const string errorMessage = "フィルタに失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);
@@ -896,11 +890,10 @@ namespace FollowManager.CardPanel
             try
             {
                 return _accountManager
-                    .Accounts
-                    .Single(account => account.Tokens.ScreenName == sidePanelChangedEventArgs.TabData.Tokens.ScreenName)
+                    .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
                     .UserTweets;
             }
-            catch (InvalidOperationException)
+            catch (KeyNotFoundException)
             {
                 const string errorMessage = "ツイートのリストのディクショナリーの取得に失敗しました。アカウントが追加されていません。";
                 _loggingService.Logs.Add(errorMessage);

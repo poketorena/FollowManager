@@ -1,4 +1,6 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using FollowManager.Account;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -14,7 +16,11 @@ namespace FollowManager.Tab
         /// <summary>
         /// アカウント
         /// </summary>
-        public ReadOnlyReactiveCollection<Account.Account> Accounts { get; }
+        public ReadOnlyReactiveCollection<Account.Account> Accounts
+        {
+            get { return _accounts; }
+            private set { SetProperty(ref _accounts, value); }
+        }
 
         /// <summary>
         /// 呼び出し元ウィンドウのオブジェクトId
@@ -35,6 +41,8 @@ namespace FollowManager.Tab
 
         // プライベート変数
 
+        private ReadOnlyReactiveCollection<Account.Account> _accounts;
+
         private DelegateCommand<object[]> _addAccountTabCommand;
 
         // DI注入される変数
@@ -52,10 +60,25 @@ namespace FollowManager.Tab
             _addAccountTabModel = addAccountTabModel;
 
             // アカウントを購読して現在登録されているアカウントを更新する
+            _accountManager
+                .Accounts
+                .CollectionChangedAsObservable()
+                .Subscribe(_ =>
+                {
+                    Accounts = _accountManager
+                    .Accounts
+                    .Values
+                    .ToObservable()
+                    .ToReadOnlyReactiveCollection();
+                })
+            .AddTo(Disposables);
+
+            // 最初の1回は手動で代入する
             Accounts = _accountManager
                 .Accounts
-                .ToReadOnlyReactiveCollection()
-                .AddTo(Disposables);
+                .Values
+                .ToObservable()
+                .ToReadOnlyReactiveCollection();
         }
 
         // デストラクタ

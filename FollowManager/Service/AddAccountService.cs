@@ -52,7 +52,7 @@ namespace FollowManager.Service
                     var tokens = OAuth.GetTokens(_session, pincode);
                     var account = _unityContainer.Resolve<Account.Account>();
                     account.Tokens = tokens;
-                    _accountManager.Accounts.Add(account);
+                    _accountManager.Accounts.Add((long)account.User.Id, account);
                     DeleteSession();
                     _loggingService.Logs.Add("アカウントの追加に成功しました。");
                 }
