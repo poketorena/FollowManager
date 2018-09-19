@@ -29,15 +29,15 @@ namespace FollowManager.Account
         public void DeleteAccount(Account account)
         {
             var screenName = account.Tokens.ScreenName;
-            try
-            {
+            //try
+            //{
                 Accounts.Remove((long)(account.User.Id));
                 _loggingService.Logs.Add($"@{screenName}を削除しました。");
-            }
-            catch (Exception)
-            {
-                _loggingService.Logs.Add($"@{screenName}の削除に失敗しました。");
-            }
+            //}
+            //catch (Exception)
+            //{
+            //    _loggingService.Logs.Add($"@{screenName}の削除に失敗しました。");
+            //}
         }
 
         // DI注入される変数
