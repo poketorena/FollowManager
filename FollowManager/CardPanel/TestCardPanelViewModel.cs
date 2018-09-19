@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using CoreTweet;
 using FollowManager.Account;
+using Prism.Mvvm;
 using Reactive.Bindings;
 
 namespace FollowManager.CardPanel
@@ -9,7 +10,7 @@ namespace FollowManager.CardPanel
     /// <summary>
     /// CardPanelViewModelのモック
     /// </summary>
-    public class TestCardPanelViewModel
+    public class TestCardPanelViewModel : BindableBase
     {
         // パブリックプロパティ
 

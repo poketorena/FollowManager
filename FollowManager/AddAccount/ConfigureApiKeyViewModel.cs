@@ -3,12 +3,13 @@ using FollowManager.Api;
 using FollowManager.Service;
 using FollowManager.Validation;
 using Prism.Commands;
+using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 
 namespace FollowManager.AddAccount
 {
-    public class ConfigureApiKeyViewModel
+    public class ConfigureApiKeyViewModel : BindableBase
     {
         // パブリックプロパティ
 
