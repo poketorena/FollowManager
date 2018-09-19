@@ -122,10 +122,7 @@ namespace FollowManager.Collections.Generic
         /// <param name="propertyName">変更されたプロパティの名前。</param>
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
@@ -135,10 +132,7 @@ namespace FollowManager.Collections.Generic
         /// <param name="e">発生させるイベントの引数。</param>
         protected virtual void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            if (CollectionChanged != null)
-            {
-                CollectionChanged(this, e);
-            }
+            CollectionChanged?.Invoke(this, e);
         }
 
         private void OnCollectionAdded(KeyValuePair<TKey, TValue> changedItem, int startingIndex)
@@ -196,13 +190,13 @@ namespace FollowManager.Collections.Generic
         /// <param name="item">新しい項目。</param>
         protected override void SetItem(int index, KeyValuePair<TKey, TValue> item)
         {
-            KeyValuePair<TKey, TValue> oldItem = this[index];
+            var oldItem = this[index];
             base.SetItem(index, item);
             OnCollectionReplaced(item, oldItem);
         }
 
         /// <summary>
-        ///   <see cref="T:System.Collections.Generic.ObservableDictionary`2" /> 内の指定したインデックスの位置に要素を挿入します。
+        ///   <see cref="T:FollowManager.Collections.Generic.ObservableDictionary`2" /> 内の指定したインデックスの位置に要素を挿入します。
         /// </summary>
         /// <param name="index">
         ///   <paramref name="item" /> を挿入する位置の、0 から始まるインデックス番号。
@@ -212,7 +206,7 @@ namespace FollowManager.Collections.Generic
         /// </param>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
         ///   <paramref name="index" /> が 0 未満です。
-        ///   または<paramref name="index" /> が <see cref="P:System.Collections.Generic.ObservableDictionary`2Count" /> より大きくなっています。
+        ///   または<paramref name="index" /> が <see cref="P:FollowManager.Collections.Generic.ObservableDictionary`2Count" /> より大きくなっています。
         /// </exception>
         protected override void InsertItem(int index, KeyValuePair<TKey, TValue> item)
         {
@@ -226,7 +220,7 @@ namespace FollowManager.Collections.Generic
         /// <param name="index">削除する要素のインデックス。</param>
         protected override void RemoveItem(int index)
         {
-            KeyValuePair<TKey, TValue> removedItem = this[index];
+            var removedItem = this[index];
             base.RemoveItem(index);
             OnCollectionRemoved(removedItem, index);
         }

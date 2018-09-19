@@ -165,9 +165,8 @@ namespace FollowManager.Collections.Generic
             set
             {
                 // KeyValuePair を作成して追加 or 置換する。
-                KeyValuePair<TKey, TValue> newValue = new KeyValuePair<TKey, TValue>(key, value);
-                KeyValuePair<TKey, TValue> oldValue;
-                if (Dictionary.TryGetValue(key, out oldValue))
+                var newValue = new KeyValuePair<TKey, TValue>(key, value);
+                if (Dictionary.TryGetValue(key, out var oldValue))
                 {
                     var index = Items.IndexOf(oldValue);
                     SetItem(index, newValue);
@@ -198,14 +197,14 @@ namespace FollowManager.Collections.Generic
         }
 
         /// <summary>
-        ///   <see cref="T:System.Collections.Generic.CollectionBasedDictionary`2" /> に特定の値が格納されているかどうかを判断します。
+        ///   <see cref="T:FollowManager.Collections.Generic.CollectionBasedDictionary`2" /> に特定の値が格納されているかどうかを判断します。
         /// </summary>
         /// <returns>
-        ///   指定した値を持つ要素が <see cref="T:System.Collections.Generic.CollectionBasedDictionary`2" /> に格納されている場合は true。
+        ///   指定した値を持つ要素が <see cref="T:FollowManager.Collections.Generic.CollectionBasedDictionary`2" /> に格納されている場合は true。
         ///   それ以外の場合は false。
         /// </returns>
-        /// <param name="value">
-        ///   <see cref="T:System.Collections.Generic.CollectionBasedDictionary`2" /> 内で検索される値。
+        /// <param name="key">
+        ///   <see cref="T:FollowManager.Collections.Generic.CollectionBasedDictionary`2" /> 内で検索される値。
         ///   参照型の場合、null の値を使用できます。
         /// </param>
         public bool ContainsKey(TKey key)
@@ -232,8 +231,7 @@ namespace FollowManager.Collections.Generic
         /// </exception>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            KeyValuePair<TKey, TValue> kvp;
-            bool result = Dictionary.TryGetValue(key, out kvp);
+            var result = Dictionary.TryGetValue(key, out var kvp);
 
             // 取得した KeyValuePair から Value を抜き出す。
             value = kvp.Value;
