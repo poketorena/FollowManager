@@ -69,7 +69,8 @@ namespace FollowManager.AddAccount
                 _addAccountService.ConfigureAccessTokens(Pincode.Value);
                 _dialogService.CloseConfigurePincodeView();
                 _dialogService.CloseConfigureApiKeyView();
-            });
+            })
+            .AddTo(Disposables);
         }
 
         // デストラクタ
