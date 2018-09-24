@@ -9,7 +9,7 @@ using Reactive.Bindings.Extensions;
 
 namespace FollowManager.ManageAccount
 {
-    public class ManageAccountViewModel : BindableBase
+    public class ManageAccountViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
 
@@ -20,6 +20,16 @@ namespace FollowManager.ManageAccount
         {
             get { return _accounts; }
             private set { SetProperty(ref _accounts, value); }
+        }
+
+        // パブリック関数
+
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            Disposables.Dispose();
         }
 
         // デリゲートコマンド
@@ -71,13 +81,6 @@ namespace FollowManager.ManageAccount
                 .Values
                 .ToObservable()
                 .ToReadOnlyReactiveCollection();
-        }
-
-        // デストラクタ
-
-        ~ManageAccountViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

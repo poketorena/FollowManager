@@ -6,11 +6,16 @@ using System.Linq;
 
 namespace FollowManager.About
 {
-    public class AboutViewModel : BindableBase
+    public class AboutViewModel : BindableBase, IDisposable
     {
-        public AboutViewModel()
-        {
+        // パブリック関数
 
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

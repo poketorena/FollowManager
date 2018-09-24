@@ -7,10 +7,19 @@ using System.Linq;
 
 namespace FollowManager.Setting
 {
-    public class SettingViewModel : BindableBase
+    public class SettingViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
         // パブリック関数
+
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            throw new NotImplementedException();
+        }
+
         // デリゲートコマンド
         // インタラクションリクエスト
         // イベント

@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using System;
+using System.Reactive.Disposables;
 using FollowManager.Api;
 using FollowManager.Service;
 using FollowManager.Validation;
@@ -9,7 +10,7 @@ using Reactive.Bindings.Extensions;
 
 namespace FollowManager.AddAccount
 {
-    public class ConfigureApiKeyViewModel : BindableBase
+    public class ConfigureApiKeyViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
 
@@ -24,6 +25,16 @@ namespace FollowManager.AddAccount
         /// </summary>
         [NotEmptyValidation(ErrorMessage = "フィールドConsumer Secretは必須です。")]
         public ReactiveProperty<string> ConsumerSecret { get; } = new ReactiveProperty<string>(TwitterApiKey.ConsumerSecret);
+
+        // パブリック関数
+
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            Disposables.Dispose();
+        }
 
         // デリゲートコマンド
 
@@ -82,13 +93,6 @@ namespace FollowManager.AddAccount
                     _dialogService.OpenConfigurePincodeView();
                 })
                 .AddTo(Disposables);
-        }
-
-        // デストラクタ
-
-        ~ConfigureApiKeyViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

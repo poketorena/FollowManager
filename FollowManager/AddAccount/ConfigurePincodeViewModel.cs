@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using FollowManager.Service;
@@ -10,7 +11,7 @@ using Reactive.Bindings.Extensions;
 
 namespace FollowManager.AddAccount
 {
-    public class ConfigurePincodeViewModel : BindableBase
+    public class ConfigurePincodeViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
 
@@ -30,6 +31,14 @@ namespace FollowManager.AddAccount
         /// </summary>
         public DelegateCommand CancelCommand =>
             _cancelCommand ?? (_cancelCommand = new DelegateCommand(_dialogService.CloseConfigurePincodeView));
+
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            Disposables.Dispose();
+        }
 
         // プライベートプロパティ
 
@@ -71,13 +80,6 @@ namespace FollowManager.AddAccount
                 _dialogService.CloseConfigureApiKeyView();
             })
             .AddTo(Disposables);
-        }
-
-        // デストラクタ
-
-        ~ConfigurePincodeViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

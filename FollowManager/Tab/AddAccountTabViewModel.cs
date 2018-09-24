@@ -9,7 +9,7 @@ using Reactive.Bindings.Extensions;
 
 namespace FollowManager.Tab
 {
-    public class AddAccountTabViewModel : BindableBase
+    public class AddAccountTabViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
 
@@ -26,6 +26,16 @@ namespace FollowManager.Tab
         /// 呼び出し元ウィンドウのオブジェクトId
         /// </summary>
         public string CallerObjectId { get; set; }
+
+        // パブリック関数
+
+        /// <summary>
+        /// リソースを破棄します。
+        /// </summary>
+        public void Dispose()
+        {
+            Disposables.Dispose();
+        }
 
         // デリゲートコマンド
 
@@ -79,13 +89,6 @@ namespace FollowManager.Tab
                 .Values
                 .ToObservable()
                 .ToReadOnlyReactiveCollection();
-        }
-
-        // デストラクタ
-
-        ~AddAccountTabViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

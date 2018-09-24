@@ -13,10 +13,22 @@ namespace FollowManager.Service
         /// </summary>
         public void OpenSettingView()
         {
-            var window = new SettingView();
-            window.Closed += (o, args) => _loggingService.Logs.Add("設定が更新されました。");
-            window.Closed += (o, args) => window = null;
-            window.ShowDialog();
+            _settingView = new SettingView();
+            _settingView.Closed += (o, args) =>
+            {
+                _loggingService.Logs.Add("設定が更新されました。");
+                ((SettingViewModel)_settingView.DataContext).Dispose();
+                _settingView = null;
+            };
+            _settingView.ShowDialog();
+        }
+
+        /// <summary>
+        /// 設定画面を閉じます。
+        /// </summary>
+        public void CloseSettingView()
+        {
+            _settingView.Close();
         }
 
         /// <summary>
@@ -24,10 +36,22 @@ namespace FollowManager.Service
         /// </summary>
         public void OpenAboutView()
         {
-            var window = new AboutView();
-            window.Closed += (o, args) => _loggingService.Logs.Add("About画面を閉じました。");
-            window.Closed += (o, args) => window = null;
-            window.ShowDialog();
+            _aboutView = new AboutView();
+            _aboutView.Closed += (o, args) =>
+            {
+                _loggingService.Logs.Add("About画面を閉じました。");
+                ((AboutViewModel)_aboutView.DataContext).Dispose();
+                _aboutView = null;
+            };
+            _aboutView.ShowDialog();
+        }
+
+        /// <summary>
+        /// About画面を閉じます。
+        /// </summary>
+        public void CloseAboutView()
+        {
+            _aboutView.Close();
         }
 
         /// <summary>
@@ -36,7 +60,11 @@ namespace FollowManager.Service
         public void OpenConfigureApiKeyView()
         {
             _configureApiKeyView = new ConfigureApiKeyView();
-            _configureApiKeyView.Closed += (o, args) => _configureApiKeyView = null;
+            _configureApiKeyView.Closed += (o, args) =>
+            {
+                ((ConfigureApiKeyViewModel)_configureApiKeyView.DataContext).Dispose();
+                _configureApiKeyView = null;
+            };
             _configureApiKeyView.ShowDialog();
         }
 
@@ -54,7 +82,11 @@ namespace FollowManager.Service
         public void OpenConfigurePincodeView()
         {
             _configurePincodeView = new ConfigurePincodeView();
-            _configurePincodeView.Closed += (o, args) => _configurePincodeView = null;
+            _configurePincodeView.Closed += (o, args) =>
+            {
+                ((ConfigurePincodeViewModel)_configurePincodeView.DataContext).Dispose();
+                _configurePincodeView = null;
+            };
             _configurePincodeView.ShowDialog();
         }
 
@@ -71,10 +103,13 @@ namespace FollowManager.Service
         /// </summary>
         public void OpenManageAccountView()
         {
-            var window = new ManageAccountView();
-            window.Closed += (o, args) => _loggingService.Logs.Add("アカウント管理画面を閉じました。");
-            window.Closed += (o, args) => window = null;
-            window.ShowDialog();
+            _manageAccountView = new ManageAccountView();
+            _manageAccountView.Closed += (o, args) =>
+            {
+                ((ManageAccountViewModel)_manageAccountView.DataContext).Dispose();
+                _manageAccountView = null;
+            };
+            _manageAccountView.ShowDialog();
         }
 
         /// <summary>
@@ -83,7 +118,11 @@ namespace FollowManager.Service
         public void OpenAddAccountTabView()
         {
             _addAccountTabView = new AddAccountTabView();
-            _addAccountTabView.Closed += (o, args) => _addAccountTabView = null;
+            _addAccountTabView.Closed += (o, args) =>
+            {
+                ((AddAccountTabViewModel)_addAccountTabView.DataContext).Dispose();
+                _addAccountTabView = null;
+            };
             _addAccountTabView.ShowDialog();
         }
 
@@ -97,9 +136,15 @@ namespace FollowManager.Service
 
         // プライベート変数
 
+        private SettingView _settingView;
+
+        private AboutView _aboutView;
+
         private ConfigureApiKeyView _configureApiKeyView;
 
         private ConfigurePincodeView _configurePincodeView;
+
+        private ManageAccountView _manageAccountView;
 
         private AddAccountTabView _addAccountTabView;
 
