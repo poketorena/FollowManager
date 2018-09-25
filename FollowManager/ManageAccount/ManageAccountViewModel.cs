@@ -80,7 +80,8 @@ namespace FollowManager.ManageAccount
                 .Accounts
                 .Values
                 .ToObservable()
-                .ToReadOnlyReactiveCollection();
+                .ToReadOnlyReactiveCollection()
+                .AddTo(Disposables);
         }
     }
 }
