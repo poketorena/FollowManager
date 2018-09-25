@@ -124,6 +124,7 @@
     <Compile Include="MultiBinding\CommandAndConverterParameter\SortKeyRequest.cs" />
     <Compile Include="MultiBinding\CommandAndConverterParameter\SortOrderRequest.cs" />
     <Compile Include="MultiBinding\MultiParameter\BlockAndBlockReleaseRequest.cs" />
+    <Compile Include="Reactive\Extensions\WeakObservableExtensions.cs" />
     <Compile Include="Service\AddAccountService.cs" />
     <Compile Include="Service\DialogService.cs" />
     <Compile Include="Service\LoggingService.cs" />
