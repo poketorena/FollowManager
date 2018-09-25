@@ -89,7 +89,7 @@ namespace FollowManager.Account
 
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
 
-            if (File.Exists($@"Data\{Tokens.ScreenName}\" + fileName))
+            if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
                 // ローカルにデータが存在する場合はデシリアライズして返す
                 return GetFollowsFromLocal();
@@ -111,7 +111,7 @@ namespace FollowManager.Account
 
             try
             {
-                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userDatas = new List<UserData>();
                     var settings = new JsonSerializerSettings
@@ -125,7 +125,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
+                        var errorMessage = $"{fileName} を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return GetFollowsFromTwitterApi();
@@ -135,49 +135,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -211,14 +211,14 @@ namespace FollowManager.Account
             }
             catch (Exception error)
             {
-                _loggingService.Logs.Add("フォロー一覧の取得に失敗しました。" + error.Message);
-                Debug.WriteLine("フォロー一覧の取得に失敗しました。" + error.Message);
+                _loggingService.Logs.Add($"フォロー一覧の取得に失敗しました。{error.Message}");
+                Debug.WriteLine($"フォロー一覧の取得に失敗しました。{error.Message}");
                 return null;
             }
 
             try
             {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var settings = new JsonSerializerSettings
                     {
@@ -231,7 +231,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " の保存に失敗しました。";
+                        var errorMessage = $"{fileName} の保存に失敗しました。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return null;
@@ -240,49 +240,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -309,7 +309,7 @@ namespace FollowManager.Account
 
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
 
-            if (File.Exists($@"Data\{Tokens.ScreenName}\" + fileName))
+            if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
                 // ローカルにデータが存在する場合はデシリアライズして返す
                 return GetFollowersFromLocal();
@@ -331,7 +331,7 @@ namespace FollowManager.Account
 
             try
             {
-                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userDatas = new List<UserData>();
                     var settings = new JsonSerializerSettings
@@ -345,7 +345,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
+                        var errorMessage = $"{fileName} を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return GetFollowersFromTwitterApi();
@@ -355,49 +355,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -431,14 +431,14 @@ namespace FollowManager.Account
             }
             catch (Exception error)
             {
-                _loggingService.Logs.Add("フォロワー一覧の取得に失敗しました。" + error.Message);
-                Debug.WriteLine("フォローワー一覧の取得に失敗しました。" + error.Message);
+                _loggingService.Logs.Add($"フォロワー一覧の取得に失敗しました。{error.Message}");
+                Debug.WriteLine($"フォローワー一覧の取得に失敗しました。{error.Message}");
                 return null;
             }
 
             try
             {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var settings = new JsonSerializerSettings
                     {
@@ -451,7 +451,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " の保存に失敗しました。";
+                        var errorMessage = $"{fileName} の保存に失敗しました。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return null;
@@ -460,49 +460,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -529,7 +529,7 @@ namespace FollowManager.Account
 
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
 
-            if (File.Exists($@"Data\{Tokens.ScreenName}\" + fileName))
+            if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
                 // ローカルにデータが存在する場合はデシリアライズして返す
                 return GetUserTweetsFromLocal();
@@ -550,7 +550,7 @@ namespace FollowManager.Account
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
             try
             {
-                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userTweets = new Dictionary<long, List<Status>>();
                     var settings = new JsonSerializerSettings
@@ -564,7 +564,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
+                        var errorMessage = $"{fileName} を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return GetUserTweetsFromTwitterApi();
@@ -574,49 +574,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -642,28 +642,30 @@ namespace FollowManager.Account
                 }
                 catch (Exception error)
                 {
-                    _loggingService.Logs.Add("@" + userData.User.ScreenName + "のツイートの取得に失敗しました。" + error.Message);
-                    Debug.WriteLine("@" + userData.User.ScreenName + "のツイートの取得に失敗しました。" + error.Message);
+                    var errorMessage = $"@{userData.User.ScreenName}のツイートの取得に失敗しました{error.Message}";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
                     continue;
                 }
                 userTweets[(long)userData.User.Id] = statuses.ToList();
 
                 if (userTweets.Count % 100 == 0)
                 {
-                    Debug.WriteLine("Statuses.UserTimelineの呼び出し回数が" + userTweets.Count + "回に到達しました。");
+                    Debug.WriteLine($"Statuses.UserTimelineの呼び出し回数が{userTweets.Count}回に到達しました。");
                 }
 
                 if (userTweets.Count % 900 == 0)
                 {
-                    _loggingService.Logs.Add("レートリミットに達したため15分後に再開します。");
-                    Debug.WriteLine("レートリミットに達したため15分後に再開します。");
+                    const string errorMessage = "レートリミットに達したため15分後に再開します。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
                     Thread.Sleep(new TimeSpan(0, 16, 0));
                 }
             }
 
             try
             {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\" + fileName))
+                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var settings = new JsonSerializerSettings
                     {
@@ -676,7 +678,7 @@ namespace FollowManager.Account
                     }
                     catch (Exception)
                     {
-                        var errorMessage = fileName + " の保存に失敗しました。";
+                        var errorMessage = $"{fileName} の保存に失敗しました。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         return null;
@@ -685,49 +687,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (ArgumentException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (FileNotFoundException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = fileName + " を開くことに失敗しました。パスの形式が無効です。";
+                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return null;
@@ -750,49 +752,49 @@ namespace FollowManager.Account
             }
             catch (UnauthorizedAccessException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。必要なアクセス許可がありません。";
+                var errorMessage = $"{directoryName} の作成に失敗しました。必要なアクセス許可がありません。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (ArgumentNullException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。指定したパスがnullです。";
+                var errorMessage = $"{directoryName} の作成に失敗しました。指定したパスがnullです。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (ArgumentException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                var errorMessage = $"{directoryName} の作成に失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (PathTooLongException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                var errorMessage = $"{directoryName} の作成に失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (DirectoryNotFoundException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                var errorMessage = $"{directoryName} の作成に失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (IOException)
             {
-                var errorMessage = directoryName + " の作成に失敗しました。パスによって指定されたディレクトリはファイルです。またはネットワーク名が不明です。";
+                var errorMessage = $"{directoryName} の作成に失敗しました。パスによって指定されたディレクトリはファイルです。またはネットワーク名が不明です。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
             }
             catch (NotSupportedException)
             {
-                var errorMessage = directoryName + @" の作成に失敗しました。パスにドライブ ラベル (「C:\」) の一部ではないコロン文字 (:) が含まれています。";
+                var errorMessage = $@"{directoryName} の作成に失敗しました。パスにドライブ ラベル (「C:\」) の一部ではないコロン文字 (:) が含まれています。";
                 _loggingService.Logs.Add(errorMessage);
                 Debug.WriteLine(errorMessage);
                 return false;
