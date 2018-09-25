@@ -113,14 +113,6 @@ namespace FollowManager.CardPanel
                 })
                 .AddTo(Disposables);
 
-            // ソートキー、ソート順を購読して現在表示しているユーザーデータのコレクションをソートする
-            //_sidePanelModel
-            //    .FilterAndSortOption
-            //    .PropertyChangedAsObservable()
-            //    .Where(args => args.PropertyName == nameof(SortKeyType) || args.PropertyName == nameof(SortOrderType))
-            //    .Subscribe(_ => Sort())
-            //    .AddTo(Disposables);
-
             // タブのIdをCardPanelModelに書き戻す
             TabId
                 .PropertyChangedAsObservable()
