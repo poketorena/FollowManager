@@ -1,14 +1,13 @@
-﻿using FollowManager.MainWindow;
-using System.Windows;
-using Prism.Modularity;
-using Microsoft.Practices.Unity;
-using Prism.Unity;
-using FollowManager.Service;
+﻿using System.Windows;
 using FollowManager.Account;
 using FollowManager.CardPanel;
+using FollowManager.MainWindow;
+using FollowManager.Service;
 using FollowManager.SidePanel;
-using FollowManager.AddAccount;
 using FollowManager.Tab;
+using Microsoft.Practices.Unity;
+using Prism.Modularity;
+using Prism.Unity;
 
 namespace FollowManager
 {
