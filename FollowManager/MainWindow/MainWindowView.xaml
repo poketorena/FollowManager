@@ -9,6 +9,7 @@
     xmlns:dockablz="clr-namespace:Dragablz.Dockablz;assembly=Dragablz"
     xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
     xmlns:local="clr-namespace:FollowManager.MainWindow"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     xmlns:sidepanel="clr-namespace:FollowManager.SidePanel"
@@ -66,11 +67,31 @@
         <dragablz:TabablzControl
             Grid.Row="1"
             BorderThickness="0"
-            ItemsSource="{Binding TabDatas}"
+            ClosingItemCallback="{Binding ClosingTabItemHandler}"
+            ItemsSource="{Binding TabDatas.Value}"
+            ShowDefaultCloseButton="True"
             Style="{StaticResource MaterialDesignTabablzControlStyle}">
             <dragablz:TabablzControl.HeaderItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}" />
+                    <Grid>
+                        <TextBlock Grid.Column="0" Text="{Binding Header}" />
+                        <Grid.ContextMenu>
+                            <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                <MenuItem
+                                    Command="{Binding Path=Tag.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                    CommandParameter="{Binding}"
+                                    Header="タブを閉じる" />
+                                <MenuItem
+                                    Command="{Binding Path=Tag.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                    CommandParameter="{Binding}"
+                                    Header="すべてのタブを閉じる" />
+                                <MenuItem
+                                    Command="{Binding Path=Tag.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                    CommandParameter="{Binding}"
+                                    Header="このタブ以外すべて閉じる" />
+                            </ContextMenu>
+                        </Grid.ContextMenu>
+                    </Grid>
                 </DataTemplate>
             </dragablz:TabablzControl.HeaderItemTemplate>
             <TabControl.ContentTemplate>

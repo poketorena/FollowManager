@@ -115,6 +115,7 @@
       <DependentUpon>LoadingView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Loading\LoadingViewModel.cs" />
+    <Compile Include="MainWindow\MainWindowModel.cs" />
     <Compile Include="MainWindow\TestMainWindowViewModel.cs" />
     <Compile Include="ManageAccount\ManageAccountView.xaml.cs">
       <DependentUpon>ManageAccountView.xaml</DependentUpon>

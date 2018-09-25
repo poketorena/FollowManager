@@ -1,4 +1,6 @@
-﻿using System.Reactive.Disposables;
+﻿using System.Collections.ObjectModel;
+using System.Reactive.Disposables;
+using Dragablz;
 using FollowManager.Account;
 using FollowManager.Dispose;
 using FollowManager.Service;
@@ -18,7 +20,7 @@ namespace FollowManager.MainWindow
         /// <summary>
         /// タブのコレクション
         /// </summary>
-        public ReadOnlyReactiveCollection<TabData> TabDatas { get; }
+        public ReactiveProperty<ObservableCollection<TabData>> TabDatas { get; private set; }
 
         // デリゲートコマンド
 
@@ -52,6 +54,12 @@ namespace FollowManager.MainWindow
         public DelegateCommand OpenAddAccountTabViewCommand =>
             _openAddAccountTabViewCommand ?? (_openAddAccountTabViewCommand = new DelegateCommand(_dialogService.OpenAddAccountTabView));
 
+        /// <summary>
+        /// タブを閉じるときに呼ばれるメソッド
+        /// </summary>
+        public ItemActionCallback ClosingTabItemHandler
+            => _mainWindowModel.ClosingTabItemHandlerImpl;
+
         // プライベートプロパティ
 
         /// <summary>
@@ -83,9 +91,11 @@ namespace FollowManager.MainWindow
 
         private readonly TabManager _tabManager;
 
+        private readonly MainWindowModel _mainWindowModel;
+
         // コンストラクタ
 
-        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager)
+        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager, MainWindowModel mainWindowModel)
         {
             // DI
             _unityContainer = unityContainer;
@@ -93,11 +103,11 @@ namespace FollowManager.MainWindow
             _loggingService = loggingService;
             _dialogService = dialogService;
             _tabManager = tabManager;
+            _mainWindowModel = mainWindowModel;
 
             // モデルのタブのコレクションの変更を購読してタブのコレクションを更新する
             TabDatas = _tabManager
-                .TabDatas
-                .ToReadOnlyReactiveCollection()
+                .ToReactivePropertyAsSynchronized(model => model.TabDatas)
                 .AddTo(DisposeManager.Instance.Disposables);
 
             //var tabItemDatas = Observable

@@ -38,6 +38,7 @@ namespace FollowManager
             Container.RegisterType<SidePanelModel>();
             Container.RegisterType<Account.Account>();
             Container.RegisterType<AddAccountTabModel>();
+            Container.RegisterType<MainWindowModel>();
 
             // シングルトンでコンテナに登録
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());
