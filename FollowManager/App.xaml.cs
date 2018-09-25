@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using FollowManager.Dispose;
 
 namespace FollowManager
 {
@@ -19,6 +14,13 @@ namespace FollowManager
 
             var bootstrapper = new Bootstrapper();
             bootstrapper.Run();
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            DisposeManager.Instance.Disposables.Dispose();
         }
     }
 }

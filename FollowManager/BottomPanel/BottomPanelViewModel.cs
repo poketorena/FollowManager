@@ -1,4 +1,5 @@
 ﻿using System.Reactive.Disposables;
+using FollowManager.Dispose;
 using FollowManager.Service;
 using Prism.Mvvm;
 using Reactive.Bindings;
@@ -38,20 +39,13 @@ namespace FollowManager.BottomPanel
                 .Logs
                 .ObserveAddChanged()
                 .ToReactiveProperty()
-                .AddTo(Disposables);
+                .AddTo(DisposeManager.Instance.Disposables);
 
             // 変更を購読できているかのテスト
             _loggingService.Logs.Add("おはようございます");
             _loggingService.Logs.Add("こんにちは");
             _loggingService.Logs.Add("こんばんは");
             _loggingService.Logs.Add("ちゃろー！");
-        }
-
-        // デストラクタ
-
-        ~BottomPanelViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

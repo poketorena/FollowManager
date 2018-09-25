@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Disposables;
 using FollowManager.Account;
+using FollowManager.Dispose;
 using FollowManager.Service;
 using FollowManager.Tab;
 using Microsoft.Practices.Unity;
@@ -97,7 +98,7 @@ namespace FollowManager.MainWindow
             TabDatas = _tabManager
                 .TabDatas
                 .ToReadOnlyReactiveCollection()
-                .AddTo(Disposables);
+                .AddTo(DisposeManager.Instance.Disposables);
 
             //var tabItemDatas = Observable
             //    .Range(0, 5)
@@ -107,13 +108,6 @@ namespace FollowManager.MainWindow
             //    });
 
             //TabItemDatas = tabItemDatas.ToReactiveCollection();
-        }
-
-        // デストラクタ
-
-        ~MainWindowViewModel()
-        {
-            Disposables.Dispose();
         }
     }
 }

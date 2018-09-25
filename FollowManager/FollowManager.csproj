@@ -101,6 +101,7 @@
     <Compile Include="Converters\TabDataToSortKeyRequestConverter.cs" />
     <Compile Include="Converters\TabDataToSortOrderRequestConverter.cs" />
     <Compile Include="Converters\UserDataToBlockAndBlockReleaseRequestConverter.cs" />
+    <Compile Include="Dispose\DisposeManager.cs" />
     <Compile Include="EventAggregator\FilterChangedEvent.cs" />
     <Compile Include="EventAggregator\FilterChangedEventArgs.cs" />
     <Compile Include="EventAggregator\IDataChangedEventArgs.cs" />
