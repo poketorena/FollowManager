@@ -18,8 +18,6 @@ namespace FollowManager.Collections.ObjectModel.Extensions
         /// </exception>
         public static int RemoveAll<T>(this ObservableCollection<T> observableCollection, Predicate<T> match)
         {
-            var list = new List<int>();
-
             if (match == null)
             {
                 throw new ArgumentNullException(nameof(match));
