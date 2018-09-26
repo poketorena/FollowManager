@@ -55,10 +55,28 @@ namespace FollowManager.MainWindow
             _openAddAccountTabViewCommand ?? (_openAddAccountTabViewCommand = new DelegateCommand(_dialogService.OpenAddAccountTabView));
 
         /// <summary>
-        /// タブを閉じるときに呼ばれるメソッド
+        /// タブを閉じるコマンド
+        /// </summary>
+        public DelegateCommand<TabData> CloseTabCommand =>
+            _closeTabCommand ?? (_closeTabCommand = new DelegateCommand<TabData>(_tabManager.CloseTab));
+
+        /// <summary>
+        /// 全てのタブを閉じるコマンド
+        /// </summary>
+        public DelegateCommand CloseAllTabsCommand =>
+            _closeAllTabsCommand ?? (_closeAllTabsCommand = new DelegateCommand(_tabManager.CloseAllTabs));
+
+        /// <summary>
+        /// このタブ以外をすべて閉じるコマンド
+        /// </summary>
+        public DelegateCommand<TabData> CloseAllTabsExceptThisTabCommand =>
+            _closeAllTabsExceptThisTabCommand ?? (_closeAllTabsExceptThisTabCommand = new DelegateCommand<TabData>(_tabManager.CloseAllTabsExceptThisTab));
+
+        /// <summary>
+        /// クリックでタブを閉じるときに呼ばれるメソッド
         /// </summary>
         public ItemActionCallback ClosingTabItemHandler
-            => _mainWindowModel.ClosingTabItemHandlerImpl;
+            => _tabManager.ClosingTabItemHandlerImpl;
 
         // プライベートプロパティ
 
@@ -79,6 +97,12 @@ namespace FollowManager.MainWindow
 
         private DelegateCommand _openAddAccountTabViewCommand;
 
+        private DelegateCommand<TabData> _closeTabCommand;
+
+        private DelegateCommand _closeAllTabsCommand;
+
+        private DelegateCommand<TabData> _closeAllTabsExceptThisTabCommand;
+
         // DI注入される変数
 
         private readonly IUnityContainer _unityContainer;
@@ -91,11 +115,9 @@ namespace FollowManager.MainWindow
 
         private readonly TabManager _tabManager;
 
-        private readonly MainWindowModel _mainWindowModel;
-
         // コンストラクタ
 
-        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager, MainWindowModel mainWindowModel)
+        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager)
         {
             // DI
             _unityContainer = unityContainer;
@@ -103,7 +125,6 @@ namespace FollowManager.MainWindow
             _loggingService = loggingService;
             _dialogService = dialogService;
             _tabManager = tabManager;
-            _mainWindowModel = mainWindowModel;
 
             // モデルのタブのコレクションの変更を購読してタブのコレクションを更新する
             TabDatas = _tabManager
