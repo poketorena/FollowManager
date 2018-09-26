@@ -4,10 +4,12 @@ using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using FollowManager.Account;
+using FollowManager.EventAggregator;
 using FollowManager.MultiBinding.MultiParameter;
 using FollowManager.Service;
 using FollowManager.SidePanel;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -79,6 +81,8 @@ namespace FollowManager.CardPanel
 
         // DI注入される変数
 
+        private readonly IEventAggregator _eventAggregator;
+
         private readonly AccountManager _accountManager;
 
         private readonly LoggingService _loggingService;
@@ -89,9 +93,10 @@ namespace FollowManager.CardPanel
 
         // コンストラクタ
 
-        public CardPanelViewModel(AccountManager accountManager, LoggingService loggingService, CardPanelModel cardPanelModel, SidePanelModel sidePanelModel)
+        public CardPanelViewModel(IEventAggregator eventAggregator, AccountManager accountManager, LoggingService loggingService, CardPanelModel cardPanelModel, SidePanelModel sidePanelModel)
         {
             // DI
+            _eventAggregator = eventAggregator;
             _accountManager = accountManager;
             _loggingService = loggingService;
             _cardPanelModel = cardPanelModel;
@@ -119,14 +124,14 @@ namespace FollowManager.CardPanel
                 .Subscribe(_ =>
                 {
                     _cardPanelModel.TabId = TabId.Value;
-                });
-        }
+                })
+                .AddTo(Disposables);
 
-        // デストラクタ
-
-        ~CardPanelViewModel()
-        {
-            Disposables.Dispose();
+            // タブが削除されたらリソースを開放する
+            _eventAggregator
+                .GetEvent<TabRemovedEvent>()
+                .Subscribe(_ => Disposables.Dispose(), ThreadOption.PublisherThread, false, tabRemovedEventArgs => tabRemovedEventArgs.TabId == TabId.Value)
+                .AddTo(Disposables);
         }
     }
 }

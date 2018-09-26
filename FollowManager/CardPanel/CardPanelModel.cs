@@ -191,27 +191,26 @@ namespace FollowManager.CardPanel
             // フィルタの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<FilterChangedEvent>()
-                .Subscribe(LoadFilteredAndSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadFilteredAndSortedCollection, ThreadOption.PublisherThread, false, filterChangedEventArgs => filterChangedEventArgs.TabData.TabId == TabId)
                 .AddTo(Disposables);
 
             // ソートキーの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<SortKeyChangedEvent>()
-                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, sortKeyChangedEventArgs => sortKeyChangedEventArgs.TabData.TabId == TabId)
                 .AddTo(Disposables);
 
             // ソート順の変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<SortOrderChangedEvent>()
-                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, filter => filter.TabData.TabId == TabId)
+                .Subscribe(LoadSortedCollection, ThreadOption.PublisherThread, false, sortOrderChangedEventArgs => sortOrderChangedEventArgs.TabData.TabId == TabId)
                 .AddTo(Disposables);
-        }
 
-        // デストラクタ
-
-        ~CardPanelModel()
-        {
-            Disposables.Dispose();
+            // タブが削除されたらリソースを開放する
+            _eventAggregator
+                .GetEvent<TabRemovedEvent>()
+                .Subscribe(_ => Disposables.Dispose(), ThreadOption.PublisherThread, false, tabRemovedEventArgs => tabRemovedEventArgs.TabId == TabId)
+                .AddTo(Disposables);
         }
 
         // プライベート関数

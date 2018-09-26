@@ -109,6 +109,8 @@
     <Compile Include="EventAggregator\SortKeyChangedEventArgs.cs" />
     <Compile Include="EventAggregator\SortOrderChangedEvent.cs" />
     <Compile Include="EventAggregator\SortOrderChangedEventArgs.cs" />
+    <Compile Include="EventAggregator\TabRemovedEvent.cs" />
+    <Compile Include="EventAggregator\TabRemovedEventArgs.cs" />
     <Compile Include="FilterAndSort\SortKeyType.cs" />
     <Compile Include="FilterAndSort\SortOrderType.cs" />
     <Compile Include="Loading\LoadingView.xaml.cs">

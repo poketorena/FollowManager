@@ -1,8 +1,10 @@
 ﻿using System.Reactive.Disposables;
 using FollowManager.Account;
+using FollowManager.EventAggregator;
 using FollowManager.FilterAndSort;
 using FollowManager.MultiBinding.CommandAndConverterParameter;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
@@ -12,6 +14,11 @@ namespace FollowManager.SidePanel
     public class SidePanelViewModel : BindableBase
     {
         // パブリックプロパティ
+
+        /// <summary>
+        /// タブのId
+        /// </summary>
+        public ReactiveProperty<string> TabId { get; set; } = new ReactiveProperty<string>();
 
         /// <summary>
         /// 現在使用しているフィルタ
@@ -63,15 +70,18 @@ namespace FollowManager.SidePanel
 
         // DI注入される変数
 
+        private readonly IEventAggregator _eventAggregator;
+
         private readonly AccountManager _accountManager;
 
         private readonly SidePanelModel _sidePanelModel;
 
         // コンストラクタ
 
-        public SidePanelViewModel(AccountManager accountManager, SidePanelModel sidePanelModel)
+        public SidePanelViewModel(IEventAggregator eventAggregator, AccountManager accountManager, SidePanelModel sidePanelModel)
         {
             // DI
+            _eventAggregator = eventAggregator;
             _accountManager = accountManager;
             _sidePanelModel = sidePanelModel;
 
@@ -92,13 +102,12 @@ namespace FollowManager.SidePanel
                 .FilterAndSortOption
                 .ToReactivePropertyAsSynchronized(x => x.SortOrderType)
                 .AddTo(Disposables);
-        }
 
-        // デストラクタ
-
-        ~SidePanelViewModel()
-        {
-            Disposables.Dispose();
+            // タブが削除されたらリソースを開放する
+            _eventAggregator
+                .GetEvent<TabRemovedEvent>()
+                .Subscribe(_ => Disposables.Dispose(), ThreadOption.PublisherThread, false, tabRemovedEventArgs => tabRemovedEventArgs.TabId == TabId.Value)
+                .AddTo(Disposables);
         }
     }
 }
