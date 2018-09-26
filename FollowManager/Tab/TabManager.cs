@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Dragablz;
+using FollowManager.Collections.ObjectModel;
+using FollowManager.Collections.ObjectModel.Extensions;
 using FollowManager.EventAggregator;
 using Microsoft.Practices.ObjectBuilder2;
 using Prism.Events;
@@ -70,15 +72,15 @@ namespace FollowManager.Tab
         /// <param name="thisTabData">残しておくタブ</param>
         public void CloseAllTabsExceptThisTab(TabData thisTabData)
         {
-            for (var i = TabDatas.Count - 1; i >= 0; i--)
-            {
-                if (TabDatas[i].TabId != thisTabData.TabId)
+            TabDatas
+                .Where(tabData => tabData.TabId != thisTabData.TabId)
+                .ForEach(eventTabData =>
                 {
-                    var tabRemovedEventArgs = new TabRemovedEventArgs { TabId = TabDatas[i].TabId };
+                    var tabRemovedEventArgs = new TabRemovedEventArgs { TabId = eventTabData.TabId };
                     _eventAggregator.GetEvent<TabRemovedEvent>().Publish(tabRemovedEventArgs);
-                    TabDatas.RemoveAt(i);
-                }
-            }
+                });
+
+            TabDatas.RemoveAll(tabData => tabData.TabId != thisTabData.TabId);
         }
 
         // プライベート変数

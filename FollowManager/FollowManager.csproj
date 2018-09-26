@@ -91,6 +91,7 @@
     <Compile Include="CardPanel\TestCardPanelViewModel.cs" />
     <Compile Include="Collections\Generic\CollectionBasedDictionary.cs" />
     <Compile Include="Collections\Generic\ObservableDictionary.cs" />
+    <Compile Include="Collections\ObjectModel\Extensions\ObservableCollectionExtensions.cs" />
     <Compile Include="Converters\BoolToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\FilterTypeToStyleConverter.cs" />
     <Compile Include="Converters\FollowTypeToSolidColorBrushConverter.cs" />
