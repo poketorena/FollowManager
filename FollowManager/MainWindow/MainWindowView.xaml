@@ -28,6 +28,13 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
+    <Window.InputBindings>
+        <KeyBinding
+            Command="{Binding CloseTabCommand}"
+            CommandParameter="{Binding ElementName=tabablzControl, Path=SelectedItem}"
+            Gesture="Ctrl+W" />
+    </Window.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -65,6 +72,7 @@
         </Menu>
 
         <dragablz:TabablzControl
+            Name="tabablzControl"
             Grid.Row="1"
             BorderThickness="0"
             ClosingItemCallback="{Binding ClosingTabItemHandler}"
@@ -80,7 +88,7 @@
                                 <MenuItem
                                     Command="{Binding Path=Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
                                     CommandParameter="{Binding}"
-                                    Header="タブを閉じる" />
+                                    Header="タブを閉じる (Ctrl+W)" />
                                 <MenuItem Command="{Binding Path=Tag.CloseAllTabsCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" Header="すべてのタブを閉じる" />
                                 <MenuItem
                                     Command="{Binding Path=Tag.CloseAllTabsExceptThisTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
