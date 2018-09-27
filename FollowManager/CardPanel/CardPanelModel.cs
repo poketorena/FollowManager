@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using CoreTweet;
 using FollowManager.Account;
 using FollowManager.EventAggregator;
@@ -25,6 +27,11 @@ namespace FollowManager.CardPanel
         /// タブのId
         /// </summary>
         public string TabId { get; set; }
+
+        /// <summary>
+        /// XAML編集中にAPIを呼び出すのを防ぐフラグ
+        /// </summary>
+        public static bool IsInDesignMode => (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // パブリック関数
 
@@ -56,62 +63,69 @@ namespace FollowManager.CardPanel
         /// <returns></returns>
         public async Task BlockAndBlockReleaseAsync(BlockAndBlockReleaseRequest blockAndBlockReleaseRequest)
         {
-            var userId = blockAndBlockReleaseRequest.TabData.Tokens.UserId;
-            var targetId = blockAndBlockReleaseRequest.UserData.User.Id;
-            var targetScreenName = blockAndBlockReleaseRequest.UserData.User.Name;
+            if (!IsInDesignMode)
+            {
+                var userId = blockAndBlockReleaseRequest.TabData.Tokens.UserId;
+                var targetId = blockAndBlockReleaseRequest.UserData.User.Id;
+                var targetScreenName = blockAndBlockReleaseRequest.UserData.User.Name;
 
-            try
-            {
-                await _accountManager
-                    .Accounts[userId]
-                    .Tokens
-                    .Blocks
-                    .CreateAsync(user_id => targetId)
-                    .ConfigureAwait(false);
+                try
+                {
+                    await _accountManager
+                        .Accounts[userId]
+                        .Tokens
+                        .Blocks
+                        .CreateAsync(user_id => targetId)
+                        .ConfigureAwait(false);
 
-                var message = $"{targetScreenName}をブロックしました。";
-                _loggingService.Logs.Add(message);
-                Debug.WriteLine(message);
-            }
-            catch (KeyNotFoundException)
-            {
-                var errorMessage = $"{targetScreenName}のブロックに失敗しました。アカウントが追加されていません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-            }
-            catch (Exception)
-            {
-                var errorMessage = $"{targetScreenName}のブロックに失敗しました。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-            }
+                    var message = $"{targetScreenName}をブロックしました。";
+                    _loggingService.Logs.Add(message);
+                    Debug.WriteLine(message);
+                }
+                catch (KeyNotFoundException)
+                {
+                    var errorMessage = $"{targetScreenName}のブロックに失敗しました。アカウントが追加されていません。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                }
+                catch (Exception)
+                {
+                    var errorMessage = $"{targetScreenName}のブロックに失敗しました。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                }
 
-            await Task.Delay(3000).ConfigureAwait(false);
+                await Task.Delay(3000).ConfigureAwait(false);
 
-            try
-            {
-                await _accountManager
-                    .Accounts[userId]
-                    .Tokens
-                    .Blocks
-                    .DestroyAsync(user_id => targetId)
-                    .ConfigureAwait(false);
+                try
+                {
+                    await _accountManager
+                        .Accounts[userId]
+                        .Tokens
+                        .Blocks
+                        .DestroyAsync(user_id => targetId)
+                        .ConfigureAwait(false);
 
-                var message = $"{targetScreenName}のブロックを解除しました。";
-                _loggingService.Logs.Add(message);
-                Debug.WriteLine(message);
+                    var message = $"{targetScreenName}のブロックを解除しました。";
+                    _loggingService.Logs.Add(message);
+                    Debug.WriteLine(message);
+                }
+                catch (KeyNotFoundException)
+                {
+                    var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。アカウントが追加されていません。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                }
+                catch (Exception)
+                {
+                    var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                }
             }
-            catch (KeyNotFoundException)
+            else
             {
-                var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。アカウントが追加されていません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-            }
-            catch (Exception)
-            {
-                var errorMessage = $"{targetScreenName}のブロックの解除に失敗しました。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
+                throw new NotSupportedException("デザインモード時にTwitterAPIを呼び出すことはできません。");
             }
         }
 

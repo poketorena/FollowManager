@@ -11,7 +11,9 @@ namespace FollowManager.Service
     {
         // パブリックプロパティ
 
-        // XAML編集中にAPIを呼び出すのを防ぐフラグ
+        /// <summary>
+        /// XAML編集中にAPIを呼び出すのを防ぐフラグ
+        /// </summary>
         public static bool IsInDesignMode => (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         // パブリック関数

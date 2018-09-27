@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using CoreTweet;
 using FollowManager.Service;
 using Newtonsoft.Json;
@@ -16,6 +18,11 @@ namespace FollowManager.Account
     public class Account
     {
         // パブリックプロパティ
+
+        /// <summary>
+        /// XAML編集中にAPIを呼び出すのを防ぐフラグ
+        /// </summary>
+        public static bool IsInDesignMode => (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
         /// <summary>
         /// フォローしているユーザーのリスト
@@ -190,105 +197,112 @@ namespace FollowManager.Account
         /// <returns>フォローしているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowsFromTwitterApi()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
-
-            var userDatas = new List<UserData>();
-
-            try
+            if (!IsInDesignMode)
             {
-                for (long cursorTmp = -1; cursorTmp != 0;)
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
+
+                var userDatas = new List<UserData>();
+
+                try
                 {
-                    var friends = Tokens.Friends.List(
-                        user_id => Tokens.UserId,
-                        cursor => cursorTmp,
-                        count => 200
-                        );
-
-                    userDatas.AddRange(friends.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
-
-                    cursorTmp = friends.NextCursor;
-                }
-            }
-            catch (Exception error)
-            {
-                _loggingService.Logs.Add($"フォロー一覧の取得に失敗しました。{error.Message}");
-                Debug.WriteLine($"フォロー一覧の取得に失敗しました。{error.Message}");
-                return null;
-            }
-
-            try
-            {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
-                {
-                    var settings = new JsonSerializerSettings
+                    for (long cursorTmp = -1; cursorTmp != 0;)
                     {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
-                    try
-                    {
-                        jsonSerializer.Serialize(streamWriter, userDatas);
-                    }
-                    catch (Exception)
-                    {
-                        var errorMessage = $"{fileName} の保存に失敗しました。";
-                        _loggingService.Logs.Add(errorMessage);
-                        Debug.WriteLine(errorMessage);
-                        return null;
+                        var friends = Tokens.Friends.List(
+                            user_id => Tokens.UserId,
+                            cursor => cursorTmp,
+                            count => 200
+                            );
+
+                        userDatas.AddRange(friends.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
+
+                        cursorTmp = friends.NextCursor;
                     }
                 }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentNullException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (PathTooLongException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (FileNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (NotSupportedException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
+                catch (Exception error)
+                {
+                    _loggingService.Logs.Add($"フォロー一覧の取得に失敗しました。{error.Message}");
+                    Debug.WriteLine($"フォロー一覧の取得に失敗しました。{error.Message}");
+                    return null;
+                }
 
-            return userDatas;
+                try
+                {
+                    using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
+                    {
+                        var settings = new JsonSerializerSettings
+                        {
+                            Formatting = Formatting.Indented
+                        };
+                        var jsonSerializer = JsonSerializer.Create(settings);
+                        try
+                        {
+                            jsonSerializer.Serialize(streamWriter, userDatas);
+                        }
+                        catch (Exception)
+                        {
+                            var errorMessage = $"{fileName} の保存に失敗しました。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            return null;
+                        }
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentNullException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (PathTooLongException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (FileNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (NotSupportedException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+
+                return userDatas;
+            }
+            else
+            {
+                throw new NotSupportedException("デザインモード時にTwitterAPIを呼び出すことはできません。");
+            }
         }
 
         /// <summary>
@@ -410,105 +424,112 @@ namespace FollowManager.Account
         /// <returns>フォローされているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowersFromTwitterApi()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
-
-            var userDatas = new List<UserData>();
-
-            try
+            if (!IsInDesignMode)
             {
-                for (long cursorTmp = -1; cursorTmp != 0;)
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
+
+                var userDatas = new List<UserData>();
+
+                try
                 {
-                    var followers = Tokens.Followers.List(
-                        user_id => Tokens.UserId,
-                        cursor => cursorTmp,
-                        count => 200
-                        );
-
-                    userDatas.AddRange(followers.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
-
-                    cursorTmp = followers.NextCursor;
-                }
-            }
-            catch (Exception error)
-            {
-                _loggingService.Logs.Add($"フォロワー一覧の取得に失敗しました。{error.Message}");
-                Debug.WriteLine($"フォローワー一覧の取得に失敗しました。{error.Message}");
-                return null;
-            }
-
-            try
-            {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
-                {
-                    var settings = new JsonSerializerSettings
+                    for (long cursorTmp = -1; cursorTmp != 0;)
                     {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
-                    try
-                    {
-                        jsonSerializer.Serialize(streamWriter, userDatas);
-                    }
-                    catch (Exception)
-                    {
-                        var errorMessage = $"{fileName} の保存に失敗しました。";
-                        _loggingService.Logs.Add(errorMessage);
-                        Debug.WriteLine(errorMessage);
-                        return null;
+                        var followers = Tokens.Followers.List(
+                            user_id => Tokens.UserId,
+                            cursor => cursorTmp,
+                            count => 200
+                            );
+
+                        userDatas.AddRange(followers.Result.Select(user => new UserData { User = user, FollowType = FollowType.NotSet, Favorite = false }));
+
+                        cursorTmp = followers.NextCursor;
                     }
                 }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentNullException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (PathTooLongException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (FileNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (NotSupportedException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
+                catch (Exception error)
+                {
+                    _loggingService.Logs.Add($"フォロワー一覧の取得に失敗しました。{error.Message}");
+                    Debug.WriteLine($"フォローワー一覧の取得に失敗しました。{error.Message}");
+                    return null;
+                }
 
-            return userDatas;
+                try
+                {
+                    using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
+                    {
+                        var settings = new JsonSerializerSettings
+                        {
+                            Formatting = Formatting.Indented
+                        };
+                        var jsonSerializer = JsonSerializer.Create(settings);
+                        try
+                        {
+                            jsonSerializer.Serialize(streamWriter, userDatas);
+                        }
+                        catch (Exception)
+                        {
+                            var errorMessage = $"{fileName} の保存に失敗しました。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            return null;
+                        }
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentNullException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (PathTooLongException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (FileNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (NotSupportedException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+
+                return userDatas;
+            }
+            else
+            {
+                throw new NotSupportedException("デザインモード時にTwitterAPIを呼び出すことはできません。");
+            }
         }
 
         /// <summary>
@@ -629,113 +650,120 @@ namespace FollowManager.Account
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromTwitterApi()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
-
-            var userTweets = new Dictionary<long, List<Status>>();
-
-            foreach (var userData in Follows.Union(Followers, new UserDataEqualityComparer()))
+            if (!IsInDesignMode)
             {
-                IEnumerable<Status> statuses;
-                try
-                {
-                    statuses = Tokens.Statuses.UserTimeline(user_id => (long)userData.User.Id, count => 200);
-                }
-                catch (Exception error)
-                {
-                    var errorMessage = $"@{userData.User.ScreenName}のツイートの取得に失敗しました{error.Message}";
-                    _loggingService.Logs.Add(errorMessage);
-                    Debug.WriteLine(errorMessage);
-                    continue;
-                }
-                userTweets[(long)userData.User.Id] = statuses.ToList();
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
 
-                if (userTweets.Count % 100 == 0)
-                {
-                    Debug.WriteLine($"Statuses.UserTimelineの呼び出し回数が{userTweets.Count}回に到達しました。");
-                }
+                var userTweets = new Dictionary<long, List<Status>>();
 
-                if (userTweets.Count % 900 == 0)
+                foreach (var userData in Follows.Union(Followers, new UserDataEqualityComparer()))
                 {
-                    const string errorMessage = "レートリミットに達したため15分後に再開します。";
-                    _loggingService.Logs.Add(errorMessage);
-                    Debug.WriteLine(errorMessage);
-                    Thread.Sleep(new TimeSpan(0, 16, 0));
-                }
-            }
-
-            try
-            {
-                using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
-                {
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
+                    IEnumerable<Status> statuses;
                     try
                     {
-                        jsonSerializer.Serialize(streamWriter, userTweets);
+                        statuses = Tokens.Statuses.UserTimeline(user_id => (long)userData.User.Id, count => 200);
                     }
-                    catch (Exception)
+                    catch (Exception error)
                     {
-                        var errorMessage = $"{fileName} の保存に失敗しました。";
+                        var errorMessage = $"@{userData.User.ScreenName}のツイートの取得に失敗しました{error.Message}";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
-                        return null;
+                        continue;
+                    }
+                    userTweets[(long)userData.User.Id] = statuses.ToList();
+
+                    if (userTweets.Count % 100 == 0)
+                    {
+                        Debug.WriteLine($"Statuses.UserTimelineの呼び出し回数が{userTweets.Count}回に到達しました。");
+                    }
+
+                    if (userTweets.Count % 900 == 0)
+                    {
+                        const string errorMessage = "レートリミットに達したため15分後に再開します。";
+                        _loggingService.Logs.Add(errorMessage);
+                        Debug.WriteLine(errorMessage);
+                        Thread.Sleep(new TimeSpan(0, 16, 0));
                     }
                 }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentNullException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (ArgumentException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (PathTooLongException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (DirectoryNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (FileNotFoundException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
-            catch (NotSupportedException)
-            {
-                var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-                return null;
-            }
 
-            return userTweets;
+                try
+                {
+                    using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
+                    {
+                        var settings = new JsonSerializerSettings
+                        {
+                            Formatting = Formatting.Indented
+                        };
+                        var jsonSerializer = JsonSerializer.Create(settings);
+                        try
+                        {
+                            jsonSerializer.Serialize(streamWriter, userTweets);
+                        }
+                        catch (Exception)
+                        {
+                            var errorMessage = $"{fileName} の保存に失敗しました。";
+                            _loggingService.Logs.Add(errorMessage);
+                            Debug.WriteLine(errorMessage);
+                            return null;
+                        }
+                    }
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentNullException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (ArgumentException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (PathTooLongException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (FileNotFoundException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+                catch (NotSupportedException)
+                {
+                    var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                    return null;
+                }
+
+                return userTweets;
+            }
+            else
+            {
+                throw new NotSupportedException("デザインモード時にTwitterAPIを呼び出すことはできません。");
+            }
         }
 
         /// <summary>
@@ -808,21 +836,28 @@ namespace FollowManager.Account
         /// <returns></returns>
         private User GetMyUserData()
         {
-            User user;
+            if (!IsInDesignMode)
+            {
+                User user;
 
-            try
-            {
-                user = Tokens.Users.Show(
-                    user_id => Tokens.UserId,
-                    include_entities => true
-                    );
+                try
+                {
+                    user = Tokens.Users.Show(
+                        user_id => Tokens.UserId,
+                        include_entities => true
+                        );
+                }
+                catch (Exception)
+                {
+                    _loggingService.Logs.Add("自分のユーザーデータの取得に失敗しました。");
+                    return null;
+                }
+                return user;
             }
-            catch (Exception)
+            else
             {
-                _loggingService.Logs.Add("自分のユーザーデータの取得に失敗しました。");
-                return null;
+                throw new NotSupportedException("デザインモード時にTwitterAPIを呼び出すことはできません。");
             }
-            return user;
         }
     }
 }
