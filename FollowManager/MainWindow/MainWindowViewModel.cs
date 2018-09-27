@@ -25,6 +25,18 @@ namespace FollowManager.MainWindow
         // デリゲートコマンド
 
         /// <summary>
+        /// アプリケーションを終了するコマンド
+        /// </summary>
+        public DelegateCommand CloseApplicationCommand =>
+            _closeApplicationCommand ?? (_closeApplicationCommand = new DelegateCommand(_applicationService.CloseApplication));
+
+        /// <summary>
+        /// アプリケーションを再起動するコマンド
+        /// </summary>
+        public DelegateCommand RestartApplicationCommand =>
+            _restartApplicationCommand ?? (_restartApplicationCommand = new DelegateCommand(_applicationService.RestartApplication));
+
+        /// <summary>
         /// 設定画面を開くコマンド
         /// </summary>
         public DelegateCommand OpenSettingViewCommand =>
@@ -87,6 +99,10 @@ namespace FollowManager.MainWindow
 
         // プライベート変数
 
+        private DelegateCommand _closeApplicationCommand;
+
+        private DelegateCommand _restartApplicationCommand;
+
         private DelegateCommand _openSettingViewCommand;
 
         private DelegateCommand _openAboutViewCommand;
@@ -115,9 +131,11 @@ namespace FollowManager.MainWindow
 
         private readonly TabManager _tabManager;
 
+        private readonly ApplicationService _applicationService;
+
         // コンストラクタ
 
-        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager)
+        public MainWindowViewModel(IUnityContainer unityContainer, AccountManager accountManager, LoggingService loggingService, DialogService dialogService, TabManager tabManager, ApplicationService applicationService)
         {
             // DI
             _unityContainer = unityContainer;
@@ -125,6 +143,7 @@ namespace FollowManager.MainWindow
             _loggingService = loggingService;
             _dialogService = dialogService;
             _tabManager = tabManager;
+            _applicationService = applicationService;
 
             // モデルのタブのコレクションの変更を購読してタブのコレクションを更新する
             TabDatas = _tabManager

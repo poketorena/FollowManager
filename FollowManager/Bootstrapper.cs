@@ -45,6 +45,7 @@ namespace FollowManager
             Container.RegisterType<DialogService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<AddAccountService>(new ContainerControlledLifetimeManager());
             Container.RegisterType<TabManager>(new ContainerControlledLifetimeManager());
+            Container.RegisterType<ApplicationService>(new ContainerControlledLifetimeManager());
         }
     }
 }

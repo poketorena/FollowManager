@@ -47,8 +47,11 @@
             Height="30"
             Background="{StaticResource LightGrayPaper}">
             <MenuItem Height="30" Header="ファイル">
-                <MenuItem Header="終了" />
-                <MenuItem Header="再起動" />
+                <MenuItem
+                    Command="{Binding CloseApplicationCommand}"
+                    Header="終了"
+                    InputGestureText="Alt+F4" />
+                <MenuItem Command="{Binding RestartApplicationCommand}" Header="再起動" />
             </MenuItem>
             <MenuItem Height="30" Header="アカウント">
                 <MenuItem Command="{Binding OpenConfigureApiKeyViewCommand}" Header="アカウントを追加" />
@@ -88,7 +91,8 @@
                                 <MenuItem
                                     Command="{Binding Path=Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
                                     CommandParameter="{Binding}"
-                                    Header="タブを閉じる (Ctrl+W)" />
+                                    Header="タブを閉じる"
+                                    InputGestureText="Ctrl+W" />
                                 <MenuItem Command="{Binding Path=Tag.CloseAllTabsCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" Header="すべてのタブを閉じる" />
                                 <MenuItem
                                     Command="{Binding Path=Tag.CloseAllTabsExceptThisTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"

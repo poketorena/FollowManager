@@ -79,6 +79,7 @@
     <Compile Include="Account\UserDataEqualityComparer.cs" />
     <Compile Include="AddAccount\ConfigurePincodeViewModel.cs" />
     <Compile Include="Api\TwitterApiKey.cs" />
+    <Compile Include="Service\ApplicationService.cs" />
     <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
       <DependentUpon>BottomPanelView.xaml</DependentUpon>
     </Compile>
