@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Dragablz;
-using FollowManager.Collections.ObjectModel;
 using FollowManager.Collections.ObjectModel.Extensions;
 using FollowManager.EventAggregator;
 using Microsoft.Practices.ObjectBuilder2;
