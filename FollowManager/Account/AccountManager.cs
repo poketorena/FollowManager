@@ -18,9 +18,10 @@ namespace FollowManager.Account
         // パブリックプロパティ
 
         /// <summary>
-        /// 登録されているアカウントのリスト
+        /// 登録されているアカウント
         /// </summary>
-        public ObservableDictionary<long, Account> Accounts { get; } = new ObservableDictionary<long, Account>();
+        public ObservableDictionary<long, Account> Accounts =>
+            _accounts ?? (_accounts = LoadAuthorizationData());
 
         // パブリック関数
 
@@ -41,6 +42,10 @@ namespace FollowManager.Account
                 _loggingService.Logs.Add($"@{screenName}の削除に失敗しました。");
             }
         }
+
+        // プライベート変数
+
+        ObservableDictionary<long, Account> _accounts;
 
         // DI注入される変数
 
@@ -107,9 +112,10 @@ namespace FollowManager.Account
         }
 
         /// <summary>
-        /// 認証データを読み込みます。
+        /// 認証データを読み込みます。例外発生時はnullを返します。
         /// </summary>
-        private void LoadAuthorizationData()
+        /// <returns>読み込まれたアカウント</returns>
+        private ObservableDictionary<long,Account> LoadAuthorizationData()
         {
             const string fileName = "Authorizations.data";
             if (File.Exists($@"Data\Authorization\{fileName}"))
@@ -129,6 +135,8 @@ namespace FollowManager.Account
 
                         authorizations = LZ4MessagePackSerializer.Deserialize<List<Authorization>>(streamReader.BaseStream);
 
+                        var accounts = new ObservableDictionary<long, Account>();
+
                         foreach (var authorization in authorizations)
                         {
                             var account = new Account(_loggingService)
@@ -143,8 +151,9 @@ namespace FollowManager.Account
                                     )
                             };
 
-                            Accounts.Add((long)account.User.Id, account);
+                            accounts.Add((long)account.User.Id, account);
                         }
+                        return accounts;
                     }
                 }
                 catch (UnauthorizedAccessException)
@@ -152,49 +161,61 @@ namespace FollowManager.Account
                     var errorMessage = $"{fileName} を開くことに失敗しました。必要なアクセス許可がありません。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (ArgumentNullException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスがnullです。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (ArgumentException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。パスは長さ0の文字列か、空白のみで構成されているか、または1つ以上の正しくない文字を含んでいます。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (PathTooLongException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスかファイル名、またはその両方がシステム定義の最大長を超えています。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (DirectoryNotFoundException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスが無効です。マップされていないドライブを指定していませんか？";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (FileNotFoundException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。指定したパスにファイルが見つかりませんでした。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (NotSupportedException)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。パスの形式が無効です。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
                 catch (Exception)
                 {
                     var errorMessage = $"{fileName} を開くことに失敗しました。";
                     _loggingService.Logs.Add(errorMessage);
                     Debug.WriteLine(errorMessage);
+                    return null;
                 }
+            }
+            else
+            {
+                return null;
             }
         }
     }
