@@ -126,13 +126,6 @@ namespace FollowManager.Account
                     {
                         var authorizations = new List<Authorization>();
 
-                        var settings = new JsonSerializerSettings
-                        {
-                            Formatting = Formatting.Indented
-                        };
-
-                        var jsonSerializer = JsonSerializer.Create(settings);
-
                         authorizations = LZ4MessagePackSerializer.Deserialize<List<Authorization>>(streamReader.BaseStream);
 
                         var accounts = new ObservableDictionary<long, Account>();
