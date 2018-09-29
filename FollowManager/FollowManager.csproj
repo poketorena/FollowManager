@@ -244,6 +244,9 @@
     <PackageReference Include="MaterialDesignThemes">
       <Version>2.4.1.1101</Version>
     </PackageReference>
+    <PackageReference Include="MessagePack">
+      <Version>1.7.3.4</Version>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.2</Version>
     </PackageReference>
