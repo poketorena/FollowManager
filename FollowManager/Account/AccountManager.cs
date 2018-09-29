@@ -5,6 +5,7 @@ using System.IO;
 using CoreTweet;
 using FollowManager.Collections.Generic;
 using FollowManager.Service;
+using MessagePack;
 using Newtonsoft.Json;
 
 namespace FollowManager.Account
@@ -92,15 +93,9 @@ namespace FollowManager.Account
 
                 Directory.CreateDirectory(directoryName);
 
-                using (var streamWriter = File.CreateText(@"Data\Authorization\Authorizations.json"))
+                using (var streamWriter = File.CreateText(@"Data\Authorization\Authorizations.data"))
                 {
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
-
-                    jsonSerializer.Serialize(streamWriter, authorizations);
+                    LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, authorizations);
                 }
             }
             catch (Exception)
@@ -116,7 +111,7 @@ namespace FollowManager.Account
         /// </summary>
         private void LoadAuthorizationData()
         {
-            const string fileName = "Authorizations.json";
+            const string fileName = "Authorizations.data";
             if (File.Exists($@"Data\Authorization\{fileName}"))
             {
                 try
@@ -132,7 +127,7 @@ namespace FollowManager.Account
 
                         var jsonSerializer = JsonSerializer.Create(settings);
 
-                        authorizations = (List<Authorization>)jsonSerializer.Deserialize(streamReader, typeof(List<Authorization>));
+                        authorizations = LZ4MessagePackSerializer.Deserialize<List<Authorization>>(streamReader.BaseStream);
 
                         foreach (var authorization in authorizations)
                         {
