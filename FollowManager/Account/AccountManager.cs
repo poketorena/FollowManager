@@ -6,7 +6,6 @@ using CoreTweet;
 using FollowManager.Collections.Generic;
 using FollowManager.Service;
 using MessagePack;
-using Newtonsoft.Json;
 
 namespace FollowManager.Account
 {
@@ -45,7 +44,7 @@ namespace FollowManager.Account
 
         // プライベート変数
 
-        ObservableDictionary<long, Account> _accounts;
+        private ObservableDictionary<long, Account> _accounts;
 
         // DI注入される変数
 
@@ -57,9 +56,6 @@ namespace FollowManager.Account
         {
             // DI
             _loggingService = loggingService;
-
-            // 認証データの読み込み
-            LoadAuthorizationData();
         }
 
         // デストラクタ

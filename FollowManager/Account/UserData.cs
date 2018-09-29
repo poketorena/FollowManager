@@ -1,5 +1,5 @@
 ﻿using CoreTweet;
-using Newtonsoft.Json;
+using MessagePack;
 using Prism.Mvvm;
 
 namespace FollowManager.Account
@@ -7,6 +7,7 @@ namespace FollowManager.Account
     /// <summary>
     /// CoreTweetのUserのラッパークラス
     /// </summary>
+    [MessagePackObject]
     public class UserData : BindableBase
     {
         // パブリックプロパティ
@@ -14,6 +15,7 @@ namespace FollowManager.Account
         /// <summary>
         /// CoreTweetのUser
         /// </summary>
+        [Key(0)]
         public User User
         {
             get { return _user; }
@@ -23,7 +25,7 @@ namespace FollowManager.Account
         /// <summary>
         /// 自分とユーザーの関係
         /// </summary>
-        [JsonIgnore]
+        [IgnoreMember]
         public FollowType FollowType
         {
             get { return _followType; }
@@ -33,7 +35,7 @@ namespace FollowManager.Account
         /// <summary>
         /// お気に入り
         /// </summary>
-        [JsonIgnore]
+        [IgnoreMember]
         public bool Favorite
         {
             get { return _favorite; }
@@ -42,12 +44,13 @@ namespace FollowManager.Account
 
         // プライベート変数
 
+        [Key(1)]
         private User _user;
 
-        [JsonIgnore]
+        [IgnoreMember]
         private FollowType _followType;
 
-        [JsonIgnore]
+        [IgnoreMember]
         private bool _favorite;
     }
 }

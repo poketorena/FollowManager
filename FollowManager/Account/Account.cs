@@ -8,7 +8,8 @@ using System.Threading;
 using System.Windows;
 using CoreTweet;
 using FollowManager.Service;
-using Newtonsoft.Json;
+using MessagePack;
+using MessagePack.Resolvers;
 
 namespace FollowManager.Account
 {
@@ -94,7 +95,7 @@ namespace FollowManager.Account
                 }
             }
 
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.data";
 
             if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
@@ -114,21 +115,16 @@ namespace FollowManager.Account
         /// <returns>フォローしているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowsFromLocal()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.data";
 
             try
             {
                 using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userDatas = new List<UserData>();
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
                     try
                     {
-                        userDatas = (List<UserData>)jsonSerializer.Deserialize(streamReader, typeof(List<UserData>));
+                        userDatas = LZ4MessagePackSerializer.Deserialize<List<UserData>>(streamReader.BaseStream, TypelessContractlessStandardResolver.Instance);
                     }
                     catch (Exception)
                     {
@@ -199,7 +195,7 @@ namespace FollowManager.Account
         {
             if (!IsInDesignMode)
             {
-                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.json";
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Follows.data";
 
                 var userDatas = new List<UserData>();
 
@@ -229,14 +225,9 @@ namespace FollowManager.Account
                 {
                     using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                     {
-                        var settings = new JsonSerializerSettings
-                        {
-                            Formatting = Formatting.Indented
-                        };
-                        var jsonSerializer = JsonSerializer.Create(settings);
                         try
                         {
-                            jsonSerializer.Serialize(streamWriter, userDatas);
+                            LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, userDatas, TypelessContractlessStandardResolver.Instance);
                         }
                         catch (Exception)
                         {
@@ -321,7 +312,7 @@ namespace FollowManager.Account
                 }
             }
 
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.data";
 
             if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
@@ -341,21 +332,16 @@ namespace FollowManager.Account
         /// <returns>フォローされているユーザーのリストを返します。例外発生時はnullを返します。</returns>
         private List<UserData> GetFollowersFromLocal()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.data";
 
             try
             {
                 using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userDatas = new List<UserData>();
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
                     try
                     {
-                        userDatas = (List<UserData>)jsonSerializer.Deserialize(streamReader, typeof(List<UserData>));
+                        userDatas = LZ4MessagePackSerializer.Deserialize<List<UserData>>(streamReader.BaseStream, TypelessContractlessStandardResolver.Instance);
                     }
                     catch (Exception)
                     {
@@ -426,7 +412,7 @@ namespace FollowManager.Account
         {
             if (!IsInDesignMode)
             {
-                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.json";
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_Followers.data";
 
                 var userDatas = new List<UserData>();
 
@@ -456,14 +442,9 @@ namespace FollowManager.Account
                 {
                     using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                     {
-                        var settings = new JsonSerializerSettings
-                        {
-                            Formatting = Formatting.Indented
-                        };
-                        var jsonSerializer = JsonSerializer.Create(settings);
                         try
                         {
-                            jsonSerializer.Serialize(streamWriter, userDatas);
+                            LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, userDatas, TypelessContractlessStandardResolver.Instance);
                         }
                         catch (Exception)
                         {
@@ -548,7 +529,7 @@ namespace FollowManager.Account
                 }
             }
 
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
 
             if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
@@ -568,20 +549,15 @@ namespace FollowManager.Account
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         private Dictionary<long, List<Status>> GetUserTweetsFromLocal()
         {
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
             try
             {
                 using (var streamReader = File.OpenText($@"Data\{Tokens.ScreenName}\{fileName}"))
                 {
                     var userTweets = new Dictionary<long, List<Status>>();
-                    var settings = new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented
-                    };
-                    var jsonSerializer = JsonSerializer.Create(settings);
                     try
                     {
-                        userTweets = (Dictionary<long, List<Status>>)jsonSerializer.Deserialize(streamReader, typeof(Dictionary<long, List<Status>>));
+                        userTweets = LZ4MessagePackSerializer.Deserialize<Dictionary<long, List<Status>>>(streamReader.BaseStream, TypelessContractlessStandardResolver.Instance);
                     }
                     catch (Exception)
                     {
@@ -652,7 +628,7 @@ namespace FollowManager.Account
         {
             if (!IsInDesignMode)
             {
-                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.json";
+                var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
 
                 var userTweets = new Dictionary<long, List<Status>>();
 
@@ -690,14 +666,9 @@ namespace FollowManager.Account
                 {
                     using (var streamWriter = File.CreateText($@"Data\{Tokens.ScreenName}\{fileName}"))
                     {
-                        var settings = new JsonSerializerSettings
-                        {
-                            Formatting = Formatting.Indented
-                        };
-                        var jsonSerializer = JsonSerializer.Create(settings);
                         try
                         {
-                            jsonSerializer.Serialize(streamWriter, userTweets);
+                            LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, userTweets, TypelessContractlessStandardResolver.Instance);
                         }
                         catch (Exception)
                         {
