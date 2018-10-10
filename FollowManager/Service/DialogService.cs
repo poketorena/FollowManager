@@ -134,7 +134,7 @@ namespace FollowManager.Service
             _addAccountTabView.Close();
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private SettingView _settingView;
 
@@ -148,7 +148,7 @@ namespace FollowManager.Service
 
         private AddAccountTabView _addAccountTabView;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly LoggingService _loggingService;
 

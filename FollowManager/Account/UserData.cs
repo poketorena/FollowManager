@@ -42,7 +42,7 @@ namespace FollowManager.Account
             set { SetProperty(ref _favorite, value); }
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         [Key(1)]
         private User _user;

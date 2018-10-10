@@ -15,7 +15,7 @@ namespace FollowManager.SidePanel
         /// </summary>
         public FilterAndSortOption FilterAndSortOption { get; } = new FilterAndSortOption();
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// フィルタを変更します。
@@ -176,7 +176,7 @@ namespace FollowManager.SidePanel
             }
         }
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IEventAggregator _eventAggregator;
 

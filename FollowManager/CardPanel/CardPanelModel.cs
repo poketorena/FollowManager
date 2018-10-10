@@ -33,7 +33,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         public static bool IsInDesignMode => (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// Twitterのプロフィールページを規定のブラウザで開きます。
@@ -143,7 +143,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         /// <summary>
         /// 現在表示中のリスト
@@ -185,7 +185,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         private IEnumerable<UserData> _followers;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IEventAggregator _eventAggregator;
 
@@ -227,7 +227,7 @@ namespace FollowManager.CardPanel
                 .AddTo(Disposables);
         }
 
-        // プライベート関数
+        // プライベートメソッド
 
         /// <summary>
         /// フィルタとソートを適応したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。

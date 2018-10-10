@@ -25,7 +25,7 @@ namespace FollowManager.Tab
             set { SetProperty(ref _tabDatas, value); }
         }
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// クリックでタブを閉じるときに呼ばれるメソッド
@@ -81,11 +81,11 @@ namespace FollowManager.Tab
             TabDatas.RemoveAll(tabData => tabData.TabId != thisTabData.TabId);
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private ObservableCollection<TabData> _tabDatas;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IEventAggregator _eventAggregator;
 

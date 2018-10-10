@@ -22,7 +22,7 @@ namespace FollowManager.MainWindow
         /// </summary>
         public ReactiveProperty<ObservableCollection<TabData>> TabDatas { get; private set; }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// アプリケーションを終了するコマンド
@@ -97,7 +97,7 @@ namespace FollowManager.MainWindow
         /// </summary>
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private DelegateCommand _closeApplicationCommand;
 
@@ -119,7 +119,7 @@ namespace FollowManager.MainWindow
 
         private DelegateCommand<TabData> _closeAllTabsExceptThisTabCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IUnityContainer _unityContainer;
 

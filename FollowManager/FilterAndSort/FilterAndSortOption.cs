@@ -36,7 +36,7 @@ namespace FollowManager.FilterAndSort
             set { SetProperty(ref _sortOrderType, value); }
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private FilterType _filterType;
 

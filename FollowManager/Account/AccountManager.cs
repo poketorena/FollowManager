@@ -22,7 +22,7 @@ namespace FollowManager.Account
         public ObservableDictionary<long, Account> Accounts =>
             _accounts ?? (_accounts = LoadAuthorizationData());
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// 指定されたアカウントをコレクションから削除します。
@@ -42,11 +42,11 @@ namespace FollowManager.Account
             }
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private ObservableDictionary<long, Account> _accounts;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly LoggingService _loggingService;
 
@@ -65,7 +65,7 @@ namespace FollowManager.Account
             SaveAuthorizationData();
         }
 
-        // プライベート関数
+        // プライベートメソッド
 
         /// <summary>
         /// 認証データを保存します。

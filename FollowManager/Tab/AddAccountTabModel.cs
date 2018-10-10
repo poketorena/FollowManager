@@ -23,7 +23,7 @@ namespace FollowManager.Tab
             _dialogService.CloseAddAccountTabView();
         }
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly TabManager _tabManager;
 

@@ -55,7 +55,7 @@ namespace FollowManager.Account
         public User User =>
             _user ?? (_user = GetMyUserData());
 
-        // プライベート変数
+        // プライベートフィールド
 
         private List<UserData> _follows;
 
@@ -65,7 +65,7 @@ namespace FollowManager.Account
 
         private User _user;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly LoggingService _loggingService;
 
@@ -77,7 +77,7 @@ namespace FollowManager.Account
             _loggingService = loggingService;
         }
 
-        // プライベート関数
+        // プライベートメソッド
 
         /// <summary>
         /// フォローしているユーザーのリストを取得します。

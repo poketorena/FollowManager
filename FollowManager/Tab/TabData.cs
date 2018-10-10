@@ -29,7 +29,7 @@ namespace FollowManager.Tab
         /// </summary>
         public Tokens Tokens { get; set; }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private string _tabId;
     }

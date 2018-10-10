@@ -8,7 +8,7 @@ namespace FollowManager.About
 {
     public class AboutViewModel : BindableBase, IDisposable
     {
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// リソースを破棄します。

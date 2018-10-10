@@ -35,7 +35,7 @@ namespace FollowManager.SidePanel
         /// </summary>
         public ReactiveProperty<SortOrderType> SortOrderType { get; }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// フィルタを変更するコマンド
@@ -60,7 +60,7 @@ namespace FollowManager.SidePanel
 
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private DelegateCommand<object> _changeFilterTypeCommand;
 
@@ -68,7 +68,7 @@ namespace FollowManager.SidePanel
 
         private DelegateCommand<object> _changeSortOrderTypeCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IEventAggregator _eventAggregator;
 

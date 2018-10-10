@@ -16,7 +16,7 @@ namespace FollowManager.Service
         /// </summary>
         public static bool IsInDesignMode => (bool)DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue;
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// Twitterの認証ページを規定のブラウザで開きます。
@@ -66,11 +66,11 @@ namespace FollowManager.Service
             }
         }
 
-        // プライベート変数
+        // プライベートフィールド
 
         private OAuth.OAuthSession _session;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IUnityContainer _unityContainer;
 
@@ -88,7 +88,7 @@ namespace FollowManager.Service
             _accountManager = accountManager;
         }
 
-        // プライベート関数
+        // プライベートメソッド
 
         /// <summary>
         /// 認証で使ったセッションを消去します。

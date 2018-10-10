@@ -22,7 +22,7 @@ namespace FollowManager.ManageAccount
             private set { SetProperty(ref _accounts, value); }
         }
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// リソースを破棄します。
@@ -32,7 +32,7 @@ namespace FollowManager.ManageAccount
             Disposables.Dispose();
         }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// アカウントを削除するコマンド
@@ -44,13 +44,13 @@ namespace FollowManager.ManageAccount
 
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private ReadOnlyReactiveCollection<Account.Account> _accounts;
 
         private DelegateCommand<Account.Account> _deleteAccountCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly AccountManager _accountManager;
 

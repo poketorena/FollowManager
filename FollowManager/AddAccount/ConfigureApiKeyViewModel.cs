@@ -26,7 +26,7 @@ namespace FollowManager.AddAccount
         [NotEmptyValidation(ErrorMessage = "フィールドConsumer Secretは必須です。")]
         public ReactiveProperty<string> ConsumerSecret { get; } = new ReactiveProperty<string>(TwitterApiKey.ConsumerSecret);
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// リソースを破棄します。
@@ -36,7 +36,7 @@ namespace FollowManager.AddAccount
             Disposables.Dispose();
         }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// Pinコード設定画面を開くコマンド
@@ -53,11 +53,11 @@ namespace FollowManager.AddAccount
 
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private DelegateCommand _cancelCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly DialogService _dialogService;
 

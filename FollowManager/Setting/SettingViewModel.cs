@@ -10,7 +10,7 @@ namespace FollowManager.Setting
     public class SettingViewModel : BindableBase, IDisposable
     {
         // パブリックプロパティ
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// リソースを破棄します。
@@ -20,14 +20,14 @@ namespace FollowManager.Setting
             throw new NotImplementedException();
         }
 
-        // デリゲートコマンド
+        // コマンド
         // インタラクションリクエスト
         // イベント
         // プライベートプロパティ
-        // プライベート変数
-        // DI注入される変数
+        // プライベートフィールド
+        // DI注入されるフィールド
         // コンストラクタ
         // デストラクタ
-        // プライベート関数
+        // プライベートメソッド
     }
 }

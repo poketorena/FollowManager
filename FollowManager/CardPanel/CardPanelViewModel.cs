@@ -34,7 +34,7 @@ namespace FollowManager.CardPanel
             set { SetProperty(ref _userDatas, value); }
         }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// Twitterのプロフィールページを規定のブラウザで開くコマンド
@@ -69,7 +69,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private ReactiveCollection<UserData> _userDatas;
 
@@ -79,7 +79,7 @@ namespace FollowManager.CardPanel
 
         private DelegateCommand<object> _blockAndBlockReleaseCommnad;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly IEventAggregator _eventAggregator;
 

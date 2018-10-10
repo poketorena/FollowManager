@@ -27,7 +27,7 @@ namespace FollowManager.Tab
         /// </summary>
         public string CallerObjectId { get; set; }
 
-        // パブリック関数
+        // パブリックメソッド
 
         /// <summary>
         /// リソースを破棄します。
@@ -37,7 +37,7 @@ namespace FollowManager.Tab
             Disposables.Dispose();
         }
 
-        // デリゲートコマンド
+        // コマンド
 
         /// <summary>
         /// 新しいアカウントタブを作成するコマンド
@@ -49,13 +49,13 @@ namespace FollowManager.Tab
 
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private ReadOnlyReactiveCollection<Account.Account> _accounts;
 
         private DelegateCommand<object[]> _addAccountTabCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly AccountManager _accountManager;
 

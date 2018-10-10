@@ -44,11 +44,11 @@ namespace FollowManager.AddAccount
 
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // プライベート変数
+        // プライベートフィールド
 
         private DelegateCommand _cancelCommand;
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly DialogService _dialogService;
 

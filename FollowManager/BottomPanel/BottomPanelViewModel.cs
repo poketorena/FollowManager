@@ -23,7 +23,7 @@ namespace FollowManager.BottomPanel
         /// </summary>
         private CompositeDisposable Disposables { get; } = new CompositeDisposable();
 
-        // DI注入される変数
+        // DI注入されるフィールド
 
         private readonly LoggingService _loggingService;
 
