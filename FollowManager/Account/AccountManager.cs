@@ -108,10 +108,20 @@ namespace FollowManager.Account
         }
 
         /// <summary>
-        /// 認証データを読み込みます。例外発生時はnullを返します。
+        /// 認証データを読み込みます。例外発生時は規定の
+        /// <see cref="T:FollowManager.Collections.Generic.ObservableDictionary`2" />を返します。
         /// </summary>
         /// <returns>読み込まれたアカウント</returns>
         private ObservableDictionary<long,Account> LoadAuthorizationData()
+        {
+            return LoadAuthorizationDataFromLocal() ?? new ObservableDictionary<long, Account>();
+        }
+
+        /// <summary>
+        /// 認証データをローカルから読み込みます。例外発生時はnullを返します。
+        /// </summary>
+        /// <returns>読み込まれたアカウント</returns>
+        private ObservableDictionary<long, Account> LoadAuthorizationDataFromLocal()
         {
             const string fileName = "Authorizations.data";
             if (File.Exists($@"Data\Authorization\{fileName}"))
