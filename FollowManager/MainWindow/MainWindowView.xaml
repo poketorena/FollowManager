@@ -16,8 +16,8 @@
     Title="FollowManager"
     Width="856"
     Height="642"
-    MinWidth="832"
-    MinHeight="624"
+    MinWidth="856"
+    MinHeight="642"
     d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel},
                                      IsDesignTimeCreatable=False}"
     prism:ViewModelLocator.AutoWireViewModel="True"

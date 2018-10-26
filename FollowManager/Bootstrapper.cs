@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using FollowManager.About.Information;
 using FollowManager.Account;
 using FollowManager.CardPanel;
 using FollowManager.MainWindow;
@@ -38,6 +39,7 @@ namespace FollowManager
             Container.RegisterType<SidePanelModel>();
             Container.RegisterType<Account.Account>();
             Container.RegisterType<AddAccountTabModel>();
+            Container.RegisterType<InformationModel>();
 
             // シングルトンでコンテナに登録
             Container.RegisterType<AccountManager>(new ContainerControlledLifetimeManager());

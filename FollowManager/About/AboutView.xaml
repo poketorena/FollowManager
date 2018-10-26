@@ -3,55 +3,31 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:information="clr-namespace:FollowManager.About.Information"
+    xmlns:local="clr-namespace:FollowManager.About"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
     Title="FollowManagerについて"
-    Width="800"
-    Height="500"
+    Width="600"
+    Height="450"
+    d:DataContext="{d:DesignInstance {x:Type local:AboutViewModel},
+                                     IsDesignTimeCreatable=True}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+    ResizeMode="NoResize"
     ShowMaxRestoreButton="False"
     ShowMinButton="False"
     TitleCaps="False"
-    WindowStartupLocation="CenterScreen">
-    <StackPanel>
-
-        <TextBlock Margin="10" FontSize="20">
-            FollowManagerについて
-        </TextBlock>
-
-        <TextBlock
-            Margin="10"
-            FontWeight="Bold"
-            TextWrapping="Wrap">
-            情報 ライセンス
-        </TextBlock>
-        <StackPanel
-            Margin="10"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
-            <TextBox
-                Width="270"
-                Height="100"
-                Margin="10,0"
-                FontSize="60"
-                Text="{Binding PinCode}" />
-            <Button Command="{Binding ConfigureAuthorizationCommand}" Content="PinCodeを確認" />
-        </StackPanel>
-
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button
-                Width="180"
-                Margin="10"
-                Command="{Binding StartAuthorizationCommand}">
-                OK
-            </Button>
-            <Button
-                Width="180"
-                Margin="10"
-                Command="{Binding CancelCommand}">
-                キャンセル
-            </Button>
-        </StackPanel>
-    </StackPanel>
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <TabControl>
+        <TabItem Header="情報">
+            <information:InformationView />
+        </TabItem>
+        <TabItem Header="ライセンス">
+            おはよう
+        </TabItem>
+    </TabControl>
 </Controls:MetroWindow>

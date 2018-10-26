@@ -63,6 +63,11 @@
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="About\AboutViewModel.cs" />
+    <Compile Include="About\Information\InformationModel.cs" />
+    <Compile Include="About\Information\InformationView.xaml.cs">
+      <DependentUpon>InformationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="About\Information\InformationViewModel.cs" />
     <Compile Include="Account\Authorization.cs" />
     <Compile Include="Account\TestAccount.cs" />
     <Compile Include="AddAccount\ConfigureApiKeyView.xaml.cs">
@@ -154,6 +159,10 @@
     <Compile Include="Tab\TabManager.cs" />
     <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
     <Page Include="About\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="About\Information\InformationView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

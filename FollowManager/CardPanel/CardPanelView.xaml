@@ -11,8 +11,8 @@
     x:Name="self"
     d:DataContext="{d:DesignInstance {x:Type local:TestCardPanelViewModel},
                                      IsDesignTimeCreatable=True}"
-    d:DesignHeight="601"
-    d:DesignWidth="532"
+    d:DesignHeight="589"
+    d:DesignWidth="556"
     prism:ViewModelLocator.AutoWireViewModel="True"
     Background="{DynamicResource LightGrayPaper}"
     BorderBrush="{DynamicResource AccentColorBrush}"

@@ -1,0 +1,37 @@
+﻿<UserControl
+    x:Class="FollowManager.About.Information.InformationView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:FollowManager.About.Information"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:prism="http://prismlibrary.com/"
+    d:DataContext="{d:DesignInstance {x:Type local:InformationViewModel},
+                                     IsDesignTimeCreatable=True}"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    mc:Ignorable="d">
+    <StackPanel
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        Orientation="Vertical">
+        <StackPanel.Resources>
+            <Style TargetType="TextBlock">
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </StackPanel.Resources>
+        <TextBlock FontSize="40" Text="FollowManager" />
+        <TextBlock FontSize="20" Text="Version 1.0.0" />
+        <TextBlock Margin="0,10,0,0">
+            © 2018 ポケトレーナー. This software is licenced under
+            <Hyperlink Command="{Binding OpenUriCommand}" CommandParameter="https://github.com/poketorena/FollowManager/blob/master/LICENSE">
+                The MIT Licence
+            </Hyperlink>.
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Center">
+            ProjectHome :
+            <Hyperlink Command="{Binding OpenUriCommand}" CommandParameter="https://github.com/poketorena/FollowManager">
+                https://github.com/poketorena/FollowManager
+            </Hyperlink>.
+        </TextBlock>
+    </StackPanel>
+</UserControl>
