@@ -3,6 +3,8 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/bxj8ag7m6j14oj8k?svg=true)](https://ci.appveyor.com/project/poketorena/followmanager)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
+![](./Screenshot/Screenshot.png)
+
 ## Description
 
 Windowsで動作する、Twitterのフォロー整理を楽にするアプリです。
