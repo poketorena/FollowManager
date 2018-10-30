@@ -6,8 +6,15 @@ namespace FollowManager.ManageAccount
 {
     public class TestManageAccountViewModel
     {
+        // パブリックプロパティ
+
         public ReadOnlyReactiveCollection<Account.TestAccount> Accounts { get; }
 
+        // コンストラクタ
+
+        /// <summary>
+        /// XAMLデザイナー用コンストラクタ
+        /// </summary>
         public TestManageAccountViewModel()
         {
             var accounts = Observable

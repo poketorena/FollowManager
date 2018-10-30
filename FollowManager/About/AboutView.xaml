@@ -5,12 +5,14 @@
     xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:information="clr-namespace:FollowManager.About.Information"
+    xmlns:license="clr-namespace:FollowManager.About.License"
     xmlns:local="clr-namespace:FollowManager.About"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com/"
+    x:Name="self"
     Title="FollowManagerについて"
-    Width="600"
-    Height="450"
+    Width="650.999"
+    Height="488.25"
     d:DataContext="{d:DesignInstance {x:Type local:AboutViewModel},
                                      IsDesignTimeCreatable=True}"
     prism:ViewModelLocator.AutoWireViewModel="True"
@@ -22,12 +24,12 @@
     TitleCaps="False"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <TabControl>
+    <TabControl Margin="4">
         <TabItem Header="情報">
-            <information:InformationView />
+            <information:InformationView Margin="4" Tag="{Binding RelativeSource={RelativeSource AncestorType=Controls:MetroWindow, Mode=FindAncestor}, Path=DataContext, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
         </TabItem>
         <TabItem Header="ライセンス">
-            おはよう
+            <license:LicenseView Margin="4" Tag="{Binding RelativeSource={RelativeSource AncestorType=Controls:MetroWindow, Mode=FindAncestor}, Path=DataContext, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" />
         </TabItem>
     </TabControl>
 </Controls:MetroWindow>

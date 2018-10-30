@@ -37,7 +37,7 @@
         <ListBox Grid.Row="1" ItemsSource="{Binding Accounts}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <prism:InvokeCommandAction Command="{Binding AddAccountTabCommand}" TriggerParameterPath="AddedItems" />
+                    <prism:InvokeCommandAction Command="{Binding AddAccountTabCommand}" TriggerParameterPath="AddedItems"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ItemsControl.ItemTemplate>

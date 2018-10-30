@@ -1,19 +1,13 @@
-﻿using Microsoft.Practices.Unity;
-using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
+using Reactive.Bindings;
 
 namespace FollowManager.About.Information
 {
     public class InformationViewModel : BindableBase
-	{
-        // コマンド
+    {
+        // パブリックプロパティ
 
-        public DelegateCommand<string> OpenUriCommand =>
-            _openUriCommand ?? (_openUriCommand = new DelegateCommand<string>(_informationModel.OpenUriCommand));
-
-        // プライベートフィールド
-
-        private DelegateCommand<string> _openUriCommand;
+        public ReactiveProperty<string> Version { get; } = new ReactiveProperty<string>();
 
         // DI注入されるフィールド
 
@@ -21,15 +15,12 @@ namespace FollowManager.About.Information
 
         // コンストラクタ
 
-        public InformationViewModel()
-        {
-
-        }
-
-        [InjectionConstructor]
         public InformationViewModel(InformationModel informationModel)
         {
+            // DI
             _informationModel = informationModel;
+
+            Version.Value = _informationModel.GetVersion();
         }
     }
 }

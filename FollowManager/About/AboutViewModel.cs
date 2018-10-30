@@ -1,21 +1,38 @@
-﻿using Prism.Commands;
+﻿using Microsoft.Practices.Unity;
+using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FollowManager.About
 {
-    public class AboutViewModel : BindableBase, IDisposable
+    public class AboutViewModel : BindableBase
     {
-        // パブリックメソッド
+        // コマンド
 
         /// <summary>
-        /// リソースを破棄します。
+        /// ブラウザでUriを開くコマンド
         /// </summary>
-        public void Dispose()
+        public DelegateCommand<string> OpenUriCommand =>
+            _openUriCommand ?? (_openUriCommand = new DelegateCommand<string>(_aboutModel.OpenUriCommand));
+
+        // プライベートフィールド
+
+        private DelegateCommand<string> _openUriCommand;
+
+        // DI注入されるフィールド
+
+        private readonly AboutModel _aboutModel;
+
+        // コンストラクタ
+
+        /// <summary>
+        /// XAMLデザイナー用コンストラクタ
+        /// </summary>
+        public AboutViewModel() { }
+
+        [InjectionConstructor]
+        public AboutViewModel(AboutModel aboutModel)
         {
-            throw new NotImplementedException();
+            _aboutModel = aboutModel;
         }
     }
 }

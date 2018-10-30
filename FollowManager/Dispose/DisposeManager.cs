@@ -5,7 +5,7 @@ namespace FollowManager.Dispose
     /// <summary>
     /// リソースを管理するクラス
     /// </summary>
-    public class DisposeManager
+    public sealed class DisposeManager
     {
         // パブリックプロパティ
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using FollowManager.Service;
+﻿using System.Reflection;
 
 namespace FollowManager.About.Information
 {
@@ -8,29 +6,10 @@ namespace FollowManager.About.Information
     {
         // パブリックメソッド
 
-        public void OpenUriCommand(string uri)
-        {
-            try
-            {
-                Process.Start(uri);
-            }
-            catch (Exception)
-            {
-                const string errorMessage = "ブラウザを開くことに失敗しました。";
-                _loggingService.Logs.Add(errorMessage);
-                Debug.WriteLine(errorMessage);
-            }
-        }
-
-        // DI注入されるフィールド
-
-        private readonly LoggingService _loggingService;
-
-        // コンストラクタ
-
-        public InformationModel(LoggingService loggingservice)
-        {
-            _loggingService = loggingservice;
-        }
+        /// <summary>
+        /// 現在のアプリケーションバージョンを取得します。
+        /// </summary>
+        /// <returns></returns>
+        public string GetVersion() => Assembly.GetExecutingAssembly().GetName().Version.ToString(3);
     }
 }

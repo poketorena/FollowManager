@@ -40,7 +40,6 @@ namespace FollowManager.Service
             _aboutView.Closed += (o, args) =>
             {
                 _loggingService.Logs.Add("About画面を閉じました。");
-                ((AboutViewModel)_aboutView.DataContext).Dispose();
                 _aboutView = null;
             };
             _aboutView.ShowDialog();

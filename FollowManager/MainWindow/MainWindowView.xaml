@@ -18,7 +18,7 @@
     Height="642"
     MinWidth="856"
     MinHeight="642"
-    d:DataContext="{d:DesignInstance {x:Type local:MainWindowViewModel},
+    d:DataContext="{d:DesignInstance {x:Type local:TestMainWindowViewModel},
                                      IsDesignTimeCreatable=False}"
     prism:ViewModelLocator.AutoWireViewModel="True"
     BorderBrush="{DynamicResource AccentColorBrush}"

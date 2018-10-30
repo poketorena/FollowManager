@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FollowManager.Tab;
 using Reactive.Bindings;
 
@@ -20,6 +16,9 @@ namespace FollowManager.MainWindow
 
         // コンストラクタ
 
+        /// <summary>
+        /// XAMLデザイナー用コンストラクタ
+        /// </summary>
         public TestMainWindowViewModel()
         {
             var tabDatas = Observable

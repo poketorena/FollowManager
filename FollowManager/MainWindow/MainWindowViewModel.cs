@@ -149,15 +149,6 @@ namespace FollowManager.MainWindow
             TabDatas = _tabManager
                 .ToReactivePropertyAsSynchronized(model => model.TabDatas)
                 .AddTo(DisposeManager.Instance.Disposables);
-
-            //var tabItemDatas = Observable
-            //    .Range(0, 5)
-            //    .Select(num => new TabItemData
-            //    {
-            //        Header = "@science50" + (num++).ToString(),
-            //    });
-
-            //TabItemDatas = tabItemDatas.ToReactiveCollection();
         }
     }
 }

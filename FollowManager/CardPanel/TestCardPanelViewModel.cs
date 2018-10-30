@@ -18,6 +18,9 @@ namespace FollowManager.CardPanel
 
         // コンストラクタ
 
+        /// <summary>
+        /// XAMLデザイナー用コンストラクタ
+        /// </summary>
         public TestCardPanelViewModel()
         {
             var users = Observable
