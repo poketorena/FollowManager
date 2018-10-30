@@ -68,7 +68,6 @@
                             Text="{Binding Tokens.ScreenName, StringFormat=@{0}}" />
                         <Grid.ContextMenu>
                             <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                <MenuItem Header="データのエクスポート" />
                                 <MenuItem
                                     Command="{Binding Path=Tag.DeleteAccountCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
                                     CommandParameter="{Binding}"

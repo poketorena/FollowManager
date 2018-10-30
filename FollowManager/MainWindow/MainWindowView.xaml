@@ -57,17 +57,8 @@
             </MenuItem>
             <MenuItem Height="30" Header="タブ">
                 <MenuItem Command="{Binding OpenAddAccountTabViewCommand}" Header="新規アカウントタブ" />
-                <MenuItem Header="新規比較タブ" />
-                <MenuItem Header="新規依存関係グラフタブ" />
-                <MenuItem Header="新規カスタムタブ" />
-            </MenuItem>
-            <MenuItem Height="30" Header="ツール">
-                <MenuItem Header="再読み込み" />
-                <MenuItem Header="データの再取得" />
-                <MenuItem Command="{Binding OpenSettingViewCommand}" Header="設定" />
             </MenuItem>
             <MenuItem Height="30" Header="ヘルプ">
-                <MenuItem Header="使い方のヒント" />
                 <MenuItem Command="{Binding OpenAboutViewCommand}" Header="FollowManagerについて" />
             </MenuItem>
         </Menu>
