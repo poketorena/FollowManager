@@ -49,6 +49,11 @@
                         x:Key="LightGrayPaper"
                         options:Freeze="True"
                         Color="#e8e8e8" />
+                    <SolidColorBrush
+                        x:Key="MaterialPrimaryBlack"
+                        options:Freeze="True"
+                        Opacity="0.87"
+                        Color="Black" />
 
                     <!--  Dragablz Material Design  -->
                     <Style BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" TargetType="{x:Type dragablz:TabablzControl}" />

@@ -42,7 +42,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="30"
-            Opacity="0.87"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
             Text="アカウントを追加" />
         <TextBox
             Grid.Row="1"

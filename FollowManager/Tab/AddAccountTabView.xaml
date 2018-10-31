@@ -32,12 +32,13 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="30"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
             Opacity="0.87"
             Text="アカウントを選択" />
         <ListBox Grid.Row="1" ItemsSource="{Binding Accounts}">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <prism:InvokeCommandAction Command="{Binding AddAccountTabCommand}" TriggerParameterPath="AddedItems"/>
+                    <prism:InvokeCommandAction Command="{Binding AddAccountTabCommand}" TriggerParameterPath="AddedItems" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <ItemsControl.ItemTemplate>
@@ -65,11 +66,13 @@
                             Grid.Row="0"
                             Grid.Column="2"
                             FontSize="16"
+                            Foreground="{StaticResource MaterialPrimaryBlack}"
                             Text="{Binding User.Name}" />
                         <TextBlock
                             Grid.Row="1"
                             Grid.Column="2"
                             FontSize="16"
+                            Foreground="{StaticResource MaterialPrimaryBlack}"
                             Opacity="0.8"
                             Text="{Binding Tokens.ScreenName, StringFormat=@{0}}" />
                     </Grid>

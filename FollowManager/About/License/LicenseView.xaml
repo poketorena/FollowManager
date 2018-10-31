@@ -10,6 +10,8 @@
     x:Name="self"
     d:DataContext="{d:DesignInstance {x:Type local:TestLicenseViewModel},
                                      IsDesignTimeCreatable=True}"
+    d:DesignHeight="484.25"
+    d:DesignWidth="646.999"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <Grid>
@@ -31,7 +33,7 @@
             </i:Interaction.Triggers>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Item1}" />
+                    <TextBlock Foreground="{StaticResource MaterialPrimaryBlack}" Text="{Binding Item1}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ListBox>
@@ -44,7 +46,7 @@
             <TextBlock
                 Grid.Row="0"
                 FontSize="24"
-                Foreground="{DynamicResource AccentColorBrush}"
+                Foreground="{StaticResource AccentColorBrush}"
                 Text="{Binding SelectedLicense.Value.Item1}" />
             <TextBlock Grid.Row="1">
                 <Hyperlink Command="{Binding ElementName=self, Path=Tag.OpenUriCommand}" CommandParameter="{Binding SelectedLicense.Value.Item2}">
@@ -52,7 +54,10 @@
                 </Hyperlink>
             </TextBlock>
             <ScrollViewer Grid.Row="2" Margin="0,12,0,0">
-                <TextBlock Text="{Binding SelectedLicense.Value.Item3}" TextWrapping="Wrap" />
+                <TextBlock
+                    Foreground="{StaticResource MaterialPrimaryBlack}"
+                    Text="{Binding SelectedLicense.Value.Item3}"
+                    TextWrapping="Wrap" />
             </ScrollViewer>
         </Grid>
     </Grid>

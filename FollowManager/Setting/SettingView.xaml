@@ -8,7 +8,7 @@
     Width="800"
     Height="500"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    BorderBrush="{DynamicResource AccentColorBrush}"
+    BorderBrush="{StaticResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ShowMaxRestoreButton="False"
     ShowMinButton="False"

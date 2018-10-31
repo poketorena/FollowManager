@@ -16,7 +16,7 @@
     d:DataContext="{d:DesignInstance {x:Type local:AboutViewModel},
                                      IsDesignTimeCreatable=True}"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    BorderBrush="{DynamicResource AccentColorBrush}"
+    BorderBrush="{StaticResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     ResizeMode="NoResize"
     ShowMaxRestoreButton="False"

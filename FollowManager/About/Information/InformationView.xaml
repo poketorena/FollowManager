@@ -9,6 +9,8 @@
     x:Name="self"
     d:DataContext="{d:DesignInstance {x:Type local:TestInformationViewModel},
                                      IsDesignTimeCreatable=True}"
+    d:DesignHeight="484.25"
+    d:DesignWidth="646.999"
     prism:ViewModelLocator.AutoWireViewModel="True"
     mc:Ignorable="d">
     <StackPanel
@@ -20,15 +22,21 @@
                 <Setter Property="HorizontalAlignment" Value="Center" />
             </Style>
         </StackPanel.Resources>
-        <TextBlock FontSize="40" Text="FollowManager" />
-        <TextBlock FontSize="20" Text="{Binding Version.Value, StringFormat=Version {0}}" />
-        <TextBlock Margin="0,10,0,0">
+        <TextBlock
+            FontSize="40"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
+            Text="FollowManager" />
+        <TextBlock
+            FontSize="20"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
+            Text="{Binding Version.Value, StringFormat=Version {0}}" />
+        <TextBlock Margin="0,10,0,0" Foreground="{StaticResource MaterialPrimaryBlack}">
             © 2018 ポケトレーナー. This software is licensed under
             <Hyperlink Command="{Binding ElementName=self, Path=Tag.OpenUriCommand, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" CommandParameter="https://github.com/poketorena/FollowManager/blob/master/LICENSE">
                 The MIT License
             </Hyperlink>.
             </TextBlock>
-        <TextBlock HorizontalAlignment="Center">
+        <TextBlock HorizontalAlignment="Center" Foreground="{StaticResource MaterialPrimaryBlack}">
             ProjectHome :
             <Hyperlink Command="{Binding ElementName=self, Path=Tag.OpenUriCommand, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}" CommandParameter="https://github.com/poketorena/FollowManager">
                 https://github.com/poketorena/FollowManager

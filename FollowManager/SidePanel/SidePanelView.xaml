@@ -6,8 +6,8 @@
     xmlns:prism="http://prismlibrary.com/"
     x:Name="self"
     prism:ViewModelLocator.AutoWireViewModel="True"
-    Background="{DynamicResource LightGrayPaper}"
-    BorderBrush="{DynamicResource AccentColorBrush}"
+    Background="{StaticResource LightGrayPaper}"
+    BorderBrush="{StaticResource AccentColorBrush}"
     FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto">
 
     <UserControl.Resources>
@@ -24,7 +24,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
 
-    <Grid Margin="5">
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="50" />
             <RowDefinition Height="40" />
@@ -43,8 +43,10 @@
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
             FontSize="25"
-            Foreground="{DynamicResource AccentColorBrush}"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
             Text="フィルタ" />
         <Button
             Grid.Row="1"
@@ -108,8 +110,10 @@
         </Button>
         <TextBlock
             Grid.Row="5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
             FontSize="25"
-            Foreground="{DynamicResource AccentColorBrush}"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
             Text="ソートキー" />
         <Button
             Grid.Row="6"
@@ -158,8 +162,10 @@
         </Button>
         <TextBlock
             Grid.Row="9"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
             FontSize="25"
-            Foreground="{DynamicResource AccentColorBrush}"
+            Foreground="{StaticResource MaterialPrimaryBlack}"
             Text="ソート順" />
         <Button
             Grid.Row="10"
