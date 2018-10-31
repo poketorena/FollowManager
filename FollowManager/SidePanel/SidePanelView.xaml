@@ -50,7 +50,7 @@
             Text="フィルタ" />
         <Button
             Grid.Row="1"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=Fan}"
             Content="ファン">
@@ -65,7 +65,7 @@
         </Button>
         <Button
             Grid.Row="2"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=OneWay}"
             Content="片思い">
@@ -80,7 +80,7 @@
         </Button>
         <Button
             Grid.Row="3"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=Mutual}"
             Content="相互フォロー">
@@ -95,7 +95,7 @@
         </Button>
         <Button
             Grid.Row="4"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeFilterTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToFilterRequestConverter}, ConverterParameter=Inactive}"
             Content="非アクティブ">
@@ -117,7 +117,7 @@
             Text="ソートキー" />
         <Button
             Grid.Row="6"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortKeyRequestConverter}, ConverterParameter=LastTweetDay}"
             Content="最終ツイート日">
@@ -132,7 +132,7 @@
         </Button>
         <Button
             Grid.Row="7"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortKeyRequestConverter}, ConverterParameter=FollowDay}"
             Content="フォローした日">
@@ -147,7 +147,7 @@
         </Button>
         <Button
             Grid.Row="8"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeSortKeyTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortKeyRequestConverter}, ConverterParameter=TweetsPerDay}"
             Content="1日あたりのツイート数">
@@ -169,7 +169,7 @@
             Text="ソート順" />
         <Button
             Grid.Row="10"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortOrderRequestConverter}, ConverterParameter=Ascending}"
             Content="昇順">
@@ -184,7 +184,7 @@
         </Button>
         <Button
             Grid.Row="11"
-            Margin="0,2.5,0,2.5"
+            Margin="4"
             Command="{Binding ChangeSortOrderTypeCommand}"
             CommandParameter="{Binding TabData, ElementName=self, UpdateSourceTrigger=PropertyChanged, Mode=OneWay, Converter={StaticResource TabDataToSortOrderRequestConverter}, ConverterParameter=Descending}"
             Content="降順">
