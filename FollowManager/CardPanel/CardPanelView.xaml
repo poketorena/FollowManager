@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:FollowManager.CardPanel"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mywincollection="clr-namespace:MyWinCollection"
     xmlns:prism="http://prismlibrary.com/"
     x:Name="self"
     d:DataContext="{d:DesignInstance {x:Type local:TestCardPanelViewModel},
@@ -43,7 +44,9 @@
         Background="Transparent"
         BorderThickness="0"
         ItemsSource="{Binding UserDatas}"
-        ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        VirtualizingPanel.IsVirtualizing="True"
+        VirtualizingPanel.VirtualizationMode="Recycling">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <materialDesign:Card Width="200">
@@ -152,7 +155,7 @@
 
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                <mywincollection:VirtualizingWrapPanel IsItemsHost="True" Orientation="Horizontal" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ListBox>

@@ -180,6 +180,7 @@
     <Compile Include="Tab\TabData.cs" />
     <Compile Include="Tab\TabManager.cs" />
     <Compile Include="Validation\NotEmptyValidationAttribute.cs" />
+    <Compile Include="VirtualizingWrapPanel\VirtualizingWrapPanel.cs" />
     <Page Include="About\AboutView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -318,6 +319,9 @@
     <EmbeddedResource Include="Resources\Licenses\MessagePack for C#.txt" />
     <EmbeddedResource Include="Resources\Licenses\Reactive Extensions.txt" />
     <EmbeddedResource Include="Resources\Licenses\ReactiveProperty.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Licenses\virtualwrappanel.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
