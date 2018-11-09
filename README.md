@@ -59,7 +59,7 @@ Windowsで動作する、Twitterのフォロー整理を楽にするアプリで
 
 ### ブロックしてブロック解除する
 
-以下のボタンをクリックして切り替える。
+以下のボタンをクリックする。
 
 ![BlockAndBlockRelease](./Screenshot/BlockAndBlockRelease.png)
 
