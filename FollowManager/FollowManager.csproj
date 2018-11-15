@@ -106,6 +106,7 @@
     <Compile Include="Account\UserDataEqualityComparer.cs" />
     <Compile Include="AddAccount\ConfigurePincodeViewModel.cs" />
     <Compile Include="Api\TwitterApiKey.cs" />
+    <Compile Include="EventAggregator\ISidePanelChangedEventArgs.cs" />
     <Compile Include="Service\ApplicationService.cs" />
     <Compile Include="BottomPanel\BottomPanelView.xaml.cs">
       <DependentUpon>BottomPanelView.xaml</DependentUpon>
@@ -133,7 +134,6 @@
     <Compile Include="Dispose\DisposeManager.cs" />
     <Compile Include="EventAggregator\FilterChangedEvent.cs" />
     <Compile Include="EventAggregator\FilterChangedEventArgs.cs" />
-    <Compile Include="EventAggregator\IDataChangedEventArgs.cs" />
     <Compile Include="EventAggregator\SortKeyChangedEvent.cs" />
     <Compile Include="EventAggregator\SortKeyChangedEventArgs.cs" />
     <Compile Include="EventAggregator\SortOrderChangedEvent.cs" />
