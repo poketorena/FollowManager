@@ -46,7 +46,9 @@
         ItemsSource="{Binding UserDatas}"
         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
         VirtualizingPanel.IsVirtualizing="True"
-        VirtualizingPanel.VirtualizationMode="Recycling">
+        VirtualizingPanel.VirtualizationMode="Recycling"
+        VirtualizingPanel.CacheLength="500,500"
+        VirtualizingPanel.CacheLengthUnit="Item">
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <materialDesign:Card Width="200">
