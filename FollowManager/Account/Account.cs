@@ -58,6 +58,7 @@ namespace FollowManager.Account
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
         public async Task<Dictionary<long, List<Status>>> GetUserTweetsAsync()
         {
+            // フィールドにキャッシュされていたらキャッシュを返す
             if (_usersTweets != null)
             {
                 return _usersTweets;
