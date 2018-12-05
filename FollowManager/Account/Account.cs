@@ -50,6 +50,45 @@ namespace FollowManager.Account
         public User User =>
             _user ?? (_user = GetMyUserData());
 
+        // パブリックメソッド
+
+        /// <summary>
+        /// ツイートのリストのディクショナリーを取得します。
+        /// </summary>
+        /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
+        public async Task<Dictionary<long, List<Status>>> GetUserTweetsAsync()
+        {
+            if (_usersTweets != null)
+            {
+                return _usersTweets;
+            }
+
+            var userTweets = new Dictionary<long, List<Status>>();
+
+            if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
+            {
+                if (!TryCreateDataDirectory())
+                {
+                    return null;
+                }
+            }
+
+            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
+
+            if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
+            {
+                // ローカルにデータが存在する場合はデシリアライズして返す
+                return await GetUserTweetsFromLocalAsync()
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                // ローカルにデータが存在しない場合はTwitterApiを呼び出して取得する
+                return await GetUserTweetsFromTwitterApiAsync()
+                    .ConfigureAwait(false);
+            }
+        }
+
         // プライベートフィールド
 
         private List<UserData> _follows;
@@ -508,42 +547,6 @@ namespace FollowManager.Account
             }
         }
 
-        /// <summary>
-        /// ツイートのリストのディクショナリーを取得します。
-        /// </summary>
-        /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
-        public async Task<Dictionary<long, List<Status>>> GetUserTweetsAsync()
-        {
-            if (_usersTweets != null)
-            {
-                return _usersTweets;
-            }
-
-            var userTweets = new Dictionary<long, List<Status>>();
-
-            if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
-            {
-                if (!TryCreateDataDirectory())
-                {
-                    return null;
-                }
-            }
-
-            var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
-
-            if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
-            {
-                // ローカルにデータが存在する場合はデシリアライズして返す
-                return await GetUserTweetsFromLocalAsync()
-                    .ConfigureAwait(false);
-            }
-            else
-            {
-                // ローカルにデータが存在しない場合はTwitterApiを呼び出して取得する
-                return await GetUserTweetsFromTwitterApiAsync()
-                    .ConfigureAwait(false);
-            }
-        }
 
         /// <summary>
         /// ローカルからツイートのリストのディクショナリーを取得します。
