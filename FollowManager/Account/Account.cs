@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using CoreTweet;
+using CoreTweet.Core;
 using FollowManager.Service;
 using MessagePack;
 using MessagePack.Resolvers;
@@ -38,13 +40,6 @@ namespace FollowManager.Account
             _followers ?? (_followers = GetFollowers());
 
         /// <summary>
-        /// ツイートのリストのディクショナリー
-        /// </summary>
-        /// <value>キーはユーザーId</value>
-        public Dictionary<long, List<Status>> UserTweets =>
-            _userTweets ?? (_userTweets = GetUserTweets());
-
-        /// <summary>
         /// CoreTweetのトークン
         /// </summary>
         public Tokens Tokens { get; set; }
@@ -61,7 +56,7 @@ namespace FollowManager.Account
 
         private List<UserData> _followers;
 
-        private Dictionary<long, List<Status>> _userTweets;
+        private Dictionary<long, List<Status>> _usersTweets;
 
         private User _user;
 
@@ -517,8 +512,13 @@ namespace FollowManager.Account
         /// ツイートのリストのディクショナリーを取得します。
         /// </summary>
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
-        private Dictionary<long, List<Status>> GetUserTweets()
+        public async Task<Dictionary<long, List<Status>>> GetUserTweetsAsync()
         {
+            if (_usersTweets != null)
+            {
+                return _usersTweets;
+            }
+
             var userTweets = new Dictionary<long, List<Status>>();
 
             if (!Directory.Exists($@"Data\{Tokens.ScreenName}"))
@@ -534,12 +534,14 @@ namespace FollowManager.Account
             if (File.Exists($@"Data\{Tokens.ScreenName}\{fileName}"))
             {
                 // ローカルにデータが存在する場合はデシリアライズして返す
-                return GetUserTweetsFromLocal();
+                return await GetUserTweetsFromLocalAsync()
+                    .ConfigureAwait(false);
             }
             else
             {
                 // ローカルにデータが存在しない場合はTwitterApiを呼び出して取得する
-                return GetUserTweetsFromTwitterApi();
+                return await GetUserTweetsFromTwitterApiAsync()
+                    .ConfigureAwait(false);
             }
         }
 
@@ -547,7 +549,7 @@ namespace FollowManager.Account
         /// ローカルからツイートのリストのディクショナリーを取得します。
         /// </summary>
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
-        private Dictionary<long, List<Status>> GetUserTweetsFromLocal()
+        private async Task<Dictionary<long, List<Status>>> GetUserTweetsFromLocalAsync()
         {
             var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
             try
@@ -564,7 +566,8 @@ namespace FollowManager.Account
                         var errorMessage = $"{fileName} を開くことに失敗しました。ファイルが壊れているためデータを再取得します。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
-                        return GetUserTweetsFromTwitterApi();
+                        return await GetUserTweetsFromTwitterApiAsync()
+                            .ConfigureAwait(false);
                     }
                     return userTweets;
                 }
@@ -624,43 +627,59 @@ namespace FollowManager.Account
         /// TwitterApiからツイートのリストのディクショナリーを取得します。
         /// </summary>
         /// <returns>ツイートのリストのディクショナリーを返します。例外発生時はnullを返します。</returns>
-        private Dictionary<long, List<Status>> GetUserTweetsFromTwitterApi()
+        private async Task<Dictionary<long, List<Status>>> GetUserTweetsFromTwitterApiAsync()
         {
             if (!IsInDesignMode)
             {
                 var fileName = DateTime.Now.ToShortDateString().Replace('/', '-') + "_UserTweets.data";
 
-                var userTweets = new Dictionary<long, List<Status>>();
+                var usersTweets = new Dictionary<long, List<Status>>();
+
+                var tasks = new List<Task<ListedResponse<Status>>>();
 
                 foreach (var userData in Follows.Union(Followers, new UserDataEqualityComparer()))
                 {
-                    IEnumerable<Status> statuses;
-                    try
-                    {
-                        statuses = Tokens.Statuses.UserTimeline(user_id => (long)userData.User.Id, count => 200);
-                    }
-                    catch (Exception error)
-                    {
-                        var errorMessage = $"@{userData.User.ScreenName}のツイートの取得に失敗しました{error.Message}";
-                        _loggingService.Logs.Add(errorMessage);
-                        Debug.WriteLine(errorMessage);
-                        continue;
-                    }
-                    userTweets[(long)userData.User.Id] = statuses.ToList();
+                    tasks.Add(Tokens.Statuses.UserTimelineAsync(user_id => (long)userData.User.Id, count => 200));
 
-                    if (userTweets.Count % 100 == 0)
+                    if (tasks.Count % 100 == 0)
                     {
-                        Debug.WriteLine($"Statuses.UserTimelineの呼び出し回数が{userTweets.Count}回に到達しました。");
+                        Debug.WriteLine($"Statuses.UserTimelineの呼び出し回数が{usersTweets.Count}回に到達しました。");
                     }
 
-                    if (userTweets.Count % 900 == 0)
+                    if (tasks.Count % 900 == 0)
                     {
                         const string errorMessage = "レートリミットに達したため15分後に再開します。";
                         _loggingService.Logs.Add(errorMessage);
                         Debug.WriteLine(errorMessage);
                         Thread.Sleep(new TimeSpan(0, 16, 0));
+                        await Task.Delay(new TimeSpan(0, 16, 0))
+                            .ConfigureAwait(false);
                     }
                 }
+
+                var failedCount = 0;
+
+                foreach (var task in tasks)
+                {
+                    try
+                    {
+                        var statuses = await task;
+                        usersTweets[(long)statuses[0].User.Id] = statuses.ToList();
+                    }
+                    catch (Exception error)
+                    {
+                        failedCount++;
+                    }
+                }
+                if (failedCount > 0)
+                {
+                    var errorMessage = $"@{failedCount}件のアカウントのツイートの取得に失敗しました。許可されていない鍵アカウントのツイートを取得しようとした可能性があります。";
+                    _loggingService.Logs.Add(errorMessage);
+                    Debug.WriteLine(errorMessage);
+                }
+
+                // キャッシュへ保存
+                _usersTweets = usersTweets;
 
                 try
                 {
@@ -668,7 +687,7 @@ namespace FollowManager.Account
                     {
                         try
                         {
-                            LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, userTweets, TypelessContractlessStandardResolver.Instance);
+                            LZ4MessagePackSerializer.Serialize(streamWriter.BaseStream, usersTweets, TypelessContractlessStandardResolver.Instance);
                         }
                         catch (Exception)
                         {
@@ -729,7 +748,7 @@ namespace FollowManager.Account
                     return null;
                 }
 
-                return userTweets;
+                return usersTweets;
             }
             else
             {
