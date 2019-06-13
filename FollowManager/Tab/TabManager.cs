@@ -3,7 +3,6 @@ using System.Linq;
 using Dragablz;
 using FollowManager.Collections.ObjectModel.Extensions;
 using FollowManager.EventAggregator;
-using Microsoft.Practices.ObjectBuilder2;
 using Prism.Events;
 using Prism.Mvvm;
 
@@ -70,13 +69,11 @@ namespace FollowManager.Tab
         /// <param name="thisTabData">残しておくタブ</param>
         public void CloseAllTabsExceptThisTab(TabData thisTabData)
         {
-            TabDatas
-                .Where(tabData => tabData.TabId != thisTabData.TabId)
-                .ForEach(eventTabData =>
-                {
-                    var tabRemovedEventArgs = new TabRemovedEventArgs { TabId = eventTabData.TabId };
-                    _eventAggregator.GetEvent<TabRemovedEvent>().Publish(tabRemovedEventArgs);
-                });
+            foreach (var eventTabData in TabDatas.Where(tabData => tabData.TabId != thisTabData.TabId))
+            {
+                var tabRemovedEventArgs = new TabRemovedEventArgs { TabId = eventTabData.TabId };
+                _eventAggregator.GetEvent<TabRemovedEvent>().Publish(tabRemovedEventArgs);
+            }
 
             TabDatas.RemoveAll(tabData => tabData.TabId != thisTabData.TabId);
         }

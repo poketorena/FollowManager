@@ -1,6 +1,6 @@
-﻿using Microsoft.Practices.Unity;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
+using Unity.Attributes;
 
 namespace FollowManager.About
 {

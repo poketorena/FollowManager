@@ -670,7 +670,7 @@ namespace FollowManager.Account
                         var statuses = await task;
                         usersTweets[(long)statuses[0].User.Id] = statuses.ToList();
                     }
-                    catch (Exception error)
+                    catch (Exception)
                     {
                         failedCount++;
                     }

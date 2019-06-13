@@ -1,7 +1,8 @@
-﻿<Application
+﻿<prism:PrismApplication
     x:Class="FollowManager.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:prism="http://prismlibrary.com/"
     xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
     <Application.Resources>
@@ -125,4 +126,4 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
-</Application>
+</prism:PrismApplication>

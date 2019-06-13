@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using CoreTweet;
 using FollowManager.Account;
-using Microsoft.Practices.Unity;
+using Unity;
 
 namespace FollowManager.Service
 {

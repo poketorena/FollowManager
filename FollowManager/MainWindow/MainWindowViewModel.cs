@@ -5,11 +5,11 @@ using FollowManager.Account;
 using FollowManager.Dispose;
 using FollowManager.Service;
 using FollowManager.Tab;
-using Microsoft.Practices.Unity;
 using Prism.Commands;
 using Prism.Mvvm;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Unity;
 
 namespace FollowManager.MainWindow
 {
