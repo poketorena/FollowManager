@@ -11,6 +11,7 @@ using FollowManager.SidePanel;
 using FollowManager.Tab;
 using Prism.Ioc;
 using Prism.Unity;
+using WpfBindingErrors;
 
 namespace FollowManager
 {
@@ -19,6 +20,13 @@ namespace FollowManager
     /// </summary>
     public partial class App : PrismApplication
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            BindingExceptionThrower.Attach();
+        }
+
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);

@@ -297,6 +297,9 @@
     <PackageReference Include="System.Reactive">
       <Version>4.1.5</Version>
     </PackageReference>
+    <PackageReference Include="WpfBindingErrors">
+      <Version>1.0.0</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">
