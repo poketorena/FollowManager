@@ -113,6 +113,20 @@ namespace FollowManager.CardPanel
                 .Subscribe(userData =>
                 {
                     UserDatas = (userData ?? new List<UserData>())
+                    .Select(tmpUserData =>
+                    {
+                        tmpUserData.User.ProfileImageUrlHttps = tmpUserData.User.ProfileImageUrlHttps.Replace("_normal", "_mini");
+
+                        if (tmpUserData.User.ProfileBannerUrl == null)
+                        {
+                            tmpUserData.User.ProfileBannerUrl = "http://placehold.jp/eeeeee/cccccc/60x20.png?text=No%20Image";
+                        }
+                        else
+                        {
+                            tmpUserData.User.ProfileBannerUrl += "/300x100";
+                        }
+                        return tmpUserData;
+                    })
                     .ToObservable()
                     .ToReactiveCollection();
                 })
