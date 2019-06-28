@@ -205,7 +205,7 @@ namespace FollowManager.CardPanel
             // フィルタの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
             _eventAggregator
                 .GetEvent<FilterChangedEvent>()
-                .Subscribe(LoadFilteredAndSortedCollectionAsync, ThreadOption.PublisherThread, false, filterChangedEventArgs => filterChangedEventArgs.TabData.TabId == TabId)
+                .Subscribe(LoadFilteredAndSortedCollection, ThreadOption.PublisherThread, false, filterChangedEventArgs => filterChangedEventArgs.TabData.TabId == TabId)
                 .AddTo(Disposables);
 
             // ソートキーの変更を購読してユーザーのリストを読み込む（同じタブからの要求のみ処理する）
@@ -233,7 +233,7 @@ namespace FollowManager.CardPanel
         /// フィルタとソートを適応したユーザーのリストを読み込み、完了後にLoadCompletedイベントを発生させます。
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
-        private async void LoadFilteredAndSortedCollectionAsync(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private void LoadFilteredAndSortedCollection(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             switch (sidePanelChangedEventArgs.FilterAndSortOption.FilterType)
             {
@@ -260,7 +260,7 @@ namespace FollowManager.CardPanel
                     }
                 case FilterType.Inactive:
                     {
-                        _current = await GetInactiveListOrDefaultAsync(sidePanelChangedEventArgs).ConfigureAwait(false) ?? new List<UserData>();
+                        _current = GetInactiveListOrDefault(sidePanelChangedEventArgs) ?? new List<UserData>();
                         SortCurrentList(sidePanelChangedEventArgs);
                         LoadCompleted?.Invoke(_current);
                         break;
@@ -281,7 +281,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                LoadFilteredAndSortedCollectionAsync(sidePanelChangedEventArgs);
+                LoadFilteredAndSortedCollection(sidePanelChangedEventArgs);
             }
         }
 
@@ -299,7 +299,7 @@ namespace FollowManager.CardPanel
             {
                 case SortKeyType.LastTweetDay:
                     {
-                        var userTweets = GetUserTweetsOrDefaultAsync(sidePanelChangedEventArgs);
+                        var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
 
                         if (userTweets == null)
                         {
@@ -312,9 +312,9 @@ namespace FollowManager.CardPanel
                         if (sortOrderType == SortOrderType.Ascending)
                         {
                             // HACK: 非同期処理は要調整
-                            _current = _current.OrderBy(async userData =>
+                            _current = _current.OrderBy(userData =>
                             {
-                                var result = (await userTweets)
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
                                 if (result)
                                 {
@@ -339,9 +339,9 @@ namespace FollowManager.CardPanel
                         }
                         else
                         {
-                            _current = _current.OrderByDescending(async userData =>
+                            _current = _current.OrderByDescending(userData =>
                             {
-                                var result = (await userTweets)
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
                                 if (result)
                                 {
@@ -392,7 +392,7 @@ namespace FollowManager.CardPanel
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        var userDatas = (await GetInactiveListOrDefaultAsync(sidePanelChangedEventArgs).ConfigureAwait(false))?.Reverse();
+                                        var userDatas = GetInactiveListOrDefault(sidePanelChangedEventArgs)?.Reverse();
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
@@ -422,7 +422,7 @@ namespace FollowManager.CardPanel
                                     }
                                 case FilterType.Inactive:
                                     {
-                                        var userDatas = await GetInactiveListOrDefaultAsync(sidePanelChangedEventArgs).ConfigureAwait(false);
+                                        var userDatas = GetInactiveListOrDefault(sidePanelChangedEventArgs);
                                         CheckTemporaryUserDatasAndUpdateCurrentUserDataList(userDatas);
                                         break;
                                     }
@@ -451,7 +451,7 @@ namespace FollowManager.CardPanel
                     }
                 case SortKeyType.TweetsPerDay:
                     {
-                        var userTweets = GetUserTweetsOrDefaultAsync(sidePanelChangedEventArgs);
+                        var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
 
                         if (userTweets == null)
                         {
@@ -464,9 +464,9 @@ namespace FollowManager.CardPanel
                         if (sortOrderType == SortOrderType.Ascending)
                         {
                             // HACK: 非同期処理は要調整
-                            _current = _current.OrderBy(async userData =>
+                            _current = _current.OrderBy(userData =>
                             {
-                                var result = (await userTweets)
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
 
                                 if (result)
@@ -495,9 +495,9 @@ namespace FollowManager.CardPanel
                         else
                         {
                             // HACK: 非同期処理は要調整
-                            _current = _current.OrderByDescending(async userData =>
+                            _current = _current.OrderByDescending(userData =>
                             {
-                                var result = (await userTweets)
+                                var result = userTweets
                                 .TryGetValue((long)userData.User.Id, out var statuses);
 
                                 if (result)
@@ -751,7 +751,7 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private async Task<IEnumerable<UserData>> GetInactiveListOrDefaultAsync(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> GetInactiveListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             if (_inactive != null)
             {
@@ -759,7 +759,7 @@ namespace FollowManager.CardPanel
             }
             else
             {
-                _inactive = await CreateInactiveListOrDefaultAsync(sidePanelChangedEventArgs).ConfigureAwait(false);
+                _inactive = CreateInactiveListOrDefault(sidePanelChangedEventArgs);
                 return _inactive;
             }
         }
@@ -769,9 +769,9 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>30日間ツイートしていないユーザーのリスト</returns>
-        private async Task<IEnumerable<UserData>> CreateInactiveListOrDefaultAsync(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private IEnumerable<UserData> CreateInactiveListOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
-            var userTweets = await GetUserTweetsOrDefaultAsync(sidePanelChangedEventArgs).ConfigureAwait(false);
+            var userTweets = GetUserTweetsOrDefault(sidePanelChangedEventArgs);
 
             if (userTweets == null)
             {
@@ -898,14 +898,13 @@ namespace FollowManager.CardPanel
         /// </summary>
         /// <param name="sidePanelChangedEventArgs">SidePanelで発生したイベントデータ</param>
         /// <returns>ツイートのリストのディクショナリー</returns>
-        private async Task<Dictionary<long, List<Status>>> GetUserTweetsOrDefaultAsync(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
+        private Dictionary<long, List<Status>> GetUserTweetsOrDefault(ISidePanelChangedEventArgs sidePanelChangedEventArgs)
         {
             try
             {
-                return await _accountManager
+                return _accountManager
                     .Accounts[sidePanelChangedEventArgs.TabData.Tokens.UserId]
-                    .GetUserTweetsAsync()
-                    .ConfigureAwait(false);
+                    .UserTweets;
             }
             catch (KeyNotFoundException)
             {
